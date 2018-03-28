@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mars>
+    <debug level="5"/>
+    <cpu intervalMillis="2000" sampleMillis="1000"/>
+
+</mars>
