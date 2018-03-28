@@ -7,7 +7,7 @@ package com.winning.mars_generator;
 public class MarsConfig {
     private static int debug;
     private static CPU cpu;
-
+    private static Battery battery;
 
     public static class BaseConfig{
         //Obtaining Cycle
@@ -35,6 +35,9 @@ public class MarsConfig {
         }
     }
 
+    public static class Battery extends BaseConfig{
+    }
+
     public static int getDebug() {
         return debug;
     }
@@ -49,5 +52,13 @@ public class MarsConfig {
 
     public static void setCpu(CPU cpu) {
         MarsConfig.cpu = cpu;
+    }
+
+    public static Battery getBattery() {
+        return battery;
+    }
+
+    public static void setBattery(Battery battery) {
+        MarsConfig.battery = battery;
     }
 }

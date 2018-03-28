@@ -21,6 +21,7 @@ public class MarsParser {
     //for xml parser
     private static final String NODE_DEBUG = "debug";
     private static final String NODE_CPU = "cpu";
+    private static final String NODE_BATTERY = "battery";
     private static final String INTERVAL_MILLIS = "intervalMillis";
     private static final String SAMPLE_MILLIS = "sampleMillis";
     private static final String LEVEL = "level";
@@ -53,6 +54,11 @@ public class MarsParser {
                         }else if(NODE_DEBUG.equalsIgnoreCase(nodeName)){
                             String level = xmlPullParser.getAttributeValue("", LEVEL);
                             MarsConfig.setDebug(Integer.parseInt(level));
+                        }else if(NODE_BATTERY.equalsIgnoreCase(nodeName)){
+                            MarsConfig.Battery batteryConfig = new MarsConfig.Battery();
+                            String intervalMillis = xmlPullParser.getAttributeValue("", INTERVAL_MILLIS);
+                            batteryConfig.setIntervalMillis(Long.parseLong(intervalMillis));
+                            MarsConfig.setBattery(batteryConfig);
                         }
                         break;
                     }
