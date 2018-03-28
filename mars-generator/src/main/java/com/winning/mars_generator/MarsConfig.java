@@ -8,6 +8,7 @@ public class MarsConfig {
     private static int debug;
     private static CPU cpu;
     private static Battery battery;
+    private static Fps fps;
 
     public static class BaseConfig{
         //Obtaining Cycle
@@ -35,8 +36,8 @@ public class MarsConfig {
         }
     }
 
-    public static class Battery extends BaseConfig{
-    }
+    public static class Battery extends BaseConfig{}
+    public static class Fps extends BaseConfig{}
 
     public static int getDebug() {
         return debug;
@@ -60,5 +61,13 @@ public class MarsConfig {
 
     public static void setBattery(Battery battery) {
         MarsConfig.battery = battery;
+    }
+
+    public static Fps getFps() {
+        return fps;
+    }
+
+    public static void setFps(Fps fps) {
+        MarsConfig.fps = fps;
     }
 }

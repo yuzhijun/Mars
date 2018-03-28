@@ -22,6 +22,7 @@ public class MarsParser {
     private static final String NODE_DEBUG = "debug";
     private static final String NODE_CPU = "cpu";
     private static final String NODE_BATTERY = "battery";
+    private static final String NODE_FPS = "fps";
     private static final String INTERVAL_MILLIS = "intervalMillis";
     private static final String SAMPLE_MILLIS = "sampleMillis";
     private static final String LEVEL = "level";
@@ -59,6 +60,11 @@ public class MarsParser {
                             String intervalMillis = xmlPullParser.getAttributeValue("", INTERVAL_MILLIS);
                             batteryConfig.setIntervalMillis(Long.parseLong(intervalMillis));
                             MarsConfig.setBattery(batteryConfig);
+                        }else if(NODE_FPS.equalsIgnoreCase(nodeName)){
+                            MarsConfig.Fps fpsConfig = new MarsConfig.Fps();
+                            String intervalMillis = xmlPullParser.getAttributeValue("", INTERVAL_MILLIS);
+                            fpsConfig.setIntervalMillis(Long.parseLong(intervalMillis));
+                            MarsConfig.setFps(fpsConfig);
                         }
                         break;
                     }
