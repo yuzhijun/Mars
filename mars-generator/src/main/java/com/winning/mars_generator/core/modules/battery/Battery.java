@@ -10,7 +10,7 @@ import com.winning.mars_generator.utils.LogUtil;
 /**
  * Created by yuzhijun on 2018/3/28.
  */
-public class Battery extends GeneratorSubject<BatteryBean> implements Install<MarsConfig.Battery>{
+public class Battery extends GeneratorSubject<BatteryBean> implements Install {
     private BatteryEngine mBatteryEngine;
 
     @Override

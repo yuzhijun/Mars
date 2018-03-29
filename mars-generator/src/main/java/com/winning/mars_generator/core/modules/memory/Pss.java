@@ -11,7 +11,7 @@ import com.winning.mars_generator.utils.LogUtil;
  * Created by yuzhijun on 2018/3/29.
  */
 
-public class Pss extends GeneratorSubject<PssBean> implements Install<MarsConfig.Pss> {
+public class Pss extends GeneratorSubject<PssBean> implements Install {
     private PssEngine mPssEngine;
 
     @Override

@@ -10,7 +10,7 @@ import com.winning.mars_generator.utils.LogUtil;
 /**
  * Created by yuzhijun on 2018/3/27.
  */
-public class Cpu extends GeneratorSubject<CpuBean> implements Install<MarsConfig.CPU>{
+public class Cpu extends GeneratorSubject<CpuBean> implements Install {
     private CpuEngine mCpuEngine;
 
     @Override

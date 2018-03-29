@@ -10,7 +10,7 @@ import com.winning.mars_generator.utils.LogUtil;
 /**
  * Created by yuzhijun on 2018/3/29.
  */
-public class Heap extends GeneratorSubject<HeapBean> implements Install<MarsConfig.Heap> {
+public class Heap extends GeneratorSubject<HeapBean> implements Install {
     private HeapEngine mHeapEngine;
 
     @Override

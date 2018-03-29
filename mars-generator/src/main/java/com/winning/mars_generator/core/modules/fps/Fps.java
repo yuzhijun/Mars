@@ -10,7 +10,7 @@ import com.winning.mars_generator.utils.LogUtil;
 /**
  * Created by yuzhijun on 2018/3/28.
  */
-public class Fps extends GeneratorSubject<FpsBean> implements Install<MarsConfig.Fps>{
+public class Fps extends GeneratorSubject<FpsBean> implements Install {
     private FpsEngine mFpsEngine;
 
     @Override

@@ -14,7 +14,7 @@ import com.winning.mars_generator.utils.LogUtil;
  * be similar to BlockCanary
  * Created by yuzhijun on 2018/3/28.
  */
-public class Sm extends GeneratorSubject<SmBean> implements Install<MarsConfig.Sm>{
+public class Sm extends GeneratorSubject<SmBean> implements Install {
     private static SmEngine mSmEngine;
     private static Sm mInstance;
     private Sm(){

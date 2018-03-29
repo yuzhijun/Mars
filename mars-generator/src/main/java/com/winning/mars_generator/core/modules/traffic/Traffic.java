@@ -11,7 +11,7 @@ import com.winning.mars_generator.utils.LogUtil;
  * traffic
  * Created by yuzhijun on 2018/3/28.
  */
-public class Traffic extends GeneratorSubject<TrafficBean> implements Install<MarsConfig.Traffic>{
+public class Traffic extends GeneratorSubject<TrafficBean> implements Install {
     private TrafficEngine mTrafficEngine;
 
     @Override

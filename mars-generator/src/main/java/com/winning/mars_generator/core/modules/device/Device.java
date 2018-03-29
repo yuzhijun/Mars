@@ -2,7 +2,6 @@ package com.winning.mars_generator.core.modules.device;
 
 import android.content.Context;
 
-import com.winning.mars_generator.MarsConfig;
 import com.winning.mars_generator.core.GeneratorSubject;
 import com.winning.mars_generator.core.Install;
 import com.winning.mars_generator.utils.LogUtil;
@@ -10,7 +9,7 @@ import com.winning.mars_generator.utils.LogUtil;
 /**
  * Created by yuzhijun on 2018/3/28.
  */
-public class Device extends GeneratorSubject<DeviceBean> implements Install<MarsConfig.BaseConfig> {
+public class Device extends GeneratorSubject<DeviceBean> implements Install {
 
     private DeviceEngine mDeviceEngine;
 

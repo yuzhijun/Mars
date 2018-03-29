@@ -5,7 +5,7 @@ import android.content.Context;
 /**
  * Created by yuzhijun on 2018/3/27.
  */
-public interface Install<T> {
+public interface Install {
     void install(Context context) ;
 
     void uninstall();

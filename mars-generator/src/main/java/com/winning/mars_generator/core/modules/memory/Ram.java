@@ -11,7 +11,7 @@ import com.winning.mars_generator.utils.LogUtil;
  * Created by yuzhijun on 2018/3/29.
  */
 
-public class Ram extends GeneratorSubject<RamBean> implements Install<MarsConfig.Ram>{
+public class Ram extends GeneratorSubject<RamBean> implements Install {
     private RamEngine mRamEngine;
 
     @Override
