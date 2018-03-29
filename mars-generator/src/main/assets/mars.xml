@@ -6,4 +6,7 @@
     <fps intervalMillis="2000"/>
     <traffic intervalMillis="2000" sampleMillis="1000"/>
     <sm longBlockThreshold="2000" shortBlockThreshold="500" dumpInterval="800"/>
+    <heap intervalMillis="2000"/>
+    <ram intervalMillis="2000"/>
+    <pss intervalMillis="2000"/>
 </mars>

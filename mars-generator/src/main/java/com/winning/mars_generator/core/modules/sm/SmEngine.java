@@ -73,7 +73,7 @@ public class SmEngine  {
                         }
                         //if long block, should get cpu info and stack trace info
                         final boolean cpuBusy = mCpuSampler.isCpuBusy(eventStartTimeMilliis, eventEndTimeMillis);
-                        //这里短卡顿基本是dump不到数据的，因为dump延时一般都会比短卡顿时间久
+                        //only long block we can get cpu info
                         final List<CpuBean> cpuInfos = mCpuSampler.getCpuRateInfo(eventStartTimeMilliis, eventEndTimeMillis);
                         final Map<Long, List<StackTraceElement>> threadStackEntries = mStackSampler.getThreadStackEntries(eventStartTimeMilliis, eventEndTimeMillis);
                         Observable.fromCallable(new Callable<MemoryBean>() {

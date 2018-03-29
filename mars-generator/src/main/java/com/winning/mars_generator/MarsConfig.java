@@ -11,6 +11,9 @@ public class MarsConfig {
     private static Fps fps;
     private static Traffic traffic;
     private static Sm sm;
+    private static Heap heap;
+    private static Ram ram;
+    private static Pss pss;
 
     public static class BaseConfig{
         //Obtaining Cycle
@@ -83,6 +86,9 @@ public class MarsConfig {
 
     public static class Battery extends BaseConfig{}
     public static class Fps extends BaseConfig{}
+    public static class Heap extends BaseConfig{}
+    public static class Ram extends BaseConfig{}
+    public static class Pss extends BaseConfig{}
 
     public static int getDebug() {
         return debug;
@@ -130,5 +136,29 @@ public class MarsConfig {
 
     public static void setSm(Sm sm) {
         MarsConfig.sm = sm;
+    }
+
+    public static Heap getHeap() {
+        return heap;
+    }
+
+    public static void setHeap(Heap heap) {
+        MarsConfig.heap = heap;
+    }
+
+    public static Ram getRam() {
+        return ram;
+    }
+
+    public static void setRam(Ram ram) {
+        MarsConfig.ram = ram;
+    }
+
+    public static Pss getPss() {
+        return pss;
+    }
+
+    public static void setPss(Pss pss) {
+        MarsConfig.pss = pss;
     }
 }

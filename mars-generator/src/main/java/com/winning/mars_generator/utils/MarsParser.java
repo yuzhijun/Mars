@@ -25,6 +25,9 @@ public class MarsParser {
     private static final String NODE_FPS = "fps";
     private static final String NODE_TRAFFIC = "traffic";
     private static final String NODE_SM = "sm";
+    private static final String NODE_HEAP = "heap";
+    private static final String NODE_RAM = "ram";
+    private static final String NODE_PSS = "pss";
 
     private static final String INTERVAL_MILLIS = "intervalMillis";
     private static final String SAMPLE_MILLIS = "sampleMillis";
@@ -87,6 +90,21 @@ public class MarsParser {
                             smConfig.setShortBlockThreshold(Long.parseLong(shortBlockThreshold));
                             smConfig.setDumpInterval(Long.parseLong(dumpInterval));
                             MarsConfig.setSm(smConfig);
+                        }else if (NODE_HEAP.equalsIgnoreCase(nodeName)){
+                            MarsConfig.Heap heapConfig = new MarsConfig.Heap();
+                            String intervalMillis = xmlPullParser.getAttributeValue("", INTERVAL_MILLIS);
+                            heapConfig.setIntervalMillis(Long.parseLong(intervalMillis));
+                            MarsConfig.setHeap(heapConfig);
+                        }else if(NODE_RAM.equalsIgnoreCase(nodeName)){
+                            MarsConfig.Ram ramConfig = new MarsConfig.Ram();
+                            String intervalMillis = xmlPullParser.getAttributeValue("", INTERVAL_MILLIS);
+                            ramConfig.setIntervalMillis(Long.parseLong(intervalMillis));
+                            MarsConfig.setRam(ramConfig);
+                        }else if(NODE_PSS.equalsIgnoreCase(nodeName)){
+                            MarsConfig.Pss pssConfig = new MarsConfig.Pss();
+                            String intervalMillis = xmlPullParser.getAttributeValue("", INTERVAL_MILLIS);
+                            pssConfig.setIntervalMillis(Long.parseLong(intervalMillis));
+                            MarsConfig.setPss(pssConfig);
                         }
                         break;
                     }
