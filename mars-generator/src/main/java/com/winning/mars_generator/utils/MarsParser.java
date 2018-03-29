@@ -23,8 +23,14 @@ public class MarsParser {
     private static final String NODE_CPU = "cpu";
     private static final String NODE_BATTERY = "battery";
     private static final String NODE_FPS = "fps";
+    private static final String NODE_TRAFFIC = "traffic";
+    private static final String NODE_SM = "sm";
+
     private static final String INTERVAL_MILLIS = "intervalMillis";
     private static final String SAMPLE_MILLIS = "sampleMillis";
+    private static final String LONG_BLOCK_THRESHOLD = "longBlockThreshold";
+    private static final String SHORT_BLOCK_THRESHOLD = "shortBlockThreshold";
+    private static final String DUMP_INTERVAL = "dumpInterval";
     private static final String LEVEL = "level";
 
     private static MarsParser parser;
@@ -65,6 +71,22 @@ public class MarsParser {
                             String intervalMillis = xmlPullParser.getAttributeValue("", INTERVAL_MILLIS);
                             fpsConfig.setIntervalMillis(Long.parseLong(intervalMillis));
                             MarsConfig.setFps(fpsConfig);
+                        }else if(NODE_TRAFFIC.equalsIgnoreCase(nodeName)){
+                            MarsConfig.Traffic trafficConfig = new MarsConfig.Traffic();
+                            String intervalMillis = xmlPullParser.getAttributeValue("", INTERVAL_MILLIS);
+                            String sampleMillis = xmlPullParser.getAttributeValue("", SAMPLE_MILLIS);
+                            trafficConfig.setIntervalMillis(Long.parseLong(intervalMillis));
+                            trafficConfig.setSampleMillis(Long.parseLong(sampleMillis));
+                            MarsConfig.setTraffic(trafficConfig);
+                        }else if(NODE_SM.equalsIgnoreCase(nodeName)){
+                            MarsConfig.Sm smConfig = new MarsConfig.Sm();
+                            String longBlockThreshold = xmlPullParser.getAttributeValue("", LONG_BLOCK_THRESHOLD);
+                            String shortBlockThreshold = xmlPullParser.getAttributeValue("", SHORT_BLOCK_THRESHOLD);
+                            String dumpInterval = xmlPullParser.getAttributeValue("", DUMP_INTERVAL);
+                            smConfig.setLongBlockThreshold(Long.parseLong(longBlockThreshold));
+                            smConfig.setShortBlockThreshold(Long.parseLong(shortBlockThreshold));
+                            smConfig.setDumpInterval(Long.parseLong(dumpInterval));
+                            MarsConfig.setSm(smConfig);
                         }
                         break;
                     }

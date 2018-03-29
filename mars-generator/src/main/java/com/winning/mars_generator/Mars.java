@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v4.util.ArrayMap;
 
 import com.winning.mars_generator.core.Install;
+import com.winning.mars_generator.core.modules.sm.Sm;
 import com.winning.mars_generator.utils.BaseUtility;
 import com.winning.mars_generator.utils.MarsParser;
 
@@ -50,7 +51,11 @@ public class Mars {
         }
         try {
             T createdModule;
-            createdModule = clz.newInstance();
+            if (Sm.class.equals(clz)){
+                createdModule = (T) Sm.getInstance();
+            }else{
+                createdModule = clz.newInstance();
+            }
             mCachedModules.put(clz, createdModule);
             return createdModule;
         } catch (Throwable e) {

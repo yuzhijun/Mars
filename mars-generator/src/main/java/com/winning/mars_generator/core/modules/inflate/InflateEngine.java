@@ -29,7 +29,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class InflateEngine implements Engine {
     private Generator<InflateBean> mGenerator;
     private Context mContext;
-    private Activity mCurrentActivity;
     private Application.ActivityLifecycleCallbacks mActivityLifecycleCallbacks;
     private WeakHashMap<Activity, InflaterDelegateFactory> mInflaterDelegateMap;
     private ConcurrentHashMap<AppCompatActivity,List<View>> mViewHashMap;
@@ -52,7 +51,6 @@ public class InflateEngine implements Engine {
             mActivityLifecycleCallbacks = new Application.ActivityLifecycleCallbacks() {
                 @Override
                 public void onActivityCreated(Activity activity, Bundle bundle) {
-                    mCurrentActivity = activity;
                     /**
                      *  in order to get all views of current activity
                      *  so that we can calculate the depth of inflater
@@ -108,11 +106,11 @@ public class InflateEngine implements Engine {
                 @Override
                 public void onActivityDestroyed(Activity activity) {
                     //calculate the depth of inflater
-                    if (null != mViewHashMap && null != mViewHashMap.get(mCurrentActivity)
-                            && mViewHashMap.get(mCurrentActivity).size() > 0){
-                        long depth = calculateDepthInflater(mViewHashMap.get(mCurrentActivity));
+                    if (null != mViewHashMap && null != mViewHashMap.get(activity)
+                            && mViewHashMap.get(activity).size() > 0){
+                        long depth = calculateDepthInflater(mViewHashMap.get(activity));
                         mInflateBean.setInflateDepth(depth);
-                        mInflateBean.setActivity(mCurrentActivity);
+                        mInflateBean.setActivity(activity);
                     }
                     mGenerator.generate(mInflateBean);
                 }

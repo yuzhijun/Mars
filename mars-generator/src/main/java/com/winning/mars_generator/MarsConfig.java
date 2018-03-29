@@ -9,6 +9,8 @@ public class MarsConfig {
     private static CPU cpu;
     private static Battery battery;
     private static Fps fps;
+    private static Traffic traffic;
+    private static Sm sm;
 
     public static class BaseConfig{
         //Obtaining Cycle
@@ -33,6 +35,49 @@ public class MarsConfig {
 
         public void setSampleMillis(long sampleMillis) {
             this.sampleMillis = sampleMillis;
+        }
+    }
+
+    public static class Traffic extends BaseConfig{
+        //Sampling Cycle
+        private long sampleMillis;
+
+        public long getSampleMillis() {
+            return sampleMillis;
+        }
+
+        public void setSampleMillis(long sampleMillis) {
+            this.sampleMillis = sampleMillis;
+        }
+    }
+
+    public static class Sm {
+        private long longBlockThreshold;
+        private long shortBlockThreshold;
+        private long dumpInterval;
+
+        public long getLongBlockThreshold() {
+            return longBlockThreshold;
+        }
+
+        public void setLongBlockThreshold(long longBlockThreshold) {
+            this.longBlockThreshold = longBlockThreshold;
+        }
+
+        public long getShortBlockThreshold() {
+            return shortBlockThreshold;
+        }
+
+        public void setShortBlockThreshold(long shortBlockThreshold) {
+            this.shortBlockThreshold = shortBlockThreshold;
+        }
+
+        public long getDumpInterval() {
+            return dumpInterval;
+        }
+
+        public void setDumpInterval(long dumpInterval) {
+            this.dumpInterval = dumpInterval;
         }
     }
 
@@ -69,5 +114,21 @@ public class MarsConfig {
 
     public static void setFps(Fps fps) {
         MarsConfig.fps = fps;
+    }
+
+    public static Traffic getTraffic() {
+        return traffic;
+    }
+
+    public static void setTraffic(Traffic traffic) {
+        MarsConfig.traffic = traffic;
+    }
+
+    public static Sm getSm() {
+        return sm;
+    }
+
+    public static void setSm(Sm sm) {
+        MarsConfig.sm = sm;
     }
 }

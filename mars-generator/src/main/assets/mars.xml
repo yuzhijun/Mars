@@ -4,4 +4,6 @@
     <cpu intervalMillis="2000" sampleMillis="1000"/>
     <battery intervalMillis="2000"/>
     <fps intervalMillis="2000"/>
+    <traffic intervalMillis="2000" sampleMillis="1000"/>
+    <sm longBlockThreshold="2000" shortBlockThreshold="500" dumpInterval="800"/>
 </mars>

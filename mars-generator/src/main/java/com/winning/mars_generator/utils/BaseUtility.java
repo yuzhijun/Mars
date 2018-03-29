@@ -5,12 +5,18 @@ import android.content.res.AssetManager;
 import android.os.Looper;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by yuzhijun on 2018/3/27.
  */
 public class BaseUtility {
-
+    private static final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.US);
     /**
      * if mars.xml.xml exists or not
      * @param context
@@ -49,5 +55,30 @@ public class BaseUtility {
         if (isMainThread()) {
             throw new IllegalStateException(tag + " operation must execute on main thread!");
         }
+    }
+
+    public static Map<String, List<String>> convertToStackString(Map<Long, List<StackTraceElement>> ts) {
+        // filtered stack trace info
+        Map<Long, List<StackTraceElement>> filterMap = new LinkedHashMap<>();
+        for (Long key : ts.keySet()) {
+            List<StackTraceElement> value = ts.get(key);
+            if (!filterMap.containsValue(value)) {// filter same stack trace info
+                filterMap.put(key, value);
+            }
+        }
+        // convert to String
+        Map<String, List<String>> result = new LinkedHashMap<>();
+        for (Map.Entry<Long, List<StackTraceElement>> entry : filterMap.entrySet()) {
+            result.put(TIME_FORMATTER.format(entry.getKey()), getStack(entry.getValue()));
+        }
+        return result;
+    }
+
+    private static List<String> getStack(List<StackTraceElement> stackTraceElements) {
+        List<String> stackList = new ArrayList<>();
+        for (StackTraceElement traceElement : stackTraceElements) {
+            stackList.add(String.valueOf(traceElement));
+        }
+        return stackList;
     }
 }

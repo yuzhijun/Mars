@@ -23,7 +23,6 @@ import io.reactivex.functions.Function;
 /**
  * Created by yuzhijun on 2018/3/28.
  */
-
 public class FpsEngine implements Engine {
     private Context mContext;
     private Generator<FpsBean> mGenerator;
