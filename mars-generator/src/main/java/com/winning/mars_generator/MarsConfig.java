@@ -14,6 +14,8 @@ public class MarsConfig {
     private static Heap heap;
     private static Ram ram;
     private static Pss pss;
+    private static Thread thread;
+    private static DeadLock deadLock;
 
     public static class BaseConfig{
         //Obtaining Cycle
@@ -89,6 +91,8 @@ public class MarsConfig {
     public static class Heap extends BaseConfig{}
     public static class Ram extends BaseConfig{}
     public static class Pss extends BaseConfig{}
+    public static class Thread extends BaseConfig{}
+    public static class DeadLock extends BaseConfig{}
 
     public static int getDebug() {
         return debug;
@@ -160,5 +164,21 @@ public class MarsConfig {
 
     public static void setPss(Pss pss) {
         MarsConfig.pss = pss;
+    }
+
+    public static Thread getThread() {
+        return thread;
+    }
+
+    public static void setThread(Thread thread) {
+        MarsConfig.thread = thread;
+    }
+
+    public static DeadLock getDeadLock() {
+        return deadLock;
+    }
+
+    public static void setDeadLock(DeadLock deadLock) {
+        MarsConfig.deadLock = deadLock;
     }
 }

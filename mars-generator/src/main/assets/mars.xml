@@ -9,4 +9,6 @@
     <heap intervalMillis="2000"/>
     <ram intervalMillis="2000"/>
     <pss intervalMillis="2000"/>
+    <thread intervalMillis="2000"/>
+    <deadlock intervalMillis="2000"/>
 </mars>

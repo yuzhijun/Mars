@@ -21,7 +21,6 @@ import java.util.Locale;
 /**
  * Created by yuzhijun on 2018/3/29.
  */
-
 public class DefaultCrashHelper implements ICrashHelper {
     private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
 

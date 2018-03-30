@@ -28,6 +28,8 @@ public class MarsParser {
     private static final String NODE_HEAP = "heap";
     private static final String NODE_RAM = "ram";
     private static final String NODE_PSS = "pss";
+    private static final String NODE_THREAD = "thread";
+    private static final String NODE_DEADLOCK = "deadlock";
 
     private static final String INTERVAL_MILLIS = "intervalMillis";
     private static final String SAMPLE_MILLIS = "sampleMillis";
@@ -105,6 +107,16 @@ public class MarsParser {
                             String intervalMillis = xmlPullParser.getAttributeValue("", INTERVAL_MILLIS);
                             pssConfig.setIntervalMillis(Long.parseLong(intervalMillis));
                             MarsConfig.setPss(pssConfig);
+                        }else if(NODE_THREAD.equalsIgnoreCase(nodeName)){
+                            MarsConfig.Thread threadConfig = new MarsConfig.Thread();
+                            String intervalMillis = xmlPullParser.getAttributeValue("", INTERVAL_MILLIS);
+                            threadConfig.setIntervalMillis(Long.parseLong(intervalMillis));
+                            MarsConfig.setThread(threadConfig);
+                        }else if (NODE_DEADLOCK.equalsIgnoreCase(nodeName)){
+                            MarsConfig.DeadLock deadLockConfig = new MarsConfig.DeadLock();
+                            String intervalMillis = xmlPullParser.getAttributeValue("", INTERVAL_MILLIS);
+                            deadLockConfig.setIntervalMillis(Long.parseLong(intervalMillis));
+                            MarsConfig.setDeadLock(deadLockConfig);
                         }
                         break;
                     }
