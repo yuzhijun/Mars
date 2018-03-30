@@ -5,4 +5,21 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
+    <application>
+        <receiver
+            android:name=".core.modules.leak.LeakOutputReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.winning.leakcanary.output.start"/>
+                <action android:name="com.winning.leakcanary.output.retry"/>
+                <action android:name="com.winning.leakcanary.output.done"/>
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".core.modules.leak.OutputLeakService"
+            android:enabled="false"
+            android:process=":leakcanary"/>
+    </application>
 </manifest>

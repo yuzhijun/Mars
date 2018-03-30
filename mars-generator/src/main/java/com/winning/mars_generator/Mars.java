@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v4.util.ArrayMap;
 
 import com.winning.mars_generator.core.Install;
+import com.winning.mars_generator.core.modules.leak.Leak;
 import com.winning.mars_generator.core.modules.sm.Sm;
 import com.winning.mars_generator.utils.BaseUtility;
 import com.winning.mars_generator.utils.MarsParser;
@@ -53,6 +54,8 @@ public class Mars {
             T createdModule;
             if (Sm.class.equals(clz)){
                 createdModule = (T) Sm.getInstance();
+            }else if(Leak.class.equals(clz)){
+                createdModule = (T) Leak.getInstance();
             }else{
                 createdModule = clz.newInstance();
             }
