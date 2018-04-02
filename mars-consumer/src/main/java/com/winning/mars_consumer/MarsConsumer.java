@@ -14,6 +14,7 @@ import com.winning.mars_generator.utils.LogUtil;
 public class MarsConsumer {
     private static boolean mIsWorking = false;
     private static Monitor mMonitor;
+    public static Context mContext;
 
     /**
      * entrance for external call
@@ -28,7 +29,7 @@ public class MarsConsumer {
         if (context == null){
             throw new IllegalStateException("context can not be null.");
         }
-
+        mContext = context;
         mMonitor = new Monitor();
         mMonitor.startMonitor(context);
 
