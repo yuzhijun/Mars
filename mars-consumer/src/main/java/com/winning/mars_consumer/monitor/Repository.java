@@ -1,5 +1,6 @@
 package com.winning.mars_consumer.monitor;
 
+import com.winning.mars_generator.core.modules.account.AccountBean;
 import com.winning.mars_generator.core.modules.battery.BatteryBean;
 import com.winning.mars_generator.core.modules.cpu.CpuBean;
 import com.winning.mars_generator.core.modules.crash.CrashBean;
@@ -7,7 +8,9 @@ import com.winning.mars_generator.core.modules.device.DeviceBean;
 import com.winning.mars_generator.core.modules.fps.FpsBean;
 import com.winning.mars_generator.core.modules.inflate.InflateBean;
 import com.winning.mars_generator.core.modules.leak.LeakBean;
+import com.winning.mars_generator.core.modules.network.NetworkBean;
 import com.winning.mars_generator.core.modules.sm.SmBean;
+import com.winning.mars_generator.core.modules.startup.StartupBean;
 import com.winning.mars_generator.core.modules.traffic.TrafficBean;
 
 import java.util.List;
@@ -120,5 +123,32 @@ public class Repository {
     }
     public void setTrafficBean(TrafficBean trafficBean) {
         mTrafficBean = trafficBean;
+    }
+
+    //network information
+    private NetworkBean mNetworkBean;
+    public NetworkBean getNetworkBean() {
+        return mNetworkBean;
+    }
+    public void setNetworkBean(NetworkBean networkBean) {
+        mNetworkBean = networkBean;
+    }
+
+    //startup information
+    private StartupBean mStartupBean;
+    public StartupBean getStartupBean() {
+        return mStartupBean;
+    }
+    public void setStartupBean(StartupBean startupBean) {
+        mStartupBean = startupBean;
+    }
+
+    //account information
+    private AccountBean mAccountBean;
+    public AccountBean getAccountBean() {
+        return mAccountBean;
+    }
+    public void setAccountBean(AccountBean accountBean) {
+        mAccountBean = accountBean;
     }
 }

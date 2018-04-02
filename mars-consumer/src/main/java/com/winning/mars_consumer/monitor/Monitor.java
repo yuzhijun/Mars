@@ -3,6 +3,8 @@ package com.winning.mars_consumer.monitor;
 import android.content.Context;
 
 import com.winning.mars_generator.Mars;
+import com.winning.mars_generator.core.modules.account.Account;
+import com.winning.mars_generator.core.modules.account.AccountBean;
 import com.winning.mars_generator.core.modules.battery.Battery;
 import com.winning.mars_generator.core.modules.battery.BatteryBean;
 import com.winning.mars_generator.core.modules.cpu.Cpu;
@@ -17,8 +19,12 @@ import com.winning.mars_generator.core.modules.inflate.Inflate;
 import com.winning.mars_generator.core.modules.inflate.InflateBean;
 import com.winning.mars_generator.core.modules.leak.Leak;
 import com.winning.mars_generator.core.modules.leak.LeakBean;
+import com.winning.mars_generator.core.modules.network.Network;
+import com.winning.mars_generator.core.modules.network.NetworkBean;
 import com.winning.mars_generator.core.modules.sm.Sm;
 import com.winning.mars_generator.core.modules.sm.SmBean;
+import com.winning.mars_generator.core.modules.startup.Startup;
+import com.winning.mars_generator.core.modules.startup.StartupBean;
 import com.winning.mars_generator.core.modules.thread.deadlock.DeadLock;
 import com.winning.mars_generator.core.modules.traffic.Traffic;
 import com.winning.mars_generator.core.modules.traffic.TrafficBean;
@@ -113,6 +119,27 @@ public class Monitor {
             @Override
             public void accept(TrafficBean trafficBean) throws Exception {
                 mRepos.setTrafficBean(trafficBean);
+            }
+        }));
+
+        mCompositeDisposable.add(mars.getModule(Network.class).subject().subscribe(new Consumer<NetworkBean>() {
+            @Override
+            public void accept(NetworkBean networkBean) throws Exception {
+                mRepos.setNetworkBean(networkBean);
+            }
+        }));
+
+        mCompositeDisposable.add(mars.getModule(Startup.class).subject().subscribe(new Consumer<StartupBean>() {
+            @Override
+            public void accept(StartupBean startupBean) throws Exception {
+                mRepos.setStartupBean(startupBean);
+            }
+        }));
+
+        mCompositeDisposable.add(mars.getModule(Account.class).subject().subscribe(new Consumer<AccountBean>() {
+            @Override
+            public void accept(AccountBean accountBean) throws Exception {
+                mRepos.setAccountBean(accountBean);
             }
         }));
     }

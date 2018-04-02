@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.winning.mars_consumer.monitor.Monitor;
 import com.winning.mars_consumer.monitor.server.MarsSocketServer;
+import com.winning.mars_consumer.monitor.uploader.JobStarter;
 import com.winning.mars_generator.utils.LogUtil;
 
 /**
@@ -32,6 +33,9 @@ public class MarsConsumer {
         mMonitor.startMonitor(context);
 
         MarsSocketServer.getInstance().startServer();
+//        JobStarter.getInstance().startJob(context);
+
+        LogUtil.d("begin consuming data.");
     }
 
     /**
@@ -39,10 +43,13 @@ public class MarsConsumer {
      * */
     public static synchronized void stop(){
         MarsSocketServer.getInstance().stopServer();
+        JobStarter.getInstance().stopJob();
         if (null != mMonitor){
             mMonitor.stopMonitor();
             mMonitor = null;
         }
         mIsWorking = false;
+
+        LogUtil.d("consuming data ends.");
     }
 }

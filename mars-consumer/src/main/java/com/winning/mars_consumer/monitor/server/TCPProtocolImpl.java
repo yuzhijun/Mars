@@ -27,34 +27,34 @@ public class TCPProtocolImpl implements TCPProtocol {
 
     @Override
     public void handleRead(SelectionKey key) throws IOException {
-        // 获得与客户端通信的信道
+        // get the channel for communication
         SocketChannel clientChannel = (SocketChannel)key.channel();
 
-        // 得到并清空缓冲区
+        // get buffer area
         ByteBuffer buffer=(ByteBuffer)key.attachment();
         buffer.clear();
 
-        // 读取信息获得读取的字节数
+        // get message byte
         long bytesRead=clientChannel.read(buffer);
 
         if(bytesRead==-1){
-            // 没有读取到内容的情况
+            // read nothing
             clientChannel.close();
         }
         else{
-            // 将缓冲区准备为数据传出状态
+            // set buffer area to output status
             buffer.flip();
-            // 将字节转化为为UTF-16的字符串
+            // convert message to UTF-8
             String receivedString= Charset.forName("UTF-8").newDecoder().decode(buffer).toString();
-            // 控制台打印出来
+            // print to console
             System.out.println("get"+clientChannel.socket().getRemoteSocketAddress()+"'s information:"+receivedString);
             if (null != mSocketCallBack){
-                // 准备发送的文本
+                // prepare message
                 String sendString = mSocketCallBack.popSocketData(receivedString);
                 buffer = ByteBuffer.wrap(sendString.getBytes("UTF-8"));
                 clientChannel.write(buffer);
             }
-            // 设置为下一次读取或是写入做准备
+            // set read or write for next operation
             key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
         }
     }

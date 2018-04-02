@@ -1,2 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.winning.mars_consumer"/>
+          package="com.winning.mars_consumer">
+    <application>
+        <receiver android:name=".monitor.uploader.WakeCPUReceiver"/>
+        <service android:name=".monitor.uploader.JobSchedulerService"/>
+        <service android:name=".monitor.uploader.WorkService"/>
+    </application>
+</manifest>
