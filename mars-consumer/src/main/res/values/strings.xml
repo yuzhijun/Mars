@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Mars-Consumer</string>
+
+    <!--network-->
+    <string name="toast_error_network">当前网络环境较差，请稍后重试!</string>
+    <string name="toast_error_not_have_network">当前没有网络，请检测设备后重试!</string>
+    <string name="toast_error_server">抱歉！服务器出错了!</string>
+    <string name="toast_error_unknown">抱歉！系统出现未知错误!</string>
 </resources>

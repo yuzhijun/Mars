@@ -89,4 +89,8 @@ public class BaseUtility {
         }
         return stackList;
     }
+
+    public static String getString(Context context,int id) {
+        return context.getApplicationContext().getString(id);
+    }
 }

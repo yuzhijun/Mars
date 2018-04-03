@@ -22,4 +22,8 @@ public class GsonSerializer implements Serializer {
     public <T> T deserialize(Reader reader, Class<T> clz) {
         return mGson.fromJson(reader, clz);
     }
+
+    public <T> T deserialize(String json,Class<T> clz){
+        return mGson.fromJson(json,clz);
+    }
 }
