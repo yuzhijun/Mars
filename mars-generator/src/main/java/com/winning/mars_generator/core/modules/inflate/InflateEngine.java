@@ -153,7 +153,7 @@ public class InflateEngine implements Engine {
         long viewDepth = 0;
         for (View view : views){
             do {
-                if (view instanceof FrameLayout || view instanceof CoordinatorLayout) {
+                if ((view instanceof FrameLayout && view.getId() == android.R.id.content) || view instanceof CoordinatorLayout) {
                     if (viewDepth > maxDepth){
                         maxDepth = viewDepth;
                     }

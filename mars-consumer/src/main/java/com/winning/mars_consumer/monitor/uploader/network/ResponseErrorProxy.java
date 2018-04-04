@@ -23,7 +23,6 @@ import java.net.UnknownHostException;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
-import retrofit2.adapter.rxjava.HttpException;
 
 import static com.winning.mars_consumer.utils.Constants.HttpCode.HTTP_NETWORK_ERROR;
 import static com.winning.mars_consumer.utils.Constants.HttpCode.HTTP_SERVER_ERROR;
@@ -82,8 +81,8 @@ public class ResponseErrorProxy implements InvocationHandler {
                                             || throwable instanceof ConnectException) {
                                         error = new ResponseError(HTTP_NETWORK_ERROR,
                                                 BaseUtility.getString(MarsConsumer.mContext,R.string.toast_error_network));
-                                    } else if (throwable instanceof HttpException) {
-                                        HttpException exception = (HttpException) throwable;
+                                    } else if (throwable instanceof retrofit2.HttpException) {
+                                        retrofit2.HttpException exception = (retrofit2.HttpException) throwable;
                                         try {
                                             error = new GsonSerializer().deserialize(
                                                     exception.response().errorBody().string(), ResponseError.class);
@@ -134,7 +133,6 @@ public class ResponseErrorProxy implements InvocationHandler {
 
     private Observable<?> refreshTokenWhenTokenInvalid() {
         synchronized (ResponseErrorProxy.class) {
-            //TODO
             return Observable.error(new ResponseError(HTTP_SERVER_ERROR,
                     BaseUtility.getString(MarsConsumer.mContext,R.string.toast_error_server)));
         }
