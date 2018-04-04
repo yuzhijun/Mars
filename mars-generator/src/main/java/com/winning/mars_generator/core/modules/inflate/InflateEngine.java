@@ -150,15 +150,26 @@ public class InflateEngine implements Engine {
      * */
     private long calculateDepthInflater(List<View> views){
         long maxDepth = 0;
-        long viewDepth = 0;
+        long viewDepth;
         for (View view : views){
+            viewDepth = 0;
             do {
-                if ((view instanceof FrameLayout && view.getId() == android.R.id.content) || view instanceof CoordinatorLayout) {
+                if (view instanceof CoordinatorLayout){
                     if (viewDepth > maxDepth){
                         maxDepth = viewDepth;
                     }
-                    continue;
+                   break;
+                }else if (view instanceof FrameLayout){
+                    if (view.getId() == android.R.id.content){
+                        if (viewDepth > maxDepth){
+                            maxDepth = viewDepth;
+                        }
+                        break;
+                    }else{
+                        break;
+                    }
                 }
+
                 if (view != null) {
                     final ViewParent parent = view.getParent();
                     view = parent instanceof View ? (View) parent : null;

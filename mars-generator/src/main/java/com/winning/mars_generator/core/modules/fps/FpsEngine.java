@@ -28,7 +28,6 @@ public class FpsEngine implements Engine {
     private Generator<FpsBean> mGenerator;
     private long mIntervalMillis;
     private CompositeDisposable mCompositeDisposable;
-    private long mFrameIntervalNanos;
     private FpsBean mFpsBean;
 
     public FpsEngine(Context context, Generator<FpsBean> generator,long intervalMillis){
@@ -36,7 +35,6 @@ public class FpsEngine implements Engine {
         this.mGenerator = generator;
         this.mIntervalMillis = intervalMillis;
         mCompositeDisposable = new CompositeDisposable();
-        mFrameIntervalNanos = (long)(1000000000 / getRefreshRate(mContext));
     }
 
     @Override
@@ -63,7 +61,7 @@ public class FpsEngine implements Engine {
         return Observable.create(new ObservableOnSubscribe<FpsBean>() {
             @Override
             public void subscribe(final ObservableEmitter<FpsBean> e) throws Exception {
-                BaseUtility.ensureWorkThread("fpsEngine");
+                BaseUtility.ensureMainThread("fpsEngine");
                 final float systemRate = getRefreshRate(mContext);
                 final Choreographer choreographer = Choreographer.getInstance();
                 choreographer.postFrameCallback(new Choreographer.FrameCallback() {
@@ -75,8 +73,8 @@ public class FpsEngine implements Engine {
                             public void doFrame(long frameTimeNanos) {
                                 long frameInterval = frameTimeNanos - startTimeNanos;
                                 long fps = 1000000000 / frameInterval;
-                                if (fps > mFrameIntervalNanos){
-                                    final long skippedFrames = fps / mFrameIntervalNanos;
+                                if (fps > getRefreshRate(mContext)){
+                                    final long skippedFrames =(long)(fps / getRefreshRate(mContext));
                                     mFpsBean.setSkipFrame(skippedFrames);
                                 }
                                 mFpsBean.setCurrentFps((int) Math.min(fps,systemRate));

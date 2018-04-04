@@ -53,6 +53,16 @@ public class BaseUtility {
      * */
     public static void ensureWorkThread(String tag) {
         if (isMainThread()) {
+            throw new IllegalStateException(tag + " operation must execute on work thread!");
+        }
+    }
+
+    /**
+     * confirm
+     * @param tag for throw exception
+     * */
+    public static void ensureMainThread(String tag) {
+        if (!isMainThread()) {
             throw new IllegalStateException(tag + " operation must execute on main thread!");
         }
     }

@@ -21,7 +21,7 @@ public class Inflate extends GeneratorSubject<InflateBean> implements Install {
         }
 
         mInflateEngine = new InflateEngine(this, context);
-        mInflateEngine.stop();
+        mInflateEngine.launch();
         LogUtil.d("Inflate module installed successfully, enjoy");
     }
 

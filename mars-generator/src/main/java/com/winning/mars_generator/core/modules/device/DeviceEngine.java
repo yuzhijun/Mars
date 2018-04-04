@@ -21,6 +21,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
@@ -33,29 +34,25 @@ import io.reactivex.functions.Consumer;
 public class DeviceEngine implements Engine {
     private Generator<DeviceBean> mGenerator;
     private Context mContext;
-    private DeviceBean mDeviceBean;
     private CompositeDisposable mCompositeDisposable;
 
-    public DeviceEngine(Generator<DeviceBean> mGenerator, Context context) {
-        this.mGenerator = mGenerator;
+    public DeviceEngine(Generator<DeviceBean> generator, Context context) {
+        this.mGenerator = generator;
         this.mContext = context;
         mCompositeDisposable = new CompositeDisposable();
     }
 
     @Override
     public void launch() {
-        if (null == mDeviceBean) {
-            mDeviceBean = new DeviceBean();
-        }
         mCompositeDisposable.add(Observable.fromCallable(new Callable<DeviceBean>() {
             @Override
             public DeviceBean call() throws Exception {
                 return getDeviceInfo();
             }
-        }).subscribe(new Consumer<DeviceBean>() {
+        }).delay(2000, TimeUnit.MILLISECONDS).subscribe(new Consumer<DeviceBean>() {
             @Override
             public void accept(DeviceBean deviceBean) throws Exception {
-                mGenerator.generate(mDeviceBean);
+                mGenerator.generate(deviceBean);
             }
         }, new Consumer<Throwable>() {
             @Override
@@ -66,6 +63,7 @@ public class DeviceEngine implements Engine {
     }
 
     private DeviceBean getDeviceInfo() {
+         DeviceBean  mDeviceBean = new DeviceBean();
         TelephonyManager phone = (TelephonyManager) mContext.getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
         mDeviceBean.setDeviceBrand(Build.BRAND);
         mDeviceBean.setDeviceID(Build.ID);

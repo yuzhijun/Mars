@@ -1,6 +1,11 @@
 package com.winning.mars_consumer.monitor.server;
 
+import android.net.Uri;
+import android.text.TextUtils;
+
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.ServerSocketChannel;
@@ -48,10 +53,28 @@ public class TCPProtocolImpl implements TCPProtocol {
             String receivedString= Charset.forName("UTF-8").newDecoder().decode(buffer).toString();
             // print to console
             System.out.println("get"+clientChannel.socket().getRemoteSocketAddress()+"'s information:"+receivedString);
+
+            String pathAndParams = null;
+            String[] requestMessage = receivedString.split("\r\n");
+            for (String line : requestMessage){
+                if (line.startsWith("GET /")) {
+                    int start = line.indexOf('/') + 1;
+                    int end = line.indexOf(' ', start);
+                    pathAndParams = line.substring(start, end);
+                    break;
+                }
+            }
+
+            Uri uri = parseUri(pathAndParams);
+            StringBuilder sendString = new StringBuilder();
+            sendString.append("HTTP/1.1 200 OK\r\n");
+            sendString.append("Content-Type: "+ prepareMimeType(uri.getPath())+"\r\n");
             if (null != mSocketCallBack){
-                // prepare message
-                String sendString = mSocketCallBack.popSocketData(receivedString);
-                buffer = ByteBuffer.wrap(sendString.getBytes("UTF-8"));
+                String responseString = mSocketCallBack.popSocketData(receivedString);
+                sendString.append("Content-Length: " + responseString.getBytes().length);
+                sendString.append("\r\n");
+                sendString.append(responseString);
+                buffer = ByteBuffer.wrap(sendString.toString().getBytes("UTF-8"));
                 clientChannel.write(buffer);
             }
             // set read or write for next operation
@@ -61,6 +84,24 @@ public class TCPProtocolImpl implements TCPProtocol {
 
     @Override
     public void handleWrite(SelectionKey key) throws IOException {
+    }
+
+    private Uri parseUri(String url) throws UnsupportedEncodingException {
+        return Uri.parse(URLDecoder.decode(url, "UTF-8"));
+    }
+
+    private static String prepareMimeType(String fileName) {
+        if (TextUtils.isEmpty(fileName)) {
+            return null;
+        } else if (fileName.endsWith(".html")) {
+            return "text/html";
+        } else if (fileName.endsWith(".js")) {
+            return "application/javascript";
+        } else if (fileName.endsWith(".css")) {
+            return "text/css";
+        } else {
+            return "application/octet-stream";
+        }
     }
 
     private static ISocketCallBack mSocketCallBack;
