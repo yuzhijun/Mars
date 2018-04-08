@@ -19,7 +19,7 @@ public class MarsSocketServer{
     private ServerSocketChannel listenerChannel;
     // buffer size
     private static final int BufferSize = 1024;
-    private static final int DEFAULT_PORT = 5390;
+    private static final int DEFAULT_PORT = 5490;
     private MarsSocketServer(){
     }
 
@@ -105,7 +105,7 @@ public class MarsSocketServer{
     }
 
     public synchronized void stopServer(){
-        TCPProtocolImpl.unRegisterSocketCallBack();
+
     }
 
     private int socketPort(){

@@ -11,7 +11,7 @@ import java.io.UnsupportedEncodingException;
  */
 
 public interface Presenter {
-    byte[] process(Uri uri) throws Throwable;
+   String process(Uri uri) throws Throwable;
 
     class ResultWrapper<T> {
         public static final int SUCCESS = 1;

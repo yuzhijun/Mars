@@ -3,6 +3,9 @@ package com.winning.mars_consumer.monitor.server;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.winning.mars_consumer.monitor.PresenterMapper;
+import com.winning.mars_generator.utils.LogUtil;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -47,43 +50,58 @@ public class TCPProtocolImpl implements TCPProtocol {
             clientChannel.close();
         }
         else{
-            // set buffer area to output status
-            buffer.flip();
-            // convert message to UTF-8
-            String receivedString= Charset.forName("UTF-8").newDecoder().decode(buffer).toString();
-            // print to console
-            System.out.println("get"+clientChannel.socket().getRemoteSocketAddress()+"'s information:"+receivedString);
+            try{
+                // set buffer area to output status
+                buffer.flip();
+                // convert message to UTF-8
+                String receivedString= Charset.forName("UTF-8").newDecoder().decode(buffer).toString();
+                // print to console
+                System.out.println("get"+clientChannel.socket().getRemoteSocketAddress()+"'s information:"+receivedString);
 
-            String pathAndParams = null;
-            String[] requestMessage = receivedString.split("\r\n");
-            for (String line : requestMessage){
-                if (line.startsWith("GET /")) {
-                    int start = line.indexOf('/') + 1;
-                    int end = line.indexOf(' ', start);
-                    pathAndParams = line.substring(start, end);
-                    break;
+                String pathAndParams = null;
+                String[] requestMessage = receivedString.split("\r\n");
+                for (String line : requestMessage){
+                    if (line.startsWith("GET /")) {
+                        int start = line.indexOf('/') + 1;
+                        int end = line.indexOf(' ', start);
+                        pathAndParams = line.substring(start, end);
+                        break;
+                    }
                 }
-            }
 
-            Uri uri = parseUri(pathAndParams);
-            StringBuilder sendString = new StringBuilder();
-            sendString.append("HTTP/1.1 200 OK\r\n");
-            sendString.append("Content-Type: "+ prepareMimeType(uri.getPath())+"\r\n");
-            if (null != mSocketCallBack){
-                String responseString = mSocketCallBack.popSocketData(receivedString);
-                sendString.append("Content-Length: " + responseString.getBytes().length);
+                Uri uri = parseUri(pathAndParams);
+                String data = PresenterMapper.getInstance().process(uri);
+                if (null == data || "".equalsIgnoreCase(data)){
+                    responseServerError(clientChannel);
+                    return;
+                }
+
+                StringBuilder sendString = new StringBuilder();
+                sendString.append("HTTP/1.0 200 OK\r\n");
+                sendString.append("Content-Type:").append(prepareMimeType(uri.getPath())).append("\r\n");
+                sendString.append("Content-Length:").append(data.length()).append("\r\n");
                 sendString.append("\r\n");
-                sendString.append(responseString);
-                buffer = ByteBuffer.wrap(sendString.toString().getBytes("UTF-8"));
-                clientChannel.write(buffer);
+                sendString.append(data);
+                ByteBuffer bufferResponse = ByteBuffer.wrap(sendString.toString().getBytes());
+                while (bufferResponse.hasRemaining()) {
+                    clientChannel.write(bufferResponse);
+                }
+            }catch (Throwable e){
+                LogUtil.d(this.getClass().getSimpleName(),"查找路由出错");
+            }finally {
+                clientChannel.close();
             }
-            // set read or write for next operation
-            key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
         }
     }
 
     @Override
     public void handleWrite(SelectionKey key) throws IOException {
+
+    }
+
+    private void responseServerError(SocketChannel socketChannel) throws Throwable{
+        ByteBuffer buffer = ByteBuffer.wrap("HTTP/1.0 500 Internal Server Error".getBytes("UTF-8"));
+        socketChannel.write(buffer);
     }
 
     private Uri parseUri(String url) throws UnsupportedEncodingException {
@@ -100,22 +118,7 @@ public class TCPProtocolImpl implements TCPProtocol {
         } else if (fileName.endsWith(".css")) {
             return "text/css";
         } else {
-            return "application/octet-stream";
-        }
-    }
-
-    private static ISocketCallBack mSocketCallBack;
-    public interface ISocketCallBack{
-        String popSocketData(String content);
-    }
-
-    public static void regisiterSocketCallBack(ISocketCallBack socketCallBack){
-        mSocketCallBack = socketCallBack;
-    }
-
-    public static void unRegisterSocketCallBack(){
-        if (null != mSocketCallBack){
-            mSocketCallBack = null;
+            return "application/json";
         }
     }
 }

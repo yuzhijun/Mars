@@ -3,6 +3,7 @@ package com.winning.mars_consumer;
 import android.content.Context;
 
 import com.winning.mars_consumer.monitor.Monitor;
+import com.winning.mars_consumer.monitor.PresenterMapper;
 import com.winning.mars_consumer.monitor.server.MarsSocketServer;
 import com.winning.mars_consumer.monitor.uploader.JobStarter;
 import com.winning.mars_generator.utils.LogUtil;
@@ -35,6 +36,8 @@ public class MarsConsumer {
 
         MarsSocketServer.getInstance().startServer();
 //        JobStarter.getInstance().startJob(context);
+
+        PresenterMapper.getInstance().init();
 
         LogUtil.d("begin consuming data.");
     }
