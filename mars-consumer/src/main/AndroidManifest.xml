@@ -1,8 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.winning.mars_consumer">
+
     <application>
         <receiver android:name=".monitor.uploader.WakeCPUReceiver"/>
-        <service android:name=".monitor.uploader.JobSchedulerService"/>
+        <service android:name=".monitor.uploader.JobSchedulerService"
+            android:exported="true"
+            android:enabled="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
         <service android:name=".monitor.uploader.WorkService"/>
+        <provider android:name=".monitor.storage.PreferenceProvider"
+                  android:enabled="true"
+                  android:authorities="com.winning.marsConsumer.PreferenceProvider" />
     </application>
 </manifest>

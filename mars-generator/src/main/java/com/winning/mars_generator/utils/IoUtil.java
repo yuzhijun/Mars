@@ -1,5 +1,7 @@
 package com.winning.mars_generator.utils;
 
+import android.database.Cursor;
+
 import java.io.Closeable;
 import java.io.IOException;
 
@@ -18,6 +20,12 @@ public class IoUtil {
                 closeable.close();
             } catch (IOException var2) {
             }
+        }
+    }
+
+    public static void closeSilently(Cursor cursor) {
+        if (cursor != null && !cursor.isClosed()) {
+            cursor.close();
         }
     }
 }

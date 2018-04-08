@@ -14,6 +14,5 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Mars.getInstance(this).install(Cpu.class);
-
     }
 }

@@ -35,7 +35,7 @@ public class MarsConsumer {
         mMonitor.startMonitor(context);
 
         MarsSocketServer.getInstance().startServer();
-//        JobStarter.getInstance().startJob(context);
+        JobStarter.getInstance().startJob(context);
 
         PresenterMapper.getInstance().init();
 

@@ -1,5 +1,6 @@
 package com.winning.mars_consumer.monitor;
 
+import com.winning.mars_consumer.utils.Constants;
 import com.winning.mars_generator.core.modules.account.AccountBean;
 import com.winning.mars_generator.core.modules.battery.BatteryBean;
 import com.winning.mars_generator.core.modules.cpu.CpuBean;
@@ -39,11 +40,15 @@ public class Repository {
 
     //battery information
     private BatteryBean mBatteryBean;
+    private final Object mLockForBattery = new Object();
     public BatteryBean getBatteryBean() {
         return mBatteryBean;
     }
     public void setBatteryBean(BatteryBean batteryBean) {
-        mBatteryBean = batteryBean;
+        synchronized (mLockForBattery){
+            mBatteryBean = batteryBean;
+            LocalRepository.getInstance().save2Local(Constants.Mapper.BATTERY,mBatteryBean);
+        }
     }
 
     //cpu information
@@ -59,6 +64,7 @@ public class Repository {
     public void setCpuBean(CpuBean cpuBean) {
         synchronized (mLockForCpu){
             mCpuBeans.add(cpuBean);
+            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.CPU,mCpuBeans);
         }
     }
 
@@ -75,16 +81,21 @@ public class Repository {
     public void setCrashBeans(List<CrashBean> crashBeans) {
         synchronized (mLockForCrash){
             mCrashBeans.addAll(crashBeans);
+            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.CRASH,mCrashBeans);
         }
     }
 
     //device information
     private DeviceBean mDeviceBean;
+    private final Object mLockForDevice = new Object();
     public DeviceBean getDeviceBean() {
         return mDeviceBean;
     }
     public void setDeviceBean(DeviceBean deviceBean) {
-        mDeviceBean = deviceBean;
+        synchronized (mLockForDevice){
+            mDeviceBean = deviceBean;
+            LocalRepository.getInstance().save2Local(Constants.Mapper.DEVICE,mDeviceBean);
+        }
     }
 
     //fps information
@@ -100,6 +111,7 @@ public class Repository {
     public void setFpsBean(FpsBean fpsBean) {
         synchronized (mLockForFps){
             mFpsBeans.add(fpsBean);
+            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.FPS,mFpsBeans);
         }
     }
 
@@ -116,6 +128,7 @@ public class Repository {
     public void setInflateBean(InflateBean inflateBean) {
        synchronized (mLockForInflate){
            mInflateBeans.add(inflateBean);
+           LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.INFLATE,mInflateBeans);
        }
     }
 
@@ -132,6 +145,7 @@ public class Repository {
     public void setLeakMemoryBean(LeakBean.LeakMemoryBean leakMemoryBean) {
         synchronized (mLockForLeak){
             mLeakMemoryBeans.add(leakMemoryBean);
+            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.LEAK,mLeakMemoryBeans);
         }
     }
 
@@ -148,6 +162,7 @@ public class Repository {
     public void setSmBean(SmBean smBean) {
         synchronized (mLockForSm){
             mSmBeans.add(smBean);
+            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.SM,mSmBeans);
         }
     }
 
@@ -164,6 +179,7 @@ public class Repository {
     public void setDeadLockThreads(List<Thread> deadLockThreads) {
         synchronized (mLockForDeadLock){
             mDeadLockThreads.addAll(deadLockThreads);
+            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.DEADLOCK,mDeadLockThreads);
         }
     }
 
@@ -180,6 +196,7 @@ public class Repository {
     public void setTrafficBean(TrafficBean trafficBean) {
         synchronized (mLockForTraffic){
             mTrafficBeans.add(trafficBean);
+            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.TRAFFIC,mTrafficBeans);
         }
     }
 
@@ -196,16 +213,21 @@ public class Repository {
     public void setNetworkBean(NetworkBean networkBean) {
         synchronized (mLockForNetwork){
             mNetworkBeans.add(networkBean);
+            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.NETWORK,mNetworkBeans);
         }
     }
 
     //startup information
     private StartupBean mStartupBean;
+    private final Object mLockForStartup = new Object();
     public StartupBean getStartupBean() {
         return mStartupBean;
     }
     public void setStartupBean(StartupBean startupBean) {
-        mStartupBean = startupBean;
+        synchronized (mLockForStartup){
+            mStartupBean = startupBean;
+            LocalRepository.getInstance().save2Local(Constants.Mapper.STARTUP,mStartupBean);
+        }
     }
 
     //account information
@@ -221,6 +243,7 @@ public class Repository {
     public void setAccountBean(AccountBean accountBean) {
         synchronized (mLockForAccount){
             mAccountBeans.add(accountBean);
+            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.ACCOUNT,mAccountBeans);
         }
     }
 

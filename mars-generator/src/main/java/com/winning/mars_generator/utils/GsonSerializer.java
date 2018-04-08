@@ -3,8 +3,14 @@ package com.winning.mars_generator.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.Reader;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GsonSerializer implements Serializer {
     private Gson mGson;
@@ -25,5 +31,32 @@ public class GsonSerializer implements Serializer {
 
     public <T> T deserialize(String json,Class<T> clz){
         return mGson.fromJson(json,clz);
+    }
+
+    public <T> T deserialize(String json, Type typeOfT){
+        return mGson.fromJson(json,typeOfT);
+    }
+
+    public <T> T deserialize(JsonElement json, Class<T> classOfT){
+        return mGson.fromJson(json,classOfT);
+    }
+
+    public  <T extends Object> List<T> getJsonList(String json, Class<T> clazz) {
+        try {
+            if (null != json && !"".equalsIgnoreCase(json)) {
+                List<T> resutList = new ArrayList<T>();
+                java.lang.reflect.Type type = new TypeToken<ArrayList<JsonObject>>() {}.getType();
+                ArrayList<JsonObject> jsonObjs = deserialize(json, type);
+                for (JsonObject jsonObj : jsonObjs) {
+                    resutList.add(deserialize(jsonObj, clazz));
+                }
+                return resutList;
+            }else{
+                return null;
+            }
+
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

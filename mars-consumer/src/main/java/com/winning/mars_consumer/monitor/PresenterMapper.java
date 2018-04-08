@@ -16,6 +16,7 @@ import com.winning.mars_consumer.monitor.presenter.SmPresenter;
 import com.winning.mars_consumer.monitor.presenter.StartupPresenter;
 import com.winning.mars_consumer.monitor.presenter.TrafficPresenter;
 import com.winning.mars_consumer.monitor.presenter.base.Presenter;
+import com.winning.mars_consumer.utils.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,31 +46,31 @@ public class PresenterMapper {
     public void init(){
         mPresenterMap = new HashMap<>();
         AccountPresenter accountPresenter = new AccountPresenter();
-        mPresenterMap.put("Account",accountPresenter);
+        mPresenterMap.put(Constants.Mapper.ACCOUNT,accountPresenter);
         BatteryPresenter batteryPresenter = new BatteryPresenter();
-        mPresenterMap.put("Battery",batteryPresenter);
+        mPresenterMap.put(Constants.Mapper.BATTERY,batteryPresenter);
         CpuPresenter cpuPresenter = new CpuPresenter();
-        mPresenterMap.put("Cpu",cpuPresenter);
+        mPresenterMap.put(Constants.Mapper.CPU,cpuPresenter);
         CrashPresenter crashPresenter = new CrashPresenter();
-        mPresenterMap.put("Crash",crashPresenter);
+        mPresenterMap.put(Constants.Mapper.CRASH,crashPresenter);
         DeadLockPresenter deadLockPresenter = new DeadLockPresenter();
-        mPresenterMap.put("Deadlock",deadLockPresenter);
+        mPresenterMap.put(Constants.Mapper.DEADLOCK,deadLockPresenter);
         DevicePresenter devicePresenter = new DevicePresenter();
-        mPresenterMap.put("Device",devicePresenter);
+        mPresenterMap.put(Constants.Mapper.DEVICE,devicePresenter);
         FpsPresenter fpsPresenter = new FpsPresenter();
-        mPresenterMap.put("Fps",fpsPresenter);
+        mPresenterMap.put(Constants.Mapper.FPS,fpsPresenter);
         InflatePresenter inflatePresenter = new InflatePresenter();
-        mPresenterMap.put("Inflate",inflatePresenter);
+        mPresenterMap.put(Constants.Mapper.INFLATE,inflatePresenter);
         LeakPresenter leakPresenter = new LeakPresenter();
-        mPresenterMap.put("Leak",leakPresenter);
+        mPresenterMap.put(Constants.Mapper.LEAK,leakPresenter);
         NetworkPresenter networkPresenter = new NetworkPresenter();
-        mPresenterMap.put("Network",networkPresenter);
+        mPresenterMap.put(Constants.Mapper.NETWORK,networkPresenter);
         SmPresenter smPresenter = new SmPresenter();
-        mPresenterMap.put("Sm",smPresenter);
+        mPresenterMap.put(Constants.Mapper.SM,smPresenter);
         StartupPresenter startupPresenter = new StartupPresenter();
-        mPresenterMap.put("Startup",startupPresenter);
+        mPresenterMap.put(Constants.Mapper.STARTUP,startupPresenter);
         TrafficPresenter trafficPresenter = new TrafficPresenter();
-        mPresenterMap.put("Traffic",trafficPresenter);
+        mPresenterMap.put(Constants.Mapper.TRAFFIC,trafficPresenter);
     }
 
     public String process(Uri uri) throws Throwable {
