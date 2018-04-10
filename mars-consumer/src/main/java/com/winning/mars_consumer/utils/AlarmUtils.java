@@ -8,7 +8,6 @@ import android.os.SystemClock;
  * Created by yuzhijun on 2018/4/2.
  */
 public class AlarmUtils {
-    public static final int DEFAULT_TRIGGER_AT_MILLIS = 10000;
 
     public static void setRTCWakeup(AlarmManager alarmManager, int defaultTriggerAtMillis, PendingIntent pendingIntent) {
         long currentTimeMillis = System.currentTimeMillis();

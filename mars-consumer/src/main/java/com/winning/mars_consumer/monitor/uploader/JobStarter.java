@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
+import com.winning.mars_consumer.MarsConsumer;
 import com.winning.mars_consumer.utils.AlarmUtils;
+import com.winning.mars_consumer.utils.CommUtil;
+import com.winning.mars_consumer.utils.Constants;
 
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
 
@@ -61,12 +64,13 @@ public class JobStarter {
         Intent intent = new Intent();
         intent.setAction(ACTION_WAKE_UP);
         mPendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        boolean isdebug = CommUtil.isApkInDebug(MarsConsumer.mContext);
         switch (type) {
             case 0:
-                AlarmUtils.setRTCWakeup(mAlarmManager, AlarmUtils.DEFAULT_TRIGGER_AT_MILLIS, mPendingIntent);
+                AlarmUtils.setRTCWakeup(mAlarmManager,isdebug ? Constants.DEBUG_UPLOAD_RATE : Constants.RELEASE_UPLOAD_RATE, mPendingIntent);
                 break;
             case 1:
-                AlarmUtils.setElapsedWakeup(mAlarmManager, AlarmUtils.DEFAULT_TRIGGER_AT_MILLIS, mPendingIntent);
+                AlarmUtils.setElapsedWakeup(mAlarmManager, isdebug ? Constants.DEBUG_UPLOAD_RATE : Constants.RELEASE_UPLOAD_RATE, mPendingIntent);
                 break;
         }
     }

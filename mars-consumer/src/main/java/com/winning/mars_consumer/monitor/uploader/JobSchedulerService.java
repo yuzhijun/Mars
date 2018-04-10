@@ -12,6 +12,7 @@ import android.support.annotation.RequiresApi;
 
 import com.winning.mars_consumer.MarsConsumer;
 import com.winning.mars_consumer.monitor.LocalRepository;
+import com.winning.mars_consumer.utils.CommUtil;
 import com.winning.mars_consumer.utils.Constants;
 import com.winning.mars_consumer.utils.DefaultPoolExecutor;
 import com.winning.mars_consumer.utils.JsonWrapperUtil;
@@ -91,7 +92,7 @@ public class JobSchedulerService extends JobService {
         mServiceComponent = new ComponentName(this, JobSchedulerService.class);
         JobInfo.Builder builder = new JobInfo.Builder(mJobId++, mServiceComponent);
         // run per 10000 millis
-        builder.setPeriodic(10000);
+        builder.setPeriodic(CommUtil.isApkInDebug(MarsConsumer.mContext) ? Constants.DEBUG_UPLOAD_RATE : Constants.RELEASE_UPLOAD_RATE);
         // wifi only
         builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED);
         // no need charging
