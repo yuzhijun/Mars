@@ -14,8 +14,8 @@ import com.winning.mars_generator.core.modules.sm.SmBean;
 import com.winning.mars_generator.core.modules.startup.StartupBean;
 import com.winning.mars_generator.core.modules.traffic.TrafficBean;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -23,6 +23,7 @@ import java.util.List;
  * Created by yuzhijun on 2018/4/2.
  */
 public class Repository {
+    private static final int MAX_SIZE = 150;//just store lasted data
     private static Repository mInstance;
     private Repository(){
     }
@@ -52,7 +53,7 @@ public class Repository {
     }
 
     //cpu information
-    private List<CpuBean> mCpuBeans = new ArrayList<>();
+    private LinkedList<CpuBean> mCpuBeans = new LinkedList<>();
     private final Object mLockForCpu = new Object();
     public Collection<CpuBean> getCpuBeans() {
         synchronized (mLockForCpu){
@@ -63,13 +64,18 @@ public class Repository {
     }
     public void setCpuBean(CpuBean cpuBean) {
         synchronized (mLockForCpu){
-            mCpuBeans.add(cpuBean);
+            if (mCpuBeans.size() < MAX_SIZE){
+                mCpuBeans.add(cpuBean);
+            }else{
+                mCpuBeans.removeFirst();
+                mCpuBeans.addLast(cpuBean);
+            }
             LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.CPU,mCpuBeans);
         }
     }
 
     //crash information
-    private List<CrashBean> mCrashBeans = new ArrayList<>();
+    private LinkedList<CrashBean> mCrashBeans = new LinkedList<>();
     private final Object mLockForCrash = new Object();
     public Collection<CrashBean> getCrashBeans() {
         synchronized (mLockForCrash){
@@ -80,7 +86,16 @@ public class Repository {
     }
     public void setCrashBeans(List<CrashBean> crashBeans) {
         synchronized (mLockForCrash){
-            mCrashBeans.addAll(crashBeans);
+            if (null != crashBeans && crashBeans.size() > 0){
+                if ((mCrashBeans.size() + crashBeans.size()) < MAX_SIZE){
+                    mCrashBeans.addAll(crashBeans);
+                }else{
+                   for (int i = 0; i < crashBeans.size();i ++){
+                       mCrashBeans.removeFirst();
+                       mCrashBeans.addLast(crashBeans.get(i));
+                   }
+                }
+            }
             LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.CRASH,mCrashBeans);
         }
     }
@@ -99,7 +114,7 @@ public class Repository {
     }
 
     //fps information
-    private List<FpsBean> mFpsBeans = new ArrayList<>();
+    private LinkedList<FpsBean> mFpsBeans = new LinkedList<>();
     private final Object mLockForFps = new Object();
     public Collection<FpsBean> getFpsBeans() {
         synchronized (mLockForFps){
@@ -110,13 +125,18 @@ public class Repository {
     }
     public void setFpsBean(FpsBean fpsBean) {
         synchronized (mLockForFps){
-            mFpsBeans.add(fpsBean);
+            if (mFpsBeans.size() < MAX_SIZE){
+                mFpsBeans.add(fpsBean);
+            }else{
+                mFpsBeans.removeFirst();
+                mFpsBeans.addLast(fpsBean);
+            }
             LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.FPS,mFpsBeans);
         }
     }
 
     //inflate information
-    private List<InflateBean> mInflateBeans = new ArrayList<>();
+    private LinkedList<InflateBean> mInflateBeans = new LinkedList<>();
     private final Object mLockForInflate = new Object();
     public Collection<InflateBean> getInflateBeans() {
         synchronized (mLockForInflate){
@@ -127,13 +147,18 @@ public class Repository {
     }
     public void setInflateBean(InflateBean inflateBean) {
        synchronized (mLockForInflate){
-           mInflateBeans.add(inflateBean);
+           if (mInflateBeans.size() < MAX_SIZE){
+               mInflateBeans.add(inflateBean);
+           }else{
+               mInflateBeans.removeFirst();
+               mInflateBeans.addLast(inflateBean);
+           }
            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.INFLATE,mInflateBeans);
        }
     }
 
     //leak information
-    private List<LeakBean.LeakMemoryBean> mLeakMemoryBeans = new ArrayList<>();
+    private LinkedList<LeakBean.LeakMemoryBean> mLeakMemoryBeans = new LinkedList<>();
     private final Object mLockForLeak = new Object();
     public Collection<LeakBean.LeakMemoryBean> getLeakMemoryBeans() {
         synchronized (mLockForLeak){
@@ -144,13 +169,18 @@ public class Repository {
     }
     public void setLeakMemoryBean(LeakBean.LeakMemoryBean leakMemoryBean) {
         synchronized (mLockForLeak){
-            mLeakMemoryBeans.add(leakMemoryBean);
+            if (mLeakMemoryBeans.size() < MAX_SIZE){
+                mLeakMemoryBeans.add(leakMemoryBean);
+            }else{
+                mLeakMemoryBeans.removeFirst();
+                mLeakMemoryBeans.addLast(leakMemoryBean);
+            }
             LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.LEAK,mLeakMemoryBeans);
         }
     }
 
     //sm information
-    private List<SmBean> mSmBeans = new ArrayList<>();
+    private LinkedList<SmBean> mSmBeans = new LinkedList<>();
     private final Object mLockForSm = new Object();
     public Collection<SmBean> getSmBeans() {
         synchronized (mLockForSm){
@@ -161,13 +191,18 @@ public class Repository {
     }
     public void setSmBean(SmBean smBean) {
         synchronized (mLockForSm){
-            mSmBeans.add(smBean);
+            if (mSmBeans.size() < MAX_SIZE){
+                mSmBeans.add(smBean);
+            }else{
+                mSmBeans.removeFirst();
+                mSmBeans.addLast(smBean);
+            }
             LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.SM,mSmBeans);
         }
     }
 
     //deadlock threads information
-    private List<Thread> mDeadLockThreads = new ArrayList<>();
+    private LinkedList<Thread> mDeadLockThreads = new LinkedList<>();
     private final Object mLockForDeadLock = new Object();
     public Collection<Thread> getDeadLockThreads() {
         synchronized (mLockForDeadLock){
@@ -178,13 +213,22 @@ public class Repository {
     }
     public void setDeadLockThreads(List<Thread> deadLockThreads) {
         synchronized (mLockForDeadLock){
-            mDeadLockThreads.addAll(deadLockThreads);
+            if (null != deadLockThreads && deadLockThreads.size() > 0){
+                if ((mDeadLockThreads.size() + deadLockThreads.size()) < MAX_SIZE){
+                    mDeadLockThreads.addAll(deadLockThreads);
+                }else{
+                    for (int i = 0; i < deadLockThreads.size();i ++){
+                        mDeadLockThreads.removeFirst();
+                        mDeadLockThreads.addLast(deadLockThreads.get(i));
+                    }
+                }
+            }
             LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.DEADLOCK,mDeadLockThreads);
         }
     }
 
     //traffic information
-    private List<TrafficBean> mTrafficBeans = new ArrayList<>();
+    private LinkedList<TrafficBean> mTrafficBeans = new LinkedList<>();
     private final Object mLockForTraffic = new Object();
     public Collection<TrafficBean> getTrafficBeans() {
         synchronized (mLockForTraffic){
@@ -195,13 +239,18 @@ public class Repository {
     }
     public void setTrafficBean(TrafficBean trafficBean) {
         synchronized (mLockForTraffic){
-            mTrafficBeans.add(trafficBean);
+            if (mTrafficBeans.size() < MAX_SIZE){
+                mTrafficBeans.add(trafficBean);
+            }else{
+                mTrafficBeans.removeFirst();
+                mTrafficBeans.addLast(trafficBean);
+            }
             LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.TRAFFIC,mTrafficBeans);
         }
     }
 
     //network information
-    private List<NetworkBean> mNetworkBeans = new ArrayList<>();
+    private LinkedList<NetworkBean> mNetworkBeans = new LinkedList<>();
     private final Object mLockForNetwork = new Object();
     public Collection<NetworkBean> getNetworkBeans() {
         synchronized (mLockForNetwork){
@@ -212,7 +261,12 @@ public class Repository {
     }
     public void setNetworkBean(NetworkBean networkBean) {
         synchronized (mLockForNetwork){
-            mNetworkBeans.add(networkBean);
+            if (mNetworkBeans.size() < MAX_SIZE){
+                mNetworkBeans.add(networkBean);
+            }else{
+                mNetworkBeans.removeFirst();
+                mNetworkBeans.addLast(networkBean);
+            }
             LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.NETWORK,mNetworkBeans);
         }
     }
@@ -231,7 +285,7 @@ public class Repository {
     }
 
     //account information
-    private List<AccountBean> mAccountBeans = new ArrayList<>();
+    private LinkedList<AccountBean> mAccountBeans = new LinkedList<>();
     private final Object mLockForAccount = new Object();
     public Collection<AccountBean> getAccountBeans() {
         synchronized (mLockForAccount){
@@ -242,16 +296,22 @@ public class Repository {
     }
     public void setAccountBean(AccountBean accountBean) {
         synchronized (mLockForAccount){
-            mAccountBeans.add(accountBean);
+            if (mAccountBeans.size() < MAX_SIZE){
+                mAccountBeans.add(accountBean);
+            }else{
+                mAccountBeans.removeFirst();
+                mAccountBeans.addLast(accountBean);
+            }
             LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.ACCOUNT,mAccountBeans);
         }
     }
 
     private static <T> Collection<T> cloneList(Collection<T> originList) {
-        List<T> dest = new ArrayList<>();
+        List<T> dest = new LinkedList<>();
         if (originList == null || originList.isEmpty()) {
             return dest;
         }
+
         dest.addAll(originList);
         return dest;
     }

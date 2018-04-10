@@ -1,5 +1,7 @@
 package com.winning.mars_consumer.monitor.uploader.network;
 
+import com.winning.mars_consumer.utils.Constants;
+
 import java.lang.reflect.Proxy;
 import java.util.concurrent.TimeUnit;
 
@@ -13,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class ApiServiceModule {
-    private static final String BASE_URL =  "http://172.16.75.245:8080";//used for consumer module
+
     private static final int DEFAULT_TIMEOUT = 5;
     private static final int READ_TIMEOUT = 3;
     private static ApiServiceModule mInstance;
@@ -42,7 +44,7 @@ public class ApiServiceModule {
 
     private Retrofit provideRetrofit(OkHttpClient OkHttpClientBuilder,String url){
         return new Retrofit.Builder()
-                .baseUrl(url == null || "".equalsIgnoreCase(url) ? BASE_URL:url)
+                .baseUrl(url == null || "".equalsIgnoreCase(url) ? Constants.BASE_URL:url)
                 .addConverterFactory(StringConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())

@@ -4,6 +4,7 @@ import com.winning.mars_consumer.MarsConsumer;
 import com.winning.mars_consumer.monitor.storage.MarsPreference;
 import com.winning.mars_generator.utils.GsonSerializer;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -12,6 +13,7 @@ import java.util.List;
  */
 
 public class LocalRepository {
+    private static final int MAX_CAPTITY = 150;
     private MarsPreference mMarsPreference = new MarsPreference(MarsConsumer.mContext,"Mars");
     private GsonSerializer mGsonSerializer = new GsonSerializer();
     private static LocalRepository mInstance;
@@ -36,21 +38,21 @@ public class LocalRepository {
 
     public <T> void saveCollection2Local(String key,T object){
         String value = mGsonSerializer.serialize(object);
-        List<T> localList = (List<T>) getCollectionFromLocal(key,object.getClass());
+        LinkedList<T> localList = (LinkedList<T>) getCollectionFromLocal(key,object.getClass());
         if (null != localList){
-            List<T> valueList = (List<T>) mGsonSerializer.getJsonList(value,object.getClass());
-            localList.addAll(valueList);
+            LinkedList<T> valueList = (LinkedList<T>) mGsonSerializer.getJsonList(value,object.getClass());
+            int size = valueList.size();
+            if (localList.size() + size < MAX_CAPTITY){
+                localList.addAll(valueList);
+            }else{
+                for (int i = 0;i < size;i++){
+                    localList.removeFirst();
+                    localList.addLast(valueList.get(i));
+                }
+            }
             value = mGsonSerializer.serialize(localList);
         }
         mMarsPreference.setPrefString(key,value);
-    }
-
-    public <T> T getFromLocal(String key,Class<T> tClass){
-        String value = mMarsPreference.getPrefString(key,"");
-        if (null == value || "".equalsIgnoreCase(value)){
-            return null;
-        }
-        return mGsonSerializer.deserialize(value,tClass);
     }
 
     public <T> List<T> getCollectionFromLocal(String key,Class<T> tClass){
@@ -58,7 +60,18 @@ public class LocalRepository {
         if (null == value || "".equalsIgnoreCase(value)){
             return null;
         }
-
         return mGsonSerializer.getJsonList(value,tClass);
+    }
+
+    public String getFromLocal(String key){
+        String value = mMarsPreference.getPrefString(key,"");
+        if (null == value || "".equalsIgnoreCase(value)){
+            return null;
+        }
+        return value;
+    }
+
+    public void cleanLocal(String key){
+        mMarsPreference.setPrefString(key,"");
     }
 }

@@ -4,6 +4,7 @@ package com.winning.mars_consumer.utils;
  * Created by yuzhijun on 2018/4/3.
  */
 public class Constants {
+    public static final String BASE_URL =  "http://172.16.75.245:8080";//used for consumer module
     public class HttpCode {
         public static final int HTTP_UNAUTHORIZED = 401;
         public static final int HTTP_SERVER_ERROR = 500;

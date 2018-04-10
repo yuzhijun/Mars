@@ -88,8 +88,9 @@ public class TCPProtocolImpl implements TCPProtocol {
                 }
             }catch (Throwable e){
                 LogUtil.d(this.getClass().getSimpleName(),"查找路由出错");
-            }finally {
                 clientChannel.close();
+            }finally {
+                key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
             }
         }
     }

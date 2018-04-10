@@ -13,9 +13,19 @@ public class WorkService extends IntentService {
     }
 
     @Override
+    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         //TODO Time consuming task
 
         WakeCPUReceiver.completeWakefulIntent(intent);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

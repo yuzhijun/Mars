@@ -6,7 +6,13 @@ import com.winning.mars_consumer.monitor.Monitor;
 import com.winning.mars_consumer.monitor.PresenterMapper;
 import com.winning.mars_consumer.monitor.server.MarsSocketServer;
 import com.winning.mars_consumer.monitor.uploader.JobStarter;
+import com.winning.mars_consumer.utils.Constants;
 import com.winning.mars_generator.utils.LogUtil;
+
+import java.net.URISyntaxException;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
 
 /**
  * Entrance
@@ -15,6 +21,7 @@ import com.winning.mars_generator.utils.LogUtil;
 public class MarsConsumer {
     private static boolean mIsWorking = false;
     private static Monitor mMonitor;
+    public static Socket mSocket;
     public static Context mContext;
 
     /**
@@ -30,6 +37,12 @@ public class MarsConsumer {
         if (context == null){
             throw new IllegalStateException("context can not be null.");
         }
+        try {
+            mSocket = IO.socket(Constants.BASE_URL);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
         mContext = context;
         mMonitor = new Monitor();
         mMonitor.startMonitor(context);
