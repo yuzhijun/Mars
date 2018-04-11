@@ -40,13 +40,15 @@ public class LocalRepository {
         String value = mGsonSerializer.serialize(object);
         LinkedList<T> localList = (LinkedList<T>) getCollectionFromLocal(key,object.getClass());
         if (null != localList){
-            LinkedList<T> valueList = (LinkedList<T>) mGsonSerializer.getJsonList(value,object.getClass());
+            LinkedList<T> valueList = (LinkedList<T>) object;
             int size = valueList.size();
             if (localList.size() + size < MAX_CAPTITY){
                 localList.addAll(valueList);
             }else{
                 for (int i = 0;i < size;i++){
-                    localList.removeFirst();
+                    if (null != localList && localList.size() > 0){
+                        localList.removeFirst();
+                    }
                     localList.addLast(valueList.get(i));
                 }
             }

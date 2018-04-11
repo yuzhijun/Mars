@@ -91,7 +91,9 @@ public class Repository {
                     mCrashBeans.addAll(crashBeans);
                 }else{
                    for (int i = 0; i < crashBeans.size();i ++){
-                       mCrashBeans.removeFirst();
+                       if (null != mCrashBeans && mCrashBeans.size() > 0){
+                           mCrashBeans.removeFirst();
+                       }
                        mCrashBeans.addLast(crashBeans.get(i));
                    }
                 }
@@ -218,7 +220,9 @@ public class Repository {
                     mDeadLockThreads.addAll(deadLockThreads);
                 }else{
                     for (int i = 0; i < deadLockThreads.size();i ++){
-                        mDeadLockThreads.removeFirst();
+                        if (null != mDeadLockThreads && mDeadLockThreads.size() > 0){
+                            mDeadLockThreads.removeFirst();
+                        }
                         mDeadLockThreads.addLast(deadLockThreads.get(i));
                     }
                 }

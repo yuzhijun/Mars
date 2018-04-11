@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class GsonSerializer implements Serializer {
@@ -44,7 +45,7 @@ public class GsonSerializer implements Serializer {
     public  <T extends Object> List<T> getJsonList(String json, Class<T> clazz) {
         try {
             if (null != json && !"".equalsIgnoreCase(json)) {
-                List<T> resutList = new ArrayList<T>();
+                List<T> resutList = new LinkedList<>();
                 java.lang.reflect.Type type = new TypeToken<ArrayList<JsonObject>>() {}.getType();
                 ArrayList<JsonObject> jsonObjs = deserialize(json, type);
                 for (JsonObject jsonObj : jsonObjs) {
