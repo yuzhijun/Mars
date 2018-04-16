@@ -1,5 +1,6 @@
 package com.winning.mars_consumer.monitor.uploader.network;
 
+
 import com.winning.mars_consumer.utils.Constants;
 
 import java.lang.reflect.Proxy;
@@ -7,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -15,7 +16,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class ApiServiceModule {
-
     private static final int DEFAULT_TIMEOUT = 5;
     private static final int READ_TIMEOUT = 3;
     private static ApiServiceModule mInstance;
@@ -47,7 +47,7 @@ public class ApiServiceModule {
                 .baseUrl(url == null || "".equalsIgnoreCase(url) ? Constants.BASE_URL:url)
                 .addConverterFactory(StringConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(OkHttpClientBuilder)
                 .build();
     }
@@ -61,7 +61,7 @@ public class ApiServiceModule {
         return (ApiService) Proxy.newProxyInstance(apiService.getClassLoader(),new Class<?>[] { apiService },new ResponseErrorProxy(api,retrofit.baseUrl().toString()));
     }
 
-    public ApiService getNetWorkService(Class<? extends ApiService> apiService,String url){
+    public ApiService getNetWorkService(Class<? extends ApiService> apiService, String url){
         OkHttpClient okHttpClient = provideOkHttpClientBuilder();
         Retrofit retrofit = provideRetrofit(okHttpClient,url);
         return getByProxy(apiService,retrofit);

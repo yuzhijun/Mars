@@ -5,4 +5,5 @@ package com.winning.mars_consumer.monitor.uploader.network;
  */
 
 public interface ApiService {
+
 }
