@@ -2,10 +2,18 @@ package com.winning.mars_consumer.monitor.uploader.network;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
+import com.winning.mars_consumer.MarsConsumer;
+import com.winning.mars_generator.Mars;
+import com.winning.mars_generator.core.modules.network.Network;
+import com.winning.mars_generator.core.modules.network.NetworkBean;
+import com.winning.mars_generator.utils.LogUtil;
 
 import org.apache.http.conn.ConnectTimeoutException;
 import org.reactivestreams.Publisher;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.net.ConnectException;
@@ -35,7 +43,21 @@ public class ResponseErrorProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, final Method method, final Object[] args) {
            return Flowable.just("")
-                   .flatMap((Function<String, Flowable<?>>) s -> (Flowable<?>) method.invoke(mProxyObject, args))
+                   .flatMap((Function<String, Publisher<?>>) s -> {
+                       final long startTime = System.currentTimeMillis();
+                       Flowable<?> flowable =  (Flowable<?>) method.invoke(mProxyObject, args);
+                       flowable.map((Function<Object, Object>) o -> {
+                           try {
+                               int respBodySizeByte = sizeOfObject(o);
+                               long endTime = System.currentTimeMillis();
+                               Mars.getInstance(MarsConsumer.mContext).getModule(Network.class).generate(new NetworkBean(startTime,endTime,respBodySizeByte,url,args));
+                           } catch (IOException e) {
+                               e.printStackTrace();
+                           }
+                           return o;
+                       }).subscribe(o -> LogUtil.d(this.getClass().getSimpleName(),"网络请求数据记录完毕"));
+                       return flowable;
+                   })
                     .retryWhen(throwableFlowable -> throwableFlowable.flatMap((Function<Throwable, Publisher<?>>) throwable -> {
                         ResponseError error = null;
                         if (throwable instanceof ConnectTimeoutException
@@ -66,6 +88,23 @@ public class ResponseErrorProxy implements InvocationHandler {
                             return Flowable.error(error);
                         }
                     }));
+    }
+
+    /**
+     * calculate the size of object
+     * @param o object to calculate
+     * @return int size
+     * */
+    private  int sizeOfObject(Object o) throws IOException{
+        if (null == o){
+            return 0;
+        }
+        ByteArrayOutputStream buff = new ByteArrayOutputStream(4094);
+        ObjectOutputStream outputStream = new ObjectOutputStream(buff);
+        outputStream.writeObject(o);
+        outputStream.flush();
+        outputStream.close();
+        return buff.size();
     }
 
     private Flowable<?> refreshTokenWhenTokenInvalid() {
