@@ -1,21 +1,19 @@
 package com.winning.mars_generator.core.modules.inflate;
 
-import android.app.Activity;
-
 /**
  * Created by yuzhijun on 2018/3/28.
  */
 
 public class InflateBean {
-    private Activity mActivity;
+    private String mActivity;
     private long inflateDepth;
     private long inflateTime;
 
-    public Activity getActivity() {
+    public String getActivity() {
         return mActivity;
     }
 
-    public void setActivity(Activity activity) {
+    public void setActivity(String activity) {
         mActivity = activity;
     }
 

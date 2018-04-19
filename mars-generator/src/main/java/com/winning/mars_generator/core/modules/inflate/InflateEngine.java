@@ -110,7 +110,7 @@ public class InflateEngine implements Engine {
                             && mViewHashMap.get(activity).size() > 0){
                         long depth = calculateDepthInflater(mViewHashMap.get(activity));
                         mInflateBean.setInflateDepth(depth);
-                        mInflateBean.setActivity(activity);
+                        mInflateBean.setActivity(activity.getClass().getSimpleName());
                     }
                     mGenerator.generate(mInflateBean);
                 }

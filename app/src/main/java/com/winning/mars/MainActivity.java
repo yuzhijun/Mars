@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.winning.mars.model.GirlsData;
 import com.winning.mars.network.AppApiService;
 import com.winning.mars_consumer.monitor.uploader.network.ApiServiceModule;
+import com.winning.mars_consumer.utils.StartupTracer;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -19,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        StartupTracer.get().onHomeCreate(this);
 
         AppApiService appApiService = ApiServiceModule.getInstance().getNetworkService(AppApiService.class);
         appApiService.getFuliData("3","1")
