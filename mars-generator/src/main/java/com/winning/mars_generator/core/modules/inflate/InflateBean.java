@@ -8,6 +8,15 @@ public class InflateBean {
     private String mActivity;
     private long inflateDepth;
     private long inflateTime;
+    private long stayTime;
+
+    public long getStayTime() {
+        return stayTime;
+    }
+
+    public void setStayTime(long stayTime) {
+        this.stayTime = stayTime;
+    }
 
     public String getActivity() {
         return mActivity;

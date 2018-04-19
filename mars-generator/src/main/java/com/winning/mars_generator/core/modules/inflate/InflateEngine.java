@@ -34,6 +34,7 @@ public class InflateEngine implements Engine {
     private ConcurrentHashMap<AppCompatActivity,List<View>> mViewHashMap;
     private InflateBean mInflateBean;
     private final Handler mHandler;
+    private long time;
 
     public InflateEngine(Generator<InflateBean> generator, Context context) {
         this.mGenerator = generator;
@@ -69,7 +70,7 @@ public class InflateEngine implements Engine {
                     /**
                      * in order to get pageLoad time
                      * */
-                    final long time = System.currentTimeMillis();
+                   time = System.currentTimeMillis();
                     calculateInflaterTime(activity, new OnViewInflated() {
                         @Override
                         public void didInflated() {
@@ -105,6 +106,8 @@ public class InflateEngine implements Engine {
 
                 @Override
                 public void onActivityDestroyed(Activity activity) {
+                    final long destroyTime = System.currentTimeMillis();
+                    mInflateBean.setStayTime(destroyTime - time);
                     //calculate the depth of inflater
                     if (null != mViewHashMap && null != mViewHashMap.get(activity)
                             && mViewHashMap.get(activity).size() > 0){
