@@ -4,7 +4,7 @@ package com.winning.mars_consumer.utils;
  * Created by yuzhijun on 2018/4/3.
  */
 public class Constants {
-    public static final String BASE_URL =  "http://172.16.75.245:8080";//used for consumer module
+    public static final String BASE_URL =  "http://gank.io";//used for consumer module
     public static final int DEBUG_UPLOAD_RATE = 10000;//ten seconds
     public static final int RELEASE_UPLOAD_RATE = 300000;//five minutes
 

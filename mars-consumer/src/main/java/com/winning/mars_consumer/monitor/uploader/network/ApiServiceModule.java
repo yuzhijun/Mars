@@ -56,14 +56,20 @@ public class ApiServiceModule {
         return getByProxy(ApiService.class,retrofit);
     }
 
-    private ApiService getByProxy(Class<? extends ApiService> apiService, Retrofit retrofit){
-        ApiService api = retrofit.create(apiService);
-        return (ApiService) Proxy.newProxyInstance(apiService.getClassLoader(),new Class<?>[] { apiService },new ResponseErrorProxy(api,retrofit.baseUrl().toString()));
+    private <T> T getByProxy(Class<T> apiService, Retrofit retrofit){
+        T api = retrofit.create(apiService);
+        return (T) Proxy.newProxyInstance(apiService.getClassLoader(),new Class<?>[] { apiService },new ResponseErrorProxy(api,retrofit.baseUrl().toString()));
     }
 
-    public ApiService getNetWorkService(Class<? extends ApiService> apiService, String url){
+    public <T> T getNetworkService(Class<T> apiService, String url){
         OkHttpClient okHttpClient = provideOkHttpClientBuilder();
         Retrofit retrofit = provideRetrofit(okHttpClient,url);
+        return getByProxy(apiService,retrofit);
+    }
+
+    public <T> T getNetworkService(Class<T> apiService){
+        OkHttpClient okHttpClient = provideOkHttpClientBuilder();
+        Retrofit retrofit = provideRetrofit(okHttpClient,null);
         return getByProxy(apiService,retrofit);
     }
 
@@ -74,6 +80,6 @@ public class ApiServiceModule {
     }
 
     public ApiService getNetworkService(){
-       return getNetworkService(null);
+       return getNetworkService("");
     }
 }

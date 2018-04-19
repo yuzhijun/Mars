@@ -72,12 +72,7 @@ public class JobSchedulerService extends JobService {
     @Override
     public boolean onStartJob(final JobParameters jobParameters) {
         if (isConnected){
-            DefaultPoolExecutor.getInstance().execute(new Runnable() {
-                @Override
-                public void run() {
-                    uploadLocalData(jobParameters);
-                }
-            });
+            DefaultPoolExecutor.getInstance().execute(() -> uploadLocalData(jobParameters));
         }
         return true;
     }
@@ -112,12 +107,9 @@ public class JobSchedulerService extends JobService {
         tm.cancelAll();
     }
 
-    private Emitter.Listener onConnect = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            if(!isConnected) {
-                isConnected = true;
-            }
+    private Emitter.Listener onConnect = args -> {
+        if(!isConnected) {
+            isConnected = true;
         }
     };
 
