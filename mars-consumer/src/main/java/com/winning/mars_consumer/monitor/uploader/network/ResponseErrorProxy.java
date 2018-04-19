@@ -18,6 +18,8 @@ import java.net.UnknownHostException;
 import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
 import retrofit2.HttpException;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
 
 import static com.winning.mars_consumer.utils.Constants.HttpCode.HTTP_NETWORK_ERROR;
 import static com.winning.mars_consumer.utils.Constants.HttpCode.HTTP_SERVER_ERROR;
@@ -43,9 +45,12 @@ public class ResponseErrorProxy implements InvocationHandler {
                        Flowable<?> flowable =  (Flowable<?>) method.invoke(mProxyObject, args);
                        return flowable.map((Function<Object, Object>) o -> {
                                 try {
+                                    GET getAnnotation = method.getAnnotation(GET.class);
+                                    POST postAnnotation = method.getAnnotation(POST.class);
+                                    String subUrl = null != getAnnotation ? getAnnotation.value() : null != postAnnotation ? postAnnotation.value() : "";
                                     int respBodySizeByte = mGson.toJson(o).length();
                                     long endTime = System.currentTimeMillis();
-                                    Mars.getInstance(MarsConsumer.mContext).getModule(Network.class).generate(new NetworkBean(startTime,endTime,respBodySizeByte,url,args));
+                                    Mars.getInstance(MarsConsumer.mContext).getModule(Network.class).generate(new NetworkBean(startTime,endTime,respBodySizeByte,url+subUrl,args));
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
