@@ -1,11 +1,19 @@
 package com.winning.mars_consumer;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 
+import com.winning.mars_consumer.monitor.bean.AppInfo;
+import com.winning.mars_consumer.monitor.bean.AppUpdate;
+import com.winning.mars_consumer.monitor.uploader.network.ApiServiceModule;
+import com.winning.mars_consumer.utils.Constants;
+import com.winning.mars_consumer.utils.DigestUtils;
 import com.winning.mars_consumer.utils.DownloadUtil;
 import com.winning.mars_generator.Mars;
 import com.winning.mars_generator.core.modules.battery.Battery;
@@ -21,6 +29,10 @@ import com.winning.mars_generator.utils.LogUtil;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.DisposableSubscriber;
 
 /**
  * Created by yuzhijun on 2018/4/10.
@@ -48,7 +60,7 @@ public class MarsEntrance {
      * init
      * @Param key appKey
      * */
-    public void init(Context context,String appKey){
+    public void init(Context context, String appKey, String appSecret){
         Mars.getInstance(context).install(Cpu.class)
         .install(Battery.class)
         .install(Crash.class)
@@ -60,9 +72,58 @@ public class MarsEntrance {
         .install(Traffic.class);
 
         MarsConsumer.consume(context);
+
+        checkAppUpdate(context,appKey,appSecret);
     }
 
-    private void download(Context context,String downloadUrl){
+    @SuppressLint("CheckResult")
+    private void checkAppUpdate(Context context, String appKey, String appSecret) {
+        final AppInfo appInfo = getAppInfo(context,appKey,appSecret);
+        ApiServiceModule.getInstance().getNetworkService()
+                .getUpadateInfo()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSubscriber<AppUpdate>() {
+                    @Override
+                    public void onNext(AppUpdate appUpdate) {
+                        if (null != appUpdate && null != appInfo){
+                            if (appUpdate.getVersionCode() > appInfo.getVersionCode()){
+                                download(context, Constants.DOWNLOAD_URL);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    public AppInfo getAppInfo(Context context,String appkey,String appSecret){
+        AppInfo appInfo = new AppInfo();
+        appInfo.setAppId(appkey);
+        appInfo.setAppSecret(appSecret);
+        appInfo.setToken(DigestUtils.md5DigestAsHex(appkey + "_" + appSecret));
+        appInfo.setPackageName(context.getPackageName());
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            PackageInfo pkgInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            appInfo.setVersionName(pkgInfo.versionName);
+            appInfo.setVersionCode(pkgInfo.versionCode);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return appInfo;
+    }
+
+    public void download(Context context,String downloadUrl){
         DownloadUtil.download(downloadUrl,new DownloadHandler(this,context));
     }
 

@@ -26,66 +26,63 @@ public class DownloadUtil {
 
     public static void download(final String url, final Handler handler) {
         isCancel = false;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-                    conn.setRequestMethod("GET");
-                    conn.setConnectTimeout(30 * 1000);
-                    long fileSize = conn.getContentLength();
-                    int code = conn.getResponseCode();
-                    if (code == 200 && fileSize > 0) {
-                        File downloadDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
-                        if (!downloadDir.exists()) {
-                            downloadDir.mkdir();
-                        }
-                        String filePath = new File(downloadDir,getFileNameFromUrl(url) + ".tmp").getAbsolutePath();
-                        File file = new File(filePath);
-                        InputStream in = conn.getInputStream();
-                        FileOutputStream out = new FileOutputStream(file);
-                        int len = 0;
-                        long downSize = 0;
-                        Integer i = 0;//ratio
-                        byte[] buffer = new byte[1024];
-                        while (!isCancel && (len = in.read(buffer)) != -1) {
-                            out.write(buffer, 0, len);
-                            downSize += len;
-                            if (downSize >= (fileSize / 100) && i < 100) {//every one percent notify
-                                sendMessage(handler, DOWNLOADING, ++i);
-                                downlaodState = DOWNLOADING;
-                                downSize = 0;
-                            }
-                        }
-                        out.flush();
-                        out.close();
-                        in.close();
-                        sendMessage(handler, DOWNLOADING, 100);
-                        downlaodState = DOWNLOADING;
-                        if (file.length() == fileSize) {
-                            //download finished
-                            String finalpath = new File(downloadDir,getFileNameFromUrl(url)).getAbsolutePath();
-                            File finalFile = new File(finalpath);
-                            if(file.renameTo(finalFile)){
-                                sendMessage(handler, DOWNLOAD_FINISH, finalpath);
-                            };
-                            downlaodState = DOWNLOAD_FINISH;
-                        } else {//download cancled
-                            sendMessage(handler, DOWNLOAD_CANCEL, "" + Thread.currentThread().getId());
-                            downlaodState = DOWNLOAD_CANCEL;
-                            if (file.exists()) {
-                                file.delete();
-                            }
-                        }
-                    } else {
-                        sendMessage(handler, DOWNLOAD_ERROR, "http code" + code);
-                        downlaodState = DOWNLOAD_ERROR;
+        new Thread(() -> {
+            try {
+                HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(30 * 1000);
+                long fileSize = conn.getContentLength();
+                int code = conn.getResponseCode();
+                if (code == 200 && fileSize > 0) {
+                    File downloadDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
+                    if (!downloadDir.exists()) {
+                        downloadDir.mkdir();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    sendMessage(handler, DOWNLOAD_ERROR, getStackTraceAsString(e));
+                    String filePath = new File(downloadDir,getFileNameFromUrl(url) + ".tmp").getAbsolutePath();
+                    File file = new File(filePath);
+                    InputStream in = conn.getInputStream();
+                    FileOutputStream out = new FileOutputStream(file);
+                    int len = 0;
+                    long downSize = 0;
+                    Integer i = 0;//ratio
+                    byte[] buffer = new byte[1024];
+                    while (!isCancel && (len = in.read(buffer)) != -1) {
+                        out.write(buffer, 0, len);
+                        downSize += len;
+                        if (downSize >= (fileSize / 100) && i < 100) {//every one percent notify
+                            sendMessage(handler, DOWNLOADING, ++i);
+                            downlaodState = DOWNLOADING;
+                            downSize = 0;
+                        }
+                    }
+                    out.flush();
+                    out.close();
+                    in.close();
+                    sendMessage(handler, DOWNLOADING, 100);
+                    downlaodState = DOWNLOADING;
+                    if (file.length() == fileSize) {
+                        //download finished
+                        String finalpath = new File(downloadDir,getFileNameFromUrl(url)).getAbsolutePath();
+                        File finalFile = new File(finalpath);
+                        if(file.renameTo(finalFile)){
+                            sendMessage(handler, DOWNLOAD_FINISH, finalpath);
+                        };
+                        downlaodState = DOWNLOAD_FINISH;
+                    } else {//download cancled
+                        sendMessage(handler, DOWNLOAD_CANCEL, "" + Thread.currentThread().getId());
+                        downlaodState = DOWNLOAD_CANCEL;
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                    }
+                } else {
+                    sendMessage(handler, DOWNLOAD_ERROR, "http code" + code);
                     downlaodState = DOWNLOAD_ERROR;
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                sendMessage(handler, DOWNLOAD_ERROR, getStackTraceAsString(e));
+                downlaodState = DOWNLOAD_ERROR;
             }
         }).start();
     }
