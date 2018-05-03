@@ -5,9 +5,10 @@ package com.winning.mars_consumer.utils;
  */
 public class Constants {
     public static final String BASE_URL =  "http://gank.io";//used for consumer module
+    public static final String SOCKET_URL = "http://172.16.75.58:9092";
     public static final String DOWNLOAD_URL = "";
-    public static final int DEBUG_UPLOAD_RATE = 10000;//ten seconds
-    public static final int RELEASE_UPLOAD_RATE = 300000;//five minutes
+    public static final int DEBUG_UPLOAD_RATE = 2000;//two seconds
+    public static final int RELEASE_UPLOAD_RATE = 10000;//five minutes
 
     public class HttpCode {
         public static final int HTTP_UNAUTHORIZED = 401;

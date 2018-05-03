@@ -66,9 +66,9 @@ public class DownloadUtil {
                         File finalFile = new File(finalpath);
                         if(file.renameTo(finalFile)){
                             sendMessage(handler, DOWNLOAD_FINISH, finalpath);
-                        };
+                        }
                         downlaodState = DOWNLOAD_FINISH;
-                    } else {//download cancled
+                    } else {//download canceled
                         sendMessage(handler, DOWNLOAD_CANCEL, "" + Thread.currentThread().getId());
                         downlaodState = DOWNLOAD_CANCEL;
                         if (file.exists()) {

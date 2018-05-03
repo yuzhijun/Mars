@@ -32,6 +32,11 @@ import io.socket.emitter.Emitter;
 public class WorkService extends IntentService {
     private boolean isConnected = false;
     private Socket mSocket;
+
+    public WorkService() {
+        super("");
+    }
+
     public WorkService(String name) {
         super(name);
     }

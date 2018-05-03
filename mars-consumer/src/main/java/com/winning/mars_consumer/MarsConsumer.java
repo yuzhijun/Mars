@@ -38,7 +38,7 @@ public class MarsConsumer {
             throw new IllegalStateException("context can not be null.");
         }
         try {
-            mSocket = IO.socket(Constants.BASE_URL);
+            mSocket = IO.socket(Constants.SOCKET_URL);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }

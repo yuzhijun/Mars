@@ -29,7 +29,7 @@ public class JsonWrapperUtil {
     }
 
     public static <T> JSONArray toJsonArray(String json,Class<T> tClass){
-        if (null != json && !"".equalsIgnoreCase(json)){
+        if (null != json && !" ".equalsIgnoreCase(json)){
             try {
                 List<JSONObject> jsonObjects = new ArrayList<>();
                 List<T> list = mGsonSerializer.getJsonList(json,tClass);

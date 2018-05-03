@@ -86,7 +86,7 @@ public class JobSchedulerService extends JobService {
     private Integer scheduleJob(){
         mServiceComponent = new ComponentName(this, JobSchedulerService.class);
         JobInfo.Builder builder = new JobInfo.Builder(mJobId++, mServiceComponent);
-        // run per 10000 millis
+        // run per 2000 millis
         builder.setPeriodic(CommUtil.isApkInDebug(MarsConsumer.mContext) ? Constants.DEBUG_UPLOAD_RATE : Constants.RELEASE_UPLOAD_RATE);
         // wifi only
         builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED);
@@ -94,6 +94,7 @@ public class JobSchedulerService extends JobService {
         builder.setRequiresCharging(false);
         // no need device idle
         builder.setRequiresDeviceIdle(false);
+        builder.setPersisted(true);
 
         JobScheduler tm = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
         return tm.schedule(builder.build());
@@ -129,7 +130,7 @@ public class JobSchedulerService extends JobService {
     private synchronized void uploadLocalData(JobParameters jobParameters){
         //upload battery data
         String battery = LocalRepository.getInstance().getFromLocal(Constants.Mapper.BATTERY);
-        if (null != battery && !"".equalsIgnoreCase(battery)){
+        if (null != battery && !" ".equalsIgnoreCase(battery)){
             JSONObject jsonObject = JsonWrapperUtil.toJsonObject(battery);
             if (null != jsonObject){
                 mSocket.emit(Constants.Mapper.BATTERY, jsonObject, new Ack() {
@@ -143,7 +144,7 @@ public class JobSchedulerService extends JobService {
 
         //upload cpu data
         String cpu = LocalRepository.getInstance().getFromLocal(Constants.Mapper.CPU);
-        if (null != cpu && !"".equalsIgnoreCase(cpu)){
+        if (null != cpu && !" ".equalsIgnoreCase(cpu)){
             JSONArray jsonArray = JsonWrapperUtil.toJsonArray(cpu, CpuBean.class);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.CPU, jsonArray, new Ack() {
@@ -157,7 +158,7 @@ public class JobSchedulerService extends JobService {
 
         //upload crash data
         String crash = LocalRepository.getInstance().getFromLocal(Constants.Mapper.CRASH);
-        if (null != crash && !"".equalsIgnoreCase(crash)){
+        if (null != crash && !" ".equalsIgnoreCase(crash)){
             JSONArray jsonArray = JsonWrapperUtil.toJsonArray(crash, CrashBean.class);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.CRASH, jsonArray, new Ack() {
@@ -171,7 +172,7 @@ public class JobSchedulerService extends JobService {
 
         //upload device data
         String device = LocalRepository.getInstance().getFromLocal(Constants.Mapper.DEVICE);
-        if (null != device && !"".equalsIgnoreCase(device)){
+        if (null != device && !" ".equalsIgnoreCase(device)){
             JSONObject jsonObject = JsonWrapperUtil.toJsonObject(device);
             if (null != jsonObject){
                 mSocket.emit(Constants.Mapper.DEVICE, jsonObject, new Ack() {
@@ -185,7 +186,7 @@ public class JobSchedulerService extends JobService {
 
         //upload fps data
         String fps = LocalRepository.getInstance().getFromLocal(Constants.Mapper.FPS);
-        if (null != fps && !"".equalsIgnoreCase(fps)){
+        if (null != fps && !" ".equalsIgnoreCase(fps)){
             JSONArray jsonArray = JsonWrapperUtil.toJsonArray(fps, FpsBean.class);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.FPS, jsonArray, new Ack() {
@@ -199,7 +200,7 @@ public class JobSchedulerService extends JobService {
 
         //upload inflate data
         String inflate = LocalRepository.getInstance().getFromLocal(Constants.Mapper.INFLATE);
-        if (null != inflate && !"".equalsIgnoreCase(inflate)){
+        if (null != inflate && !" ".equalsIgnoreCase(inflate)){
             JSONArray jsonArray = JsonWrapperUtil.toJsonArray(inflate, InflateBean.class);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.INFLATE, jsonArray, new Ack() {
@@ -213,7 +214,7 @@ public class JobSchedulerService extends JobService {
 
         //upload leak data
         String leak = LocalRepository.getInstance().getFromLocal(Constants.Mapper.LEAK);
-        if (null != inflate && !"".equalsIgnoreCase(leak)){
+        if (null != inflate && !" ".equalsIgnoreCase(leak)){
             JSONArray jsonArray = JsonWrapperUtil.toJsonArray(leak, LeakBean.LeakMemoryBean.class);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.LEAK, jsonArray, new Ack() {
@@ -227,7 +228,7 @@ public class JobSchedulerService extends JobService {
 
         //upload sm data
         String sm = LocalRepository.getInstance().getFromLocal(Constants.Mapper.SM);
-        if (null != sm && !"".equalsIgnoreCase(sm)){
+        if (null != sm && !" ".equalsIgnoreCase(sm)){
             JSONArray jsonArray = JsonWrapperUtil.toJsonArray(sm, SmBean.class);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.SM, jsonArray, new Ack() {
@@ -241,7 +242,7 @@ public class JobSchedulerService extends JobService {
 
         //upload deadLock data
         String deadLock = LocalRepository.getInstance().getFromLocal(Constants.Mapper.DEADLOCK);
-        if (null != deadLock && !"".equalsIgnoreCase(deadLock)){
+        if (null != deadLock && !" ".equalsIgnoreCase(deadLock)){
             JSONArray jsonArray = JsonWrapperUtil.toJsonArray(deadLock,Thread.class);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.DEADLOCK, jsonArray, new Ack() {
@@ -255,7 +256,7 @@ public class JobSchedulerService extends JobService {
 
         //upload traffic data
         String traffic = LocalRepository.getInstance().getFromLocal(Constants.Mapper.TRAFFIC);
-        if (null != traffic && !"".equalsIgnoreCase(traffic)){
+        if (null != traffic && !" ".equalsIgnoreCase(traffic)){
             JSONArray jsonArray = JsonWrapperUtil.toJsonArray(traffic, TrafficBean.class);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.TRAFFIC, jsonArray, new Ack() {
@@ -269,7 +270,7 @@ public class JobSchedulerService extends JobService {
 
         //upload network data
         String network = LocalRepository.getInstance().getFromLocal(Constants.Mapper.NETWORK);
-        if (null != network && !"".equalsIgnoreCase(network)){
+        if (null != network && !" ".equalsIgnoreCase(network)){
             JSONArray jsonArray = JsonWrapperUtil.toJsonArray(network, NetworkBean.class);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.NETWORK, jsonArray, new Ack() {
@@ -283,7 +284,7 @@ public class JobSchedulerService extends JobService {
 
         //upload startup data
         String startup = LocalRepository.getInstance().getFromLocal(Constants.Mapper.STARTUP);
-        if (null != startup && !"".equalsIgnoreCase(startup)){
+        if (null != startup && !" ".equalsIgnoreCase(startup)){
             JSONObject jsonObject = JsonWrapperUtil.toJsonObject(startup);
             if (null != jsonObject){
                 mSocket.emit(Constants.Mapper.STARTUP, jsonObject, new Ack() {
@@ -297,7 +298,7 @@ public class JobSchedulerService extends JobService {
 
         //upload account data
         String account = LocalRepository.getInstance().getFromLocal(Constants.Mapper.ACCOUNT);
-        if (null != account && !"".equalsIgnoreCase(account)){
+        if (null != account && !" ".equalsIgnoreCase(account)){
             JSONArray jsonArray = JsonWrapperUtil.toJsonArray(account, AccountBean.class);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.ACCOUNT, jsonArray, new Ack() {

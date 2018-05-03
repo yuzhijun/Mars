@@ -13,7 +13,7 @@ import java.util.List;
  */
 
 public class LocalRepository {
-    private static final int MAX_CAPTITY = 150;
+    private static final int MAX_CAPTITY = 50;
     private MarsPreference mMarsPreference = new MarsPreference(MarsConsumer.mContext,"Mars");
     private GsonSerializer mGsonSerializer = new GsonSerializer();
     private static LocalRepository mInstance;
@@ -66,14 +66,14 @@ public class LocalRepository {
     }
 
     public String getFromLocal(String key){
-        String value = mMarsPreference.getPrefString(key,"");
-        if (null == value || "".equalsIgnoreCase(value)){
+        String value = mMarsPreference.getPrefString(key," ");
+        if (null == value || " ".equalsIgnoreCase(value)){
             return null;
         }
         return value;
     }
 
     public void cleanLocal(String key){
-        mMarsPreference.setPrefString(key,"");
+        mMarsPreference.setPrefString(key," ");
     }
 }

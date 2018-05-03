@@ -84,19 +84,13 @@ public class Repository {
             return crashBeans;
         }
     }
-    public void setCrashBeans(List<CrashBean> crashBeans) {
+    public void setCrashBean(CrashBean crashBean) {
         synchronized (mLockForCrash){
-            if (null != crashBeans && crashBeans.size() > 0){
-                if ((mCrashBeans.size() + crashBeans.size()) < MAX_SIZE){
-                    mCrashBeans.addAll(crashBeans);
-                }else{
-                   for (int i = 0; i < crashBeans.size();i ++){
-                       if (null != mCrashBeans && mCrashBeans.size() > 0){
-                           mCrashBeans.removeFirst();
-                       }
-                       mCrashBeans.addLast(crashBeans.get(i));
-                   }
-                }
+            if (mCrashBeans.size() < MAX_SIZE){
+                mCrashBeans.add(crashBean);
+            }else{
+                mCrashBeans.removeFirst();
+                mCrashBeans.addLast(crashBean);
             }
             LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.CRASH,mCrashBeans);
         }
