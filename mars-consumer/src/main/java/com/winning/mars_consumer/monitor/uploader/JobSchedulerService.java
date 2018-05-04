@@ -46,7 +46,6 @@ import io.socket.emitter.Emitter;
 public class JobSchedulerService extends JobService {
     private int mJobId = 0;
     private boolean isConnected = false;
-    private ComponentName mServiceComponent;
     private Socket mSocket;
 
     @Override
@@ -89,7 +88,7 @@ public class JobSchedulerService extends JobService {
     }
 
     private Integer scheduleJob(){
-        mServiceComponent = new ComponentName(this, JobSchedulerService.class);
+        ComponentName mServiceComponent = new ComponentName(this, JobSchedulerService.class);
         JobInfo.Builder builder = new JobInfo.Builder(mJobId++, mServiceComponent);
 
         // run per 2000 millis

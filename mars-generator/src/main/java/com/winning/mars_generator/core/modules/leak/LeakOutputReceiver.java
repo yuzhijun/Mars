@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.support.v4.util.ArrayMap;
 
 import com.squareup.leakcanary.AnalysisResult;
-import com.squareup.leakcanary.HeapAnalyzer;
 import com.squareup.leakcanary.HeapDump;
 import com.winning.mars_generator.utils.LogUtil;
 

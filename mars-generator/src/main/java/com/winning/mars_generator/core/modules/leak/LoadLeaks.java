@@ -127,7 +127,7 @@ public class LoadLeaks implements Runnable {
                     mOnLeakCallback.onLeakNull("leak elements stack is null or empty");
                     return;
                 }
-                ArrayList<String> elementStack = new ArrayList<String>();
+                ArrayList<String> elementStack = new ArrayList<>();
                 for (LeakTraceElement leakTraceElement : elements) {
                     elementStack.add(String.valueOf(leakTraceElement));
                 }
