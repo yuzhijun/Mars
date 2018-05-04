@@ -1,6 +1,5 @@
 package com.winning.mars_consumer.monitor;
 
-import com.winning.mars_consumer.utils.Constants;
 import com.winning.mars_generator.core.modules.account.AccountBean;
 import com.winning.mars_generator.core.modules.battery.BatteryBean;
 import com.winning.mars_generator.core.modules.cpu.CpuBean;
@@ -48,7 +47,6 @@ public class Repository {
     public void setBatteryBean(BatteryBean batteryBean) {
         synchronized (mLockForBattery){
             mBatteryBean = batteryBean;
-            LocalRepository.getInstance().save2Local(Constants.Mapper.BATTERY,mBatteryBean);
         }
     }
 
@@ -70,7 +68,6 @@ public class Repository {
                 mCpuBeans.removeFirst();
                 mCpuBeans.addLast(cpuBean);
             }
-            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.CPU,mCpuBeans);
         }
     }
 
@@ -92,7 +89,6 @@ public class Repository {
                 mCrashBeans.removeFirst();
                 mCrashBeans.addLast(crashBean);
             }
-            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.CRASH,mCrashBeans);
         }
     }
 
@@ -105,7 +101,6 @@ public class Repository {
     public void setDeviceBean(DeviceBean deviceBean) {
         synchronized (mLockForDevice){
             mDeviceBean = deviceBean;
-            LocalRepository.getInstance().save2Local(Constants.Mapper.DEVICE,mDeviceBean);
         }
     }
 
@@ -116,7 +111,7 @@ public class Repository {
         synchronized (mLockForFps){
             final Collection<FpsBean> fpsBeans = cloneList(mFpsBeans);
             mFpsBeans.clear();
-            return mFpsBeans;
+            return fpsBeans;
         }
     }
     public void setFpsBean(FpsBean fpsBean) {
@@ -127,7 +122,6 @@ public class Repository {
                 mFpsBeans.removeFirst();
                 mFpsBeans.addLast(fpsBean);
             }
-            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.FPS,mFpsBeans);
         }
     }
 
@@ -149,7 +143,6 @@ public class Repository {
                mInflateBeans.removeFirst();
                mInflateBeans.addLast(inflateBean);
            }
-           LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.INFLATE,mInflateBeans);
        }
     }
 
@@ -171,7 +164,6 @@ public class Repository {
                 mLeakMemoryBeans.removeFirst();
                 mLeakMemoryBeans.addLast(leakMemoryBean);
             }
-            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.LEAK,mLeakMemoryBeans);
         }
     }
 
@@ -193,7 +185,6 @@ public class Repository {
                 mSmBeans.removeFirst();
                 mSmBeans.addLast(smBean);
             }
-            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.SM,mSmBeans);
         }
     }
 
@@ -221,7 +212,6 @@ public class Repository {
                     }
                 }
             }
-            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.DEADLOCK,mDeadLockThreads);
         }
     }
 
@@ -243,7 +233,6 @@ public class Repository {
                 mTrafficBeans.removeFirst();
                 mTrafficBeans.addLast(trafficBean);
             }
-            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.TRAFFIC,mTrafficBeans);
         }
     }
 
@@ -265,7 +254,6 @@ public class Repository {
                 mNetworkBeans.removeFirst();
                 mNetworkBeans.addLast(networkBean);
             }
-            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.NETWORK,mNetworkBeans);
         }
     }
 
@@ -278,7 +266,6 @@ public class Repository {
     public void setStartupBean(StartupBean startupBean) {
         synchronized (mLockForStartup){
             mStartupBean = startupBean;
-            LocalRepository.getInstance().save2Local(Constants.Mapper.STARTUP,mStartupBean);
         }
     }
 
@@ -300,7 +287,6 @@ public class Repository {
                 mAccountBeans.removeFirst();
                 mAccountBeans.addLast(accountBean);
             }
-            LocalRepository.getInstance().saveCollection2Local(Constants.Mapper.ACCOUNT,mAccountBeans);
         }
     }
 

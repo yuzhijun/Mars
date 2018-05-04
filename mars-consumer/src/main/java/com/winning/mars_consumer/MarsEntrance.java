@@ -19,6 +19,7 @@ import com.winning.mars_generator.Mars;
 import com.winning.mars_generator.core.modules.battery.Battery;
 import com.winning.mars_generator.core.modules.cpu.Cpu;
 import com.winning.mars_generator.core.modules.crash.Crash;
+import com.winning.mars_generator.core.modules.device.Device;
 import com.winning.mars_generator.core.modules.fps.Fps;
 import com.winning.mars_generator.core.modules.inflate.Inflate;
 import com.winning.mars_generator.core.modules.leak.Leak;
@@ -66,6 +67,7 @@ public class MarsEntrance {
         .install(Crash.class)
         .install(Fps.class)
         .install(Inflate.class)
+        .install(Device.class)
         .install(Leak.class)
         .install(Sm.class)
         .install(DeadLock.class)

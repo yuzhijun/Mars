@@ -66,14 +66,14 @@ public class LocalRepository {
     }
 
     public String getFromLocal(String key){
-        String value = mMarsPreference.getPrefString(key," ");
-        if (null == value || " ".equalsIgnoreCase(value)){
+        String value = mMarsPreference.getPrefString(key,"");
+        if (null == value || "".equalsIgnoreCase(value)){
             return null;
         }
         return value;
     }
 
     public void cleanLocal(String key){
-        mMarsPreference.setPrefString(key," ");
+        mMarsPreference.setPrefString(key,"");
     }
 }

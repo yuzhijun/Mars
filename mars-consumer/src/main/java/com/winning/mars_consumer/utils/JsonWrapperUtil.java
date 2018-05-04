@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -28,6 +29,18 @@ public class JsonWrapperUtil {
         return null;
     }
 
+    public static <T> JSONObject objectToJsonObject(T object){
+        if (null != object){
+            try {
+                JSONObject jsonObject = new JSONObject(mGsonSerializer.serialize(object));
+                return jsonObject;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     public static <T> JSONArray toJsonArray(String json,Class<T> tClass){
         if (null != json && !" ".equalsIgnoreCase(json)){
             try {
@@ -40,6 +53,23 @@ public class JsonWrapperUtil {
                 JSONArray jsonArray = new JSONArray(jsonObjects);
                 return jsonArray;
             } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public static <T> JSONArray listToJsonArray(Collection<T> collection){
+        if (null != collection && collection.size() > 0){
+            try{
+                List<JSONObject> jsonObjects = new ArrayList<>();
+                for (T item : collection){
+                    JSONObject jsonObject = new JSONObject(mGsonSerializer.serialize(item));
+                    jsonObjects.add(jsonObject);
+                }
+                JSONArray jsonArray = new JSONArray(jsonObjects);
+                return jsonArray;
+            }catch (Exception e){
                 e.printStackTrace();
             }
         }

@@ -11,24 +11,29 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 
 import com.winning.mars_consumer.MarsConsumer;
-import com.winning.mars_consumer.monitor.LocalRepository;
+import com.winning.mars_consumer.monitor.Repository;
 import com.winning.mars_consumer.utils.CommUtil;
 import com.winning.mars_consumer.utils.Constants;
 import com.winning.mars_consumer.utils.DefaultPoolExecutor;
 import com.winning.mars_consumer.utils.JsonWrapperUtil;
 import com.winning.mars_generator.core.modules.account.AccountBean;
+import com.winning.mars_generator.core.modules.battery.BatteryBean;
 import com.winning.mars_generator.core.modules.cpu.CpuBean;
 import com.winning.mars_generator.core.modules.crash.CrashBean;
+import com.winning.mars_generator.core.modules.device.DeviceBean;
 import com.winning.mars_generator.core.modules.fps.FpsBean;
 import com.winning.mars_generator.core.modules.inflate.InflateBean;
 import com.winning.mars_generator.core.modules.leak.LeakBean;
 import com.winning.mars_generator.core.modules.network.NetworkBean;
 import com.winning.mars_generator.core.modules.sm.SmBean;
+import com.winning.mars_generator.core.modules.startup.StartupBean;
 import com.winning.mars_generator.core.modules.traffic.TrafficBean;
 import com.winning.mars_generator.utils.LogUtil;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.Collection;
 
 import io.socket.client.Ack;
 import io.socket.client.Socket;
@@ -86,6 +91,7 @@ public class JobSchedulerService extends JobService {
     private Integer scheduleJob(){
         mServiceComponent = new ComponentName(this, JobSchedulerService.class);
         JobInfo.Builder builder = new JobInfo.Builder(mJobId++, mServiceComponent);
+
         // run per 2000 millis
         builder.setPeriodic(CommUtil.isApkInDebug(MarsConsumer.mContext) ? Constants.DEBUG_UPLOAD_RATE : Constants.RELEASE_UPLOAD_RATE);
         // wifi only
@@ -124,192 +130,180 @@ public class JobSchedulerService extends JobService {
     private Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
+            isConnected = false;
         }
     };
 
     private synchronized void uploadLocalData(JobParameters jobParameters){
         //upload battery data
-        String battery = LocalRepository.getInstance().getFromLocal(Constants.Mapper.BATTERY);
-        if (null != battery && !" ".equalsIgnoreCase(battery)){
-            JSONObject jsonObject = JsonWrapperUtil.toJsonObject(battery);
+        BatteryBean battery = Repository.getInstance().getBatteryBean();
+        if (null != battery){
+            JSONObject jsonObject = JsonWrapperUtil.objectToJsonObject(battery);
             if (null != jsonObject){
                 mSocket.emit(Constants.Mapper.BATTERY, jsonObject, new Ack() {
                     @Override
                     public void call(Object... args) {
-                        LocalRepository.getInstance().cleanLocal(Constants.Mapper.BATTERY);
                     }
                 });
             }
         }
 
         //upload cpu data
-        String cpu = LocalRepository.getInstance().getFromLocal(Constants.Mapper.CPU);
-        if (null != cpu && !" ".equalsIgnoreCase(cpu)){
-            JSONArray jsonArray = JsonWrapperUtil.toJsonArray(cpu, CpuBean.class);
+        Collection<CpuBean> cpus = Repository.getInstance().getCpuBeans();
+        if (null != cpus && cpus.size() > 0){
+            JSONArray jsonArray = JsonWrapperUtil.listToJsonArray(cpus);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.CPU, jsonArray, new Ack() {
                     @Override
                     public void call(Object... args) {
-                        LocalRepository.getInstance().cleanLocal(Constants.Mapper.CPU);
                     }
                 });
             }
         }
 
         //upload crash data
-        String crash = LocalRepository.getInstance().getFromLocal(Constants.Mapper.CRASH);
-        if (null != crash && !" ".equalsIgnoreCase(crash)){
-            JSONArray jsonArray = JsonWrapperUtil.toJsonArray(crash, CrashBean.class);
+        Collection<CrashBean> crashs = Repository.getInstance().getCrashBeans();
+        if (null != crashs && crashs.size() > 0){
+            JSONArray jsonArray = JsonWrapperUtil.listToJsonArray(crashs);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.CRASH, jsonArray, new Ack() {
                     @Override
                     public void call(Object... args) {
-                        LocalRepository.getInstance().cleanLocal(Constants.Mapper.CRASH);
                     }
                 });
             }
         }
 
         //upload device data
-        String device = LocalRepository.getInstance().getFromLocal(Constants.Mapper.DEVICE);
-        if (null != device && !" ".equalsIgnoreCase(device)){
-            JSONObject jsonObject = JsonWrapperUtil.toJsonObject(device);
+        DeviceBean device = Repository.getInstance().getDeviceBean();
+        if (null != device){
+            JSONObject jsonObject = JsonWrapperUtil.objectToJsonObject(device);
             if (null != jsonObject){
                 mSocket.emit(Constants.Mapper.DEVICE, jsonObject, new Ack() {
                     @Override
                     public void call(Object... args) {
-                        LocalRepository.getInstance().cleanLocal(Constants.Mapper.DEVICE);
                     }
                 });
             }
         }
 
         //upload fps data
-        String fps = LocalRepository.getInstance().getFromLocal(Constants.Mapper.FPS);
-        if (null != fps && !" ".equalsIgnoreCase(fps)){
-            JSONArray jsonArray = JsonWrapperUtil.toJsonArray(fps, FpsBean.class);
+        Collection<FpsBean> fps = Repository.getInstance().getFpsBeans();
+        if (null != fps && fps.size() > 0){
+            JSONArray jsonArray = JsonWrapperUtil.listToJsonArray(fps);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.FPS, jsonArray, new Ack() {
                     @Override
                     public void call(Object... args) {
-                        LocalRepository.getInstance().cleanLocal(Constants.Mapper.FPS);
                     }
                 });
             }
         }
 
         //upload inflate data
-        String inflate = LocalRepository.getInstance().getFromLocal(Constants.Mapper.INFLATE);
-        if (null != inflate && !" ".equalsIgnoreCase(inflate)){
-            JSONArray jsonArray = JsonWrapperUtil.toJsonArray(inflate, InflateBean.class);
+        Collection<InflateBean> inflates = Repository.getInstance().getInflateBeans();
+        if (null != inflates && inflates.size() > 0){
+            JSONArray jsonArray = JsonWrapperUtil.listToJsonArray(inflates);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.INFLATE, jsonArray, new Ack() {
                     @Override
                     public void call(Object... args) {
-                        LocalRepository.getInstance().cleanLocal(Constants.Mapper.INFLATE);
                     }
                 });
             }
         }
 
         //upload leak data
-        String leak = LocalRepository.getInstance().getFromLocal(Constants.Mapper.LEAK);
-        if (null != inflate && !" ".equalsIgnoreCase(leak)){
-            JSONArray jsonArray = JsonWrapperUtil.toJsonArray(leak, LeakBean.LeakMemoryBean.class);
+        Collection<LeakBean.LeakMemoryBean> leaks = Repository.getInstance().getLeakMemoryBeans();
+        if (null != leaks && leaks.size() > 0){
+            JSONArray jsonArray = JsonWrapperUtil.listToJsonArray(leaks);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.LEAK, jsonArray, new Ack() {
                     @Override
                     public void call(Object... args) {
-                        LocalRepository.getInstance().cleanLocal(Constants.Mapper.LEAK);
                     }
                 });
             }
         }
 
         //upload sm data
-        String sm = LocalRepository.getInstance().getFromLocal(Constants.Mapper.SM);
-        if (null != sm && !" ".equalsIgnoreCase(sm)){
-            JSONArray jsonArray = JsonWrapperUtil.toJsonArray(sm, SmBean.class);
+        Collection<SmBean> sm = Repository.getInstance().getSmBeans();
+        if (null != sm && sm.size() > 0){
+            JSONArray jsonArray = JsonWrapperUtil.listToJsonArray(sm);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.SM, jsonArray, new Ack() {
                     @Override
                     public void call(Object... args) {
-                        LocalRepository.getInstance().cleanLocal(Constants.Mapper.SM);
                     }
                 });
             }
         }
 
         //upload deadLock data
-        String deadLock = LocalRepository.getInstance().getFromLocal(Constants.Mapper.DEADLOCK);
-        if (null != deadLock && !" ".equalsIgnoreCase(deadLock)){
-            JSONArray jsonArray = JsonWrapperUtil.toJsonArray(deadLock,Thread.class);
+        Collection<Thread> deadLock = Repository.getInstance().getDeadLockThreads();
+        if (null != deadLock && deadLock.size() > 0){
+            JSONArray jsonArray = JsonWrapperUtil.listToJsonArray(deadLock);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.DEADLOCK, jsonArray, new Ack() {
                     @Override
                     public void call(Object... args) {
-                        LocalRepository.getInstance().cleanLocal(Constants.Mapper.DEADLOCK);
                     }
                 });
             }
         }
 
         //upload traffic data
-        String traffic = LocalRepository.getInstance().getFromLocal(Constants.Mapper.TRAFFIC);
-        if (null != traffic && !" ".equalsIgnoreCase(traffic)){
-            JSONArray jsonArray = JsonWrapperUtil.toJsonArray(traffic, TrafficBean.class);
+        Collection<TrafficBean> traffics = Repository.getInstance().getTrafficBeans();
+        if (null != traffics && traffics.size() > 0){
+            JSONArray jsonArray = JsonWrapperUtil.listToJsonArray(traffics);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.TRAFFIC, jsonArray, new Ack() {
                     @Override
                     public void call(Object... args) {
-                        LocalRepository.getInstance().cleanLocal(Constants.Mapper.TRAFFIC);
                     }
                 });
             }
         }
 
         //upload network data
-        String network = LocalRepository.getInstance().getFromLocal(Constants.Mapper.NETWORK);
-        if (null != network && !" ".equalsIgnoreCase(network)){
-            JSONArray jsonArray = JsonWrapperUtil.toJsonArray(network, NetworkBean.class);
+        Collection<NetworkBean> network = Repository.getInstance().getNetworkBeans();
+        if (null != network && network.size() > 0){
+            JSONArray jsonArray = JsonWrapperUtil.listToJsonArray(network);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.NETWORK, jsonArray, new Ack() {
                     @Override
                     public void call(Object... args) {
-                        LocalRepository.getInstance().cleanLocal(Constants.Mapper.NETWORK);
                     }
                 });
             }
         }
 
         //upload startup data
-        String startup = LocalRepository.getInstance().getFromLocal(Constants.Mapper.STARTUP);
-        if (null != startup && !" ".equalsIgnoreCase(startup)){
-            JSONObject jsonObject = JsonWrapperUtil.toJsonObject(startup);
+        StartupBean startup = Repository.getInstance().getStartupBean();
+        if (null != startup){
+            JSONObject jsonObject = JsonWrapperUtil.objectToJsonObject(startup);
             if (null != jsonObject){
                 mSocket.emit(Constants.Mapper.STARTUP, jsonObject, new Ack() {
                     @Override
                     public void call(Object... args) {
-                        LocalRepository.getInstance().cleanLocal(Constants.Mapper.STARTUP);
                     }
                 });
             }
         }
 
         //upload account data
-        String account = LocalRepository.getInstance().getFromLocal(Constants.Mapper.ACCOUNT);
-        if (null != account && !" ".equalsIgnoreCase(account)){
-            JSONArray jsonArray = JsonWrapperUtil.toJsonArray(account, AccountBean.class);
+        Collection<AccountBean> accounts = Repository.getInstance().getAccountBeans();
+        if (null != accounts && accounts.size() > 0){
+            JSONArray jsonArray = JsonWrapperUtil.listToJsonArray(accounts);
             if (null != jsonArray){
                 mSocket.emit(Constants.Mapper.ACCOUNT, jsonArray, new Ack() {
                     @Override
                     public void call(Object... args) {
-                        LocalRepository.getInstance().cleanLocal(Constants.Mapper.ACCOUNT);
                     }
                 });
             }
         }
 
-        jobFinished(jobParameters,true);
+        jobFinished(jobParameters,false);
     }
 }
