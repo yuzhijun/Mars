@@ -3,11 +3,11 @@ package com.winning.mars_generator.core.modules.leak;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.squareup.leakcanary.AnalysisResult;
-import com.squareup.leakcanary.CanaryLog;
-import com.squareup.leakcanary.HeapDump;
-import com.squareup.leakcanary.LeakDirectoryProvider;
-import com.squareup.leakcanary.LeakTraceElement;
+import com.winning.mars_generator.core.modules.leak.leakcanary.analyzer.AnalysisResult;
+import com.winning.mars_generator.core.modules.leak.leakcanary.analyzer.LeakTraceElement;
+import com.winning.mars_generator.core.modules.leak.leakcanary.android.CanaryLog;
+import com.winning.mars_generator.core.modules.leak.leakcanary.android.LeakDirectoryProvider;
+import com.winning.mars_generator.core.modules.leak.leakcanary.watcher.HeapDump;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,10 +20,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-import static com.squareup.leakcanary.internal.LeakCanaryInternals.newSingleThreadExecutor;
+import static com.winning.mars_generator.core.modules.leak.leakcanary.android.internal.LeakCanaryInternals.newSingleThreadExecutor;
 
 /**
- * Created by kysonchao on 2017/9/30.
+ * Created by yuzhijun on 2017/9/30.
  */
 public class LoadLeaks implements Runnable {
     public interface OnLeakCallback {

@@ -35,7 +35,7 @@ public class Mars {
         return mInstance;
     }
 
-    public final <T> Mars install(Class<? extends Install> clz) {
+    public final  Mars install(Class<? extends Install> clz) {
         getModule(clz).install(mContext);
         return this;
     }

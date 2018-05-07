@@ -78,6 +78,19 @@ public class MarsEntrance {
         checkAppUpdate(context,appKey,appSecret);
     }
 
+    public void stop(){
+        Mars.getInstance(MarsConsumer.mContext).getModule(Battery.class).uninstall();
+        Mars.getInstance(MarsConsumer.mContext).getModule(Cpu.class).uninstall();
+        Mars.getInstance(MarsConsumer.mContext).getModule(Crash.class).uninstall();
+        Mars.getInstance(MarsConsumer.mContext).getModule(Fps.class).uninstall();
+        Mars.getInstance(MarsConsumer.mContext).getModule(Leak.class).uninstall();
+        Mars.getInstance(MarsConsumer.mContext).getModule(Sm.class).uninstall();
+        Mars.getInstance(MarsConsumer.mContext).getModule(DeadLock.class).uninstall();
+        Mars.getInstance(MarsConsumer.mContext).getModule(Traffic.class).uninstall();
+
+        MarsConsumer.stop();
+    }
+
     @SuppressLint("CheckResult")
     private void checkAppUpdate(Context context, String appKey, String appSecret) {
         final AppInfo appInfo = getAppInfo(context,appKey,appSecret);

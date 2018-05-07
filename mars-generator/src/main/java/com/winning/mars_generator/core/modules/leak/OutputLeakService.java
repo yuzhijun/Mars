@@ -21,12 +21,12 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
-import com.squareup.leakcanary.AbstractAnalysisResultService;
-import com.squareup.leakcanary.AnalysisResult;
-import com.squareup.leakcanary.CanaryLog;
-import com.squareup.leakcanary.HeapDump;
-import com.squareup.leakcanary.LeakCanary;
 import com.winning.mars_generator.R;
+import com.winning.mars_generator.core.modules.leak.leakcanary.analyzer.AnalysisResult;
+import com.winning.mars_generator.core.modules.leak.leakcanary.android.AbstractAnalysisResultService;
+import com.winning.mars_generator.core.modules.leak.leakcanary.android.CanaryLog;
+import com.winning.mars_generator.core.modules.leak.leakcanary.android.LeakCanary;
+import com.winning.mars_generator.core.modules.leak.leakcanary.watcher.HeapDump;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,7 +37,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import static android.text.format.Formatter.formatShortFileSize;
-import static com.squareup.leakcanary.internal.LeakCanaryInternals.classSimpleName;
+import static com.winning.mars_generator.core.modules.leak.leakcanary.android.internal.LeakCanaryInternals.classSimpleName;
 
 /**
  * output leak service

@@ -1,8 +1,11 @@
 package com.winning.mars;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.TextView;
 
 import com.winning.mars.model.GirlsData;
 import com.winning.mars.network.AppApiService;
@@ -14,12 +17,15 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 
 public class MainActivity extends AppCompatActivity {
+    private TextView tvLeak;
 
     @SuppressLint("CheckResult")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        tvLeak = findViewById(R.id.tvLeak);
 
         StartupTracer.get().onHomeCreate(this);
 
@@ -43,6 +49,15 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete() {
 
                     }
+        });
+
+
+        tvLeak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, LeakActivity.class);
+                startActivity(intent);
+            }
         });
     }
 }

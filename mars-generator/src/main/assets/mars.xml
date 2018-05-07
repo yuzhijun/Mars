@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mars>
-    <debug level="5"/>
+    <debug level="2"/>
     <cpu intervalMillis="2000" sampleMillis="1000"/>
     <battery intervalMillis="2000"/>
     <fps intervalMillis="2000"/>

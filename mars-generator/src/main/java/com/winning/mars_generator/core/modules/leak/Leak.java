@@ -1,18 +1,17 @@
 package com.winning.mars_generator.core.modules.leak;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.support.v4.content.PermissionChecker;
 
-import com.squareup.leakcanary.AndroidExcludedRefs;
-import com.squareup.leakcanary.CanaryLog;
-import com.squareup.leakcanary.DefaultLeakDirectoryProvider;
-import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.LeakDirectoryProvider;
-import com.squareup.leakcanary.RefWatcher;
 import com.winning.mars_generator.core.GeneratorSubject;
 import com.winning.mars_generator.core.Install;
+import com.winning.mars_generator.core.modules.leak.leakcanary.android.CanaryLog;
+import com.winning.mars_generator.core.modules.leak.leakcanary.android.DefaultLeakDirectoryProvider;
+import com.winning.mars_generator.core.modules.leak.leakcanary.android.LeakCanary;
+import com.winning.mars_generator.core.modules.leak.leakcanary.android.LeakDirectoryProvider;
 import com.winning.mars_generator.utils.FileUtil;
 import com.winning.mars_generator.utils.LogUtil;
 
@@ -22,14 +21,12 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
 
 /**
  * Created by yuzhijun on 2018/3/29.
  */
 public class Leak extends GeneratorSubject<LeakBean.LeakMemoryBean> implements Install{
     private LeakDirectoryProvider mLeakDirectoryProvider;
-    private static RefWatcher sActivityRefWatcher;
     private static Leak mInstance;
     private Leak(){
     }
@@ -44,6 +41,7 @@ public class Leak extends GeneratorSubject<LeakBean.LeakMemoryBean> implements I
         return mInstance;
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void install(Context context) {
         final Application application = (Application) context;
@@ -51,45 +49,36 @@ public class Leak extends GeneratorSubject<LeakBean.LeakMemoryBean> implements I
             throw new IllegalStateException("can not call install leak");
         }
 
-        permissionNeed(application,Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(new Consumer<Boolean>() {
-            @Override
-            public void accept(Boolean aBoolean) throws Exception {
-                if (!aBoolean) {
-                    throw new IllegalStateException("install leak need permission:" + Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                }
-                uninstall();
-                mLeakDirectoryProvider = new DefaultLeakDirectoryProvider(application);
-                try {
-                    clearLeaks();
-                } catch (FileUtil.FileException e) {
-                    LogUtil.e(e.getLocalizedMessage());
-                }
-                CanaryLog.setLogger(new CanaryLog.Logger() {
-                    @Override
-                    public void d(String s, Object... objects) {
-                        LogUtil.d(String.format(s, objects));
-                    }
-
-                    @Override
-                    public void d(Throwable throwable, String s, Object... objects) {
-                        LogUtil.e(String.format(s, objects) + "\n" + String.valueOf(throwable));
-                    }
-                });
-                sActivityRefWatcher = LeakCanary.refWatcher(application).listenerServiceClass(OutputLeakService.class)
-                        .excludedRefs(AndroidExcludedRefs.createAppDefaults().build())
-                        .buildAndInstall();
-                LogUtil.d("LeakCanary installed");
+        permissionNeed(application,Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(aBoolean -> {
+            if (!aBoolean) {
+                throw new IllegalStateException("install leak need permission:" + Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
+            uninstall();
+            mLeakDirectoryProvider = new DefaultLeakDirectoryProvider(application);
+            try {
+                clearLeaks();
+            } catch (FileUtil.FileException e) {
+                LogUtil.e(e.getLocalizedMessage());
+            }
+            CanaryLog.setLogger(new CanaryLog.Logger() {
+                @Override
+                public void d(String s, Object... objects) {
+                    LogUtil.d(String.format(s, objects));
+                }
+
+                @Override
+                public void d(Throwable throwable, String s, Object... objects) {
+                    LogUtil.e(String.format(s, objects) + "\n" + String.valueOf(throwable));
+                }
+            });
+            LeakCanary.install(application);
+            LogUtil.d("LeakCanary installed");
         });
     }
 
     @Override
     public void uninstall() {
-        mLeakDirectoryProvider = null;
-        if (sActivityRefWatcher != null) {
-            //TODO unregisterActivityLifecycleCallbacks
-            sActivityRefWatcher = null;
-        }
+        LeakCanary.uninstall();
         LogUtil.d("LeakCanary uninstalled");
     }
 

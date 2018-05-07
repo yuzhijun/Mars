@@ -5,8 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.util.ArrayMap;
 
-import com.squareup.leakcanary.AnalysisResult;
-import com.squareup.leakcanary.HeapDump;
+import com.winning.mars_generator.core.modules.leak.leakcanary.analyzer.AnalysisResult;
+import com.winning.mars_generator.core.modules.leak.leakcanary.analyzer.HeapAnalyzer;
+import com.winning.mars_generator.core.modules.leak.leakcanary.watcher.HeapDump;
 import com.winning.mars_generator.utils.LogUtil;
 
 import java.util.Date;
@@ -20,6 +21,8 @@ public class LeakOutputReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (OutputLeakService.OUTPUT_BOARDCAST_ACTION_START.equals(intent.getAction())) {
             onLeakDumpStart(intent);
+        } else if (HeapAnalyzer.OUTPUT_BOARDCAST_ACTION_PROGRESS.equals(intent.getAction())) {
+            onLeakDumpProgress(intent);
         }  else if (OutputLeakService.OUTPUT_BOARDCAST_ACTION_RETRY.equals(intent.getAction())) {
             onLeakDumpRetry(intent);
         } else if (OutputLeakService.OUTPUT_BOARDCAST_ACTION_DONE.equals(intent.getAction())) {
