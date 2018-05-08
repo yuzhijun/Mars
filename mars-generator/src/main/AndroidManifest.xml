@@ -14,6 +14,7 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="com.winning.leakcanary.output.start"/>
+                <action android:name="com.winning.leakcanary.output.progress"/>
                 <action android:name="com.winning.leakcanary.output.retry"/>
                 <action android:name="com.winning.leakcanary.output.done"/>
             </intent-filter>
@@ -22,7 +23,7 @@
         <service
             android:name=".core.modules.leak.leakcanary.android.internal.HeapAnalyzerService"
             android:enabled="false"
-            />
+            android:process=":leakcanary"/>
 
         <service
             android:name=".core.modules.leak.OutputLeakService"

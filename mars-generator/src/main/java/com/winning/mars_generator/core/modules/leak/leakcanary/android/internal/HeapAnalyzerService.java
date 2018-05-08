@@ -34,6 +34,7 @@ public final class HeapAnalyzerService extends IntentService {
     private static final String LISTENER_CLASS_EXTRA = "listener_class_extra";
     private static final String HEAPDUMP_EXTRA = "heapdump_extra";
 
+
     public static void runAnalysis(Context context, HeapDump heapDump,
                                    Class<? extends AbstractAnalysisResultService> listenerServiceClass) {
         Intent intent = new Intent(context, HeapAnalyzerService.class);
@@ -48,7 +49,6 @@ public final class HeapAnalyzerService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        CanaryLog.d("-----------------------------------------------------");
         if (intent == null) {
             CanaryLog.d("HeapAnalyzerService received a null intent, ignoring.");
             return;

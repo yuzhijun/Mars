@@ -62,26 +62,34 @@ public class CpuEngine implements Engine {
 
     private ObservableSource<CpuBean> sample() {
         final CpuSnapshot startSnapshot = CpuSnapshot.snapshot();
-        return Observable.timer(mSampleMillis, TimeUnit.MILLISECONDS).map(new Function<Long, CpuBean>() {
-            @Override
-            public CpuBean apply(Long aLong) throws Exception {
-                CpuSnapshot endSnapshot = CpuSnapshot.snapshot();
-                float totalTime = (endSnapshot.total - startSnapshot.total) * 1.0f;
-                if (totalTime <= 0) {
-                    throw new MarsInvalidDataException("TotalTime must greater than 0");
-                }
-                long idleTime = endSnapshot.idle - startSnapshot.idle;
-                double totalRatio = (totalTime - idleTime) / totalTime;
-                double appRatio = (endSnapshot.app - startSnapshot.app) / totalTime;
-                double userRatio = (endSnapshot.user - startSnapshot.user) / totalTime;
-                double systemRatio = (endSnapshot.system - startSnapshot.system) / totalTime;
-                double ioWaitRatio = (endSnapshot.ioWait - startSnapshot.ioWait) / totalTime;
-                if (!isValidRatios(totalRatio, appRatio, userRatio, systemRatio, ioWaitRatio)) {
-                    throw new MarsInvalidDataException("Invalid ratio");
-                }
-                return new CpuBean(totalRatio, appRatio, userRatio, systemRatio, ioWaitRatio);
+        return Observable.timer(mSampleMillis, TimeUnit.MILLISECONDS).map(aLong -> {
+            CpuSnapshot endSnapshot = CpuSnapshot.snapshot();
+            float totalTime = (endSnapshot.total - startSnapshot.total) * 1.0f;
+            if (totalTime <= 0) {
+                throw new MarsInvalidDataException("TotalTime must greater than 0");
             }
-        });
+            long idleTime = endSnapshot.idle - startSnapshot.idle;
+            double totalRatio = (totalTime - idleTime) / totalTime;
+            double appRatio = (endSnapshot.app - startSnapshot.app) / totalTime;
+            double userRatio = (endSnapshot.user - startSnapshot.user) / totalTime;
+            double systemRatio = (endSnapshot.system - startSnapshot.system) / totalTime;
+            double ioWaitRatio = (endSnapshot.ioWait - startSnapshot.ioWait) / totalTime;
+            if (!isValidRatios(totalRatio, appRatio, userRatio, systemRatio, ioWaitRatio)) {
+                throw new MarsInvalidDataException("Invalid ratio");
+            }
+            return new CpuBean(totalRatio, appRatio, userRatio, systemRatio, ioWaitRatio);
+        }).retryWhen(throwableObservable -> throwableObservable.flatMap(new Function<Throwable, ObservableSource<?>>() {
+             int maxRetries = 3;
+             long retryDelayMillis = mSampleMillis;
+             int retryCount = 0;
+            @Override
+            public ObservableSource<?> apply(Throwable throwable) throws Exception {
+                if (++retryCount < maxRetries){
+                    return Observable.timer(retryDelayMillis,TimeUnit.MILLISECONDS);
+                }
+                return Observable.error(throwable);
+            }
+        }));
     }
 
     private boolean isValidRatios(Double... ratios) {

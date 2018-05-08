@@ -23,7 +23,7 @@ public class DefaultThreadFactory implements ThreadFactory {
         SecurityManager s = System.getSecurityManager();
         group = (s != null) ? s.getThreadGroup() :
                 Thread.currentThread().getThreadGroup();
-        namePrefix = "LRouter task pool No." + poolNumber.getAndIncrement() + ", thread No.";
+        namePrefix = "Mars task pool No." + poolNumber.getAndIncrement() + ", thread No.";
     }
 
     @Override
