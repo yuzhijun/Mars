@@ -13,8 +13,8 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        MarsEntrance.getInstance().init(this,"1233kkhr33ll333","ddeefw");
 
+        MarsEntrance.getInstance().init(this,"1233kkhr33ll333","ddeefw");
         StartupTracer.get().onApplicationCreate();
     }
 }

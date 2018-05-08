@@ -46,7 +46,7 @@ public class Leak extends GeneratorSubject<LeakBean.LeakMemoryBean> implements I
     public void install(Context context) {
         final Application application = (Application) context;
         if (LeakCanary.isInAnalyzerProcess(application)) {
-            throw new IllegalStateException("can not call install leak");
+            return;
         }
 
         permissionNeed(application,Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(aBoolean -> {

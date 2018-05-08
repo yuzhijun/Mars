@@ -32,14 +32,14 @@ import com.winning.mars_generator.core.modules.leak.leakcanary.watcher.HeapDump;
 public final class HeapAnalyzerService extends IntentService {
 
     private static final String LISTENER_CLASS_EXTRA = "listener_class_extra";
-    private static final String HEAPDUMP_EXTRA = "heapdump_extra";
+    private static final String HEAP_DUMP_EXTRA = "heap_dump_extra";
 
 
     public static void runAnalysis(Context context, HeapDump heapDump,
                                    Class<? extends AbstractAnalysisResultService> listenerServiceClass) {
         Intent intent = new Intent(context, HeapAnalyzerService.class);
         intent.putExtra(LISTENER_CLASS_EXTRA, listenerServiceClass.getName());
-        intent.putExtra(HEAPDUMP_EXTRA, heapDump);
+        intent.putExtra(HEAP_DUMP_EXTRA, heapDump);
         context.startService(intent);
     }
 
@@ -55,7 +55,7 @@ public final class HeapAnalyzerService extends IntentService {
         }
         CanaryLog.d("start analyze dump");
         String listenerClassName = intent.getStringExtra(LISTENER_CLASS_EXTRA);
-        HeapDump heapDump = (HeapDump) intent.getSerializableExtra(HEAPDUMP_EXTRA);
+        HeapDump heapDump = (HeapDump) intent.getSerializableExtra(HEAP_DUMP_EXTRA);
         CanaryLog.d("listenerClassName:" + listenerClassName);
         CanaryLog.d("referenceKey:" + heapDump.referenceKey);
         CanaryLog.d("heapDumpFile:" + heapDump.heapDumpFile.getAbsolutePath());
