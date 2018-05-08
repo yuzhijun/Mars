@@ -23,6 +23,7 @@ import com.winning.mars_generator.core.modules.device.Device;
 import com.winning.mars_generator.core.modules.fps.Fps;
 import com.winning.mars_generator.core.modules.inflate.Inflate;
 import com.winning.mars_generator.core.modules.leak.Leak;
+import com.winning.mars_generator.core.modules.leak.leakcanary.android.LeakCanary;
 import com.winning.mars_generator.core.modules.sm.Sm;
 import com.winning.mars_generator.core.modules.thread.deadlock.DeadLock;
 import com.winning.mars_generator.core.modules.traffic.Traffic;
@@ -62,20 +63,23 @@ public class MarsEntrance {
      * @Param key appKey
      * */
     public void init(Context context, String appKey, String appSecret){
-        Mars.getInstance(context).install(Cpu.class)
-        .install(Battery.class)
-        .install(Crash.class)
-        .install(Fps.class)
-        .install(Inflate.class)
-        .install(Device.class)
-        .install(Leak.class)
-        .install(Sm.class)
-        .install(DeadLock.class)
-        .install(Traffic.class);
+        Mars.getInstance(context).install(Leak.class);
 
-        MarsConsumer.consume(context);
+        if (!LeakCanary.isInAnalyzerProcess(context)){
+            Mars.getInstance(context).install(Cpu.class)
+                    .install(Battery.class)
+                    .install(Crash.class)
+                    .install(Fps.class)
+                    .install(Inflate.class)
+                    .install(Device.class)
+                    .install(Sm.class)
+                    .install(DeadLock.class)
+                    .install(Traffic.class);
 
-        checkAppUpdate(context,appKey,appSecret);
+            MarsConsumer.consume(context);
+
+            checkAppUpdate(context,appKey,appSecret);
+        }
     }
 
     public void stop(){
