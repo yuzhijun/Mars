@@ -79,15 +79,9 @@ public class CpuEngine implements Engine {
             }
             return new CpuBean(totalRatio, appRatio, userRatio, systemRatio, ioWaitRatio);
         }).retryWhen(throwableObservable -> throwableObservable.flatMap(new Function<Throwable, ObservableSource<?>>() {
-             int maxRetries = 3;
-             long retryDelayMillis = mSampleMillis;
-             int retryCount = 0;
             @Override
             public ObservableSource<?> apply(Throwable throwable) throws Exception {
-                if (++retryCount < maxRetries){
-                    return Observable.timer(retryDelayMillis,TimeUnit.MILLISECONDS);
-                }
-                return Observable.error(throwable);
+                return Observable.timer(mSampleMillis,TimeUnit.MILLISECONDS);
             }
         }));
     }
