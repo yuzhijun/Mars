@@ -1,9 +1,11 @@
 package com.winning.mars_generator.core.modules.fps;
 
+import com.winning.mars_generator.core.BaseBean;
+
 /**
  * Created by yuzhijun on 2018/3/28.
  */
-public class FpsBean {
+public class FpsBean extends BaseBean{
     public int currentFps;
     public int systemFps;
     public long skipFrame;

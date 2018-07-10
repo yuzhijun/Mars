@@ -17,7 +17,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         StartupTracer.get().onSplashCreate();
 
-        mHandler.sendEmptyMessageDelayed(0,2000);
+        mHandler.sendEmptyMessageDelayed(0,3000);
     }
 
     public static final class StartupHandler extends BaseHandler<SplashActivity>{

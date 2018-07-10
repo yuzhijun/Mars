@@ -24,6 +24,7 @@ import java.util.List;
 public class Repository {
     private static final int MAX_SIZE = 150;//just store lasted data
     private static Repository mInstance;
+    private AccountBean currentAccount;
     private Repository(){
     }
     public static Repository getInstance(){
@@ -281,6 +282,7 @@ public class Repository {
     }
     public void setAccountBean(AccountBean accountBean) {
         synchronized (mLockForAccount){
+            currentAccount = accountBean;
             if (mAccountBeans.size() < MAX_SIZE){
                 mAccountBeans.add(accountBean);
             }else{
@@ -298,5 +300,9 @@ public class Repository {
 
         dest.addAll(originList);
         return dest;
+    }
+
+    public AccountBean getCurrentAccount() {
+        return currentAccount;
     }
 }

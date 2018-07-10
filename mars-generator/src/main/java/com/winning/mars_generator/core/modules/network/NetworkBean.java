@@ -1,9 +1,11 @@
 package com.winning.mars_generator.core.modules.network;
 
+import com.winning.mars_generator.core.BaseBean;
+
 /**
  * Created by yuzhijun on 2018/4/2.
  */
-public class NetworkBean {
+public class NetworkBean extends BaseBean{
     public long startTimeMillis;
     public long endTimeMillis;
     public long respBodySizeByte;

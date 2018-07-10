@@ -2,6 +2,8 @@ package com.winning.mars_consumer.monitor;
 
 import android.content.Context;
 
+import com.winning.mars_consumer.MarsEntrance;
+import com.winning.mars_consumer.utils.CommUtil;
 import com.winning.mars_generator.Mars;
 import com.winning.mars_generator.core.modules.account.Account;
 import com.winning.mars_generator.core.modules.account.AccountBean;
@@ -58,6 +60,8 @@ public class Monitor {
         mCompositeDisposable.add(mars.getModule(Battery.class).subject().subscribe(new Consumer<BatteryBean>() {
             @Override
             public void accept(BatteryBean batteryBean) throws Exception {
+                batteryBean.setAppKey(MarsEntrance.getInstance().appKey);
+                batteryBean.setDeviceId(CommUtil.getDeviceInfo(context).getDeviceID());
                 mRepos.setBatteryBean(batteryBean);
             }
         }));
@@ -65,6 +69,8 @@ public class Monitor {
         mCompositeDisposable.add(mars.getModule(Cpu.class).subject().subscribe(new Consumer<CpuBean>() {
             @Override
             public void accept(CpuBean cpuBean) throws Exception {
+                cpuBean.setAppKey(MarsEntrance.getInstance().appKey);
+                cpuBean.setDeviceId(CommUtil.getDeviceInfo(context).getDeviceID());
                 mRepos.setCpuBean(cpuBean);
             }
         }));
@@ -92,6 +98,8 @@ public class Monitor {
         }).subscribe(new Consumer<CrashBean>() {
             @Override
             public void accept(CrashBean crashBean) throws Exception {
+                crashBean.setAppKey(MarsEntrance.getInstance().appKey);
+                crashBean.setDeviceId(CommUtil.getDeviceInfo(context).getDeviceID());
                 mRepos.setCrashBean(crashBean);
             }
         }));
@@ -99,6 +107,8 @@ public class Monitor {
         mCompositeDisposable.add(mars.getModule(Device.class).subject().subscribe(new Consumer<DeviceBean>() {
             @Override
             public void accept(DeviceBean deviceBean) throws Exception {
+                deviceBean.setAppKey(MarsEntrance.getInstance().appKey);
+                deviceBean.setDeviceId(CommUtil.getDeviceInfo(context).getDeviceID());
                 mRepos.setDeviceBean(deviceBean);
             }
         }));
@@ -106,6 +116,8 @@ public class Monitor {
         mCompositeDisposable.add(mars.getModule(Fps.class).subject().subscribe(new Consumer<FpsBean>() {
             @Override
             public void accept(FpsBean fpsBean) throws Exception {
+                fpsBean.setAppKey(MarsEntrance.getInstance().appKey);
+                fpsBean.setDeviceId(CommUtil.getDeviceInfo(context).getDeviceID());
                 mRepos.setFpsBean(fpsBean);
             }
         }));
@@ -113,6 +125,8 @@ public class Monitor {
         mCompositeDisposable.add(mars.getModule(Inflate.class).subject().subscribe(new Consumer<InflateBean>() {
             @Override
             public void accept(InflateBean inflateBean) throws Exception {
+                inflateBean.setAppKey(MarsEntrance.getInstance().appKey);
+                inflateBean.setDeviceId(CommUtil.getDeviceInfo(context).getDeviceID());
                 mRepos.setInflateBean(inflateBean);
             }
         }));
@@ -120,6 +134,8 @@ public class Monitor {
         mCompositeDisposable.add(mars.getModule(Leak.class).subject().subscribe(new Consumer<LeakBean.LeakMemoryBean>() {
             @Override
             public void accept(LeakBean.LeakMemoryBean leakMemoryBean) throws Exception {
+                leakMemoryBean.setAppKey(MarsEntrance.getInstance().appKey);
+                leakMemoryBean.setDeviceId(CommUtil.getDeviceInfo(context).getDeviceID());
                 mRepos.setLeakMemoryBean(leakMemoryBean);
             }
         }));
@@ -127,6 +143,8 @@ public class Monitor {
         mCompositeDisposable.add(mars.getModule(Sm.class).subject().subscribe(new Consumer<SmBean>() {
             @Override
             public void accept(SmBean smBean) throws Exception {
+                smBean.setAppKey(MarsEntrance.getInstance().appKey);
+                smBean.setDeviceId(CommUtil.getDeviceInfo(context).getDeviceID());
                 mRepos.setSmBean(smBean);
             }
         }));
@@ -141,6 +159,8 @@ public class Monitor {
         mCompositeDisposable.add(mars.getModule(Traffic.class).subject().subscribe(new Consumer<TrafficBean>() {
             @Override
             public void accept(TrafficBean trafficBean) throws Exception {
+                trafficBean.setAppKey(MarsEntrance.getInstance().appKey);
+                trafficBean.setDeviceId(CommUtil.getDeviceInfo(context).getDeviceID());
                 mRepos.setTrafficBean(trafficBean);
             }
         }));
@@ -148,6 +168,8 @@ public class Monitor {
         mCompositeDisposable.add(mars.getModule(Network.class).subject().subscribe(new Consumer<NetworkBean>() {
             @Override
             public void accept(NetworkBean networkBean) throws Exception {
+                networkBean.setAppKey(MarsEntrance.getInstance().appKey);
+                networkBean.setDeviceId(CommUtil.getDeviceInfo(context).getDeviceID());
                 mRepos.setNetworkBean(networkBean);
             }
         }));
@@ -155,6 +177,8 @@ public class Monitor {
         mCompositeDisposable.add(mars.getModule(Startup.class).subject().subscribe(new Consumer<StartupBean>() {
             @Override
             public void accept(StartupBean startupBean) throws Exception {
+                startupBean.setAppKey(MarsEntrance.getInstance().appKey);
+                startupBean.setDeviceId(CommUtil.getDeviceInfo(context).getDeviceID());
                 mRepos.setStartupBean(startupBean);
             }
         }));
@@ -162,6 +186,8 @@ public class Monitor {
         mCompositeDisposable.add(mars.getModule(Account.class).subject().subscribe(new Consumer<AccountBean>() {
             @Override
             public void accept(AccountBean accountBean) throws Exception {
+                accountBean.setAppKey(MarsEntrance.getInstance().appKey);
+                accountBean.setDeviceId(CommUtil.getDeviceInfo(context).getDeviceID());
                 mRepos.setAccountBean(accountBean);
             }
         }));

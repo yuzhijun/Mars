@@ -2,6 +2,8 @@ package com.winning.mars_generator.core.modules.startup;
 
 import android.support.annotation.StringDef;
 
+import com.winning.mars_generator.core.BaseBean;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -9,7 +11,7 @@ import java.lang.annotation.RetentionPolicy;
  * Created by yuzhijun on 2018/4/2.
  */
 
-public class StartupBean {
+public class StartupBean extends BaseBean{
     @Retention(RetentionPolicy.SOURCE)
     @StringDef({StartUpType.COLD, StartUpType.HOT})
     public @interface StartUpType {

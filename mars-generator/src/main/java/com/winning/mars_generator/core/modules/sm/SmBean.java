@@ -2,6 +2,7 @@ package com.winning.mars_generator.core.modules.sm;
 
 import android.support.annotation.StringDef;
 
+import com.winning.mars_generator.core.BaseBean;
 import com.winning.mars_generator.core.modules.sm.blockCanary.LongBlockBean;
 import com.winning.mars_generator.core.modules.sm.blockCanary.ShortBlockBean;
 
@@ -12,7 +13,7 @@ import java.lang.annotation.RetentionPolicy;
  * Created by yuzhijun on 2018/3/29.
  */
 
-public class SmBean {
+public class SmBean extends BaseBean{
     public LongBlockBean mLongBlockBean;
     public ShortBlockBean mShortBlockBean;
     public @BlockType String blockType;

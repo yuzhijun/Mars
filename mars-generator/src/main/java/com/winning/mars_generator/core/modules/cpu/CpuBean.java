@@ -1,12 +1,14 @@
 package com.winning.mars_generator.core.modules.cpu;
 
+import com.winning.mars_generator.core.BaseBean;
+
 import java.util.Locale;
 
 /**
  * cpu ratio
  * Created by yuzhijun on 2018/3/27.
  */
-public class CpuBean {
+public class CpuBean extends BaseBean{
     //total used ratio(user + system + io + others)
     public double totalUseRatio;
     // app's cpu ratio

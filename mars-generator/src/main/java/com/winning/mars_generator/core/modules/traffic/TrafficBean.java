@@ -1,12 +1,14 @@
 package com.winning.mars_generator.core.modules.traffic;
 
+import com.winning.mars_generator.core.BaseBean;
+
 import java.util.Locale;
 
 /**
  * used traffic ,KB
  * Created by yuzhijun on 2018/3/29.
  */
-public class TrafficBean {
+public class TrafficBean extends BaseBean{
     // total download traffic rate
     public float rxTotalRate;
     // total upload traffic rate

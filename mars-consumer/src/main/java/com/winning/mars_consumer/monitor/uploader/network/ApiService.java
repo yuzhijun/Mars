@@ -1,6 +1,6 @@
 package com.winning.mars_consumer.monitor.uploader.network;
 
-import com.winning.mars_consumer.monitor.bean.AppUpdate;
+import com.winning.mars_consumer.monitor.bean.UsableInfo;
 
 import io.reactivex.Flowable;
 import retrofit2.http.GET;
@@ -10,6 +10,6 @@ import retrofit2.http.GET;
  */
 
 public interface ApiService {
-    @GET
-    Flowable<AppUpdate> getUpadateInfo();
+    @GET("")
+    Flowable<UsableInfo> getUsableInfo();
 }

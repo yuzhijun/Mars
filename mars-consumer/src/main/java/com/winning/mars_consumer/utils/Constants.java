@@ -5,10 +5,16 @@ package com.winning.mars_consumer.utils;
  */
 public class Constants {
     public static final String BASE_URL =  "http://gank.io";//used for consumer module
-    public static final String SOCKET_URL = "http://172.16.75.58:9092";
+    public static final String SOCKET_URL = "http://203.110.176.174:8084";
+//    public static final String SOCKET_URL = "http://172.16.72.12:9092";
     public static final String DOWNLOAD_URL = "";
     public static final int DEBUG_UPLOAD_RATE = 2000;//two seconds
     public static final int RELEASE_UPLOAD_RATE = 60000;//one minute
+
+    //禁用标识
+    public static final String DEVICE_ENABLE = "device_enable";
+    public static final String APP_ENABLE = "app_enable";
+    public static final String ACCOUNT_ENABLE = "account_enable";
 
     public class HttpCode {
         public static final int HTTP_UNAUTHORIZED = 401;
@@ -32,5 +38,9 @@ public class Constants {
         public static final String SM = "Sm";
         public static final String STARTUP = "Startup";
         public static final String TRAFFIC = "Traffic";
+        public static final String DEVICE_HANDLER = "DEVICE_HANDLER";
+        public static final String APP_HANDLER = "APP_HANDLER";
+        public static final String ACCOUNT_HANDLER = "ACCOUNT_HANDLER";
+        public static final String BASE_INFO = "BASE_INFO";
     }
 }

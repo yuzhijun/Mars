@@ -1,10 +1,12 @@
 package com.winning.mars_generator.core.modules.device;
 
+import com.winning.mars_generator.core.BaseBean;
+
 /**
  * Created by yuzhijun on 2018/3/28.
  */
 
-public class DeviceBean {
+public class DeviceBean extends BaseBean{
     private String deviceBrand;
     private String deviceModel;
     private String deviceID;

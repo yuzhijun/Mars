@@ -14,6 +14,8 @@ import com.winning.mars_generator.core.modules.leak.leakcanary.android.LeakCanar
 import com.winning.mars_generator.core.modules.leak.leakcanary.android.LeakDirectoryProvider;
 import com.winning.mars_generator.utils.FileUtil;
 import com.winning.mars_generator.utils.LogUtil;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Permission;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -49,31 +51,40 @@ public class Leak extends GeneratorSubject<LeakBean.LeakMemoryBean> implements I
             return;
         }
 
-        permissionNeed(application,Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(aBoolean -> {
-            if (!aBoolean) {
-                throw new IllegalStateException("install leak need permission:" + Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
-            uninstall();
-            mLeakDirectoryProvider = new DefaultLeakDirectoryProvider(application);
-            try {
-                clearLeaks();
-            } catch (FileUtil.FileException e) {
-                LogUtil.e(e.getLocalizedMessage());
-            }
-            CanaryLog.setLogger(new CanaryLog.Logger() {
-                @Override
-                public void d(String s, Object... objects) {
-                    LogUtil.d(String.format(s, objects));
-                }
+        AndPermission.with(context)
+                .runtime()
+                .permission(Permission.Group.STORAGE)
+                .onGranted(permissions -> {
+                    permissionNeed(application, Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(aBoolean -> {
+                        if (!aBoolean) {
+                            throw new IllegalStateException("install leak need permission:" + Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                        }
+                        uninstall();
+                        mLeakDirectoryProvider = new DefaultLeakDirectoryProvider(application);
+                        try {
+                            clearLeaks();
+                        } catch (FileUtil.FileException e) {
+                            LogUtil.e(e.getLocalizedMessage());
+                        }
+                        CanaryLog.setLogger(new CanaryLog.Logger() {
+                            @Override
+                            public void d(String s, Object... objects) {
+                                LogUtil.d(String.format(s, objects));
+                            }
 
-                @Override
-                public void d(Throwable throwable, String s, Object... objects) {
-                    LogUtil.e(String.format(s, objects) + "\n" + String.valueOf(throwable));
-                }
-            });
-            LeakCanary.install(application);
-            LogUtil.d("LeakCanary installed");
-        });
+                            @Override
+                            public void d(Throwable throwable, String s, Object... objects) {
+                                LogUtil.e(String.format(s, objects) + "\n" + String.valueOf(throwable));
+                            }
+                        });
+                        LeakCanary.install(application);
+                        LogUtil.d("LeakCanary installed");
+                    });
+                })
+                .onDenied(permissions -> {
+                    // Storage permission are not allowed.
+                })
+                .start();
     }
 
     @Override

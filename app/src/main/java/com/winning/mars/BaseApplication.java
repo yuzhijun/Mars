@@ -14,7 +14,7 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        MarsEntrance.getInstance().init(this,"1233kkhr33ll333","ddeefw");
+        MarsEntrance.getInstance().init(this,"1233kkhr33ll333");
         StartupTracer.get().onApplicationCreate();
     }
 }

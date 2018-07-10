@@ -1,10 +1,12 @@
 package com.winning.mars_generator.core.modules.inflate;
 
+import com.winning.mars_generator.core.BaseBean;
+
 /**
  * Created by yuzhijun on 2018/3/28.
  */
 
-public class InflateBean {
+public class InflateBean extends BaseBean{
     private String mActivity;
     private long inflateDepth;
     private long inflateTime;

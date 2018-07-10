@@ -1,10 +1,12 @@
 package com.winning.mars_generator.core.modules.account;
 
+import com.winning.mars_generator.core.BaseBean;
+
 /**
  * Created by yuzhijun on 2018/4/2.
  */
 
-public class AccountBean {
+public class AccountBean extends BaseBean{
     private String name;
     private String pwd;
 

@@ -2,10 +2,12 @@ package com.winning.mars_generator.core.modules.battery;
 
 import android.os.BatteryManager;
 
+import com.winning.mars_generator.core.BaseBean;
+
 /**
  * Created by yuzhijun on 2018/3/28.
  */
-public class BatteryBean {
+public class BatteryBean extends BaseBean{
     public static final String SPILT = "\r\n";
     //charging or full or no charge or unknown
     public int status;

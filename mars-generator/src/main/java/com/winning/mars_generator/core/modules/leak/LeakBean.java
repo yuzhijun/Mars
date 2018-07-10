@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
 import android.support.v4.util.ArrayMap;
 
+import com.winning.mars_generator.core.BaseBean;
+
 import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -19,7 +21,7 @@ import java.util.Map;
  * Created by yuzhijun on 2018/3/30.
  */
 
-public class LeakBean {
+public class LeakBean{
     private ArrayMap<String, Map<String, Object>> mLeakMemoryInfoArrayMap;
 
     private LeakBean() {
@@ -63,7 +65,7 @@ public class LeakBean {
         return leakMemoryBean;
     }
 
-    public static class LeakMemoryBean implements Serializable, Comparable<LeakMemoryBean> {
+    public static class LeakMemoryBean extends BaseBean implements Serializable, Comparable<LeakMemoryBean> {
         public static final SimpleDateFormat DF = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);
         @Retention(RetentionPolicy.SOURCE)
         @StringDef({Fields.REF_KEY, Fields.LEAK_TIME, Fields.STATUS_SUMMARY, Fields.STATUS, Fields.LEAK_OBJ_NAME, Fields.PATH_TO_ROOT, Fields.LEAK_MEMORY_BYTES})

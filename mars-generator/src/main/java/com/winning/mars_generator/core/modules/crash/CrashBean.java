@@ -1,5 +1,6 @@
 package com.winning.mars_generator.core.modules.crash;
 
+import com.winning.mars_generator.core.BaseBean;
 import com.winning.mars_generator.utils.BaseUtility;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
  * Created by yuzhijun on 2018/3/29.
  */
 
-public class CrashBean {
+public class CrashBean extends BaseBean{
     public static CrashBean INVALID = new CrashBean();
     public long timestampMillis;
     public String threadName;
