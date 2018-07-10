@@ -51,7 +51,7 @@ public class Leak extends GeneratorSubject<LeakBean.LeakMemoryBean> implements I
             return;
         }
 
-        AndPermission.with(context)
+        AndPermission.with(context.getApplicationContext())
                 .runtime()
                 .permission(Permission.Group.STORAGE)
                 .onGranted(permissions -> {

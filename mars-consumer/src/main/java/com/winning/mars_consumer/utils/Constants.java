@@ -8,7 +8,6 @@ public class Constants {
     public static final  String UPDATE_URL = "http://203.110.176.174:8085/app/getAppVersion";
     public static final String SOCKET_URL = "http://203.110.176.174:8084";
 //    public static final String SOCKET_URL = "http://172.16.72.12:9092";
-    public static final String DOWNLOAD_URL = "";
     public static final int DEBUG_UPLOAD_RATE = 2000;//two seconds
     public static final int RELEASE_UPLOAD_RATE = 60000;//one minute
 
