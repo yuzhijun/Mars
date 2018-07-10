@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="font_size_A">12.0sp</dimen>
+    <dimen name="font_size_B">15.0sp</dimen>
+    <dimen name="font_size_B1">14.31sp</dimen>
+    <dimen name="font_size_C">18.0sp</dimen>
+    <dimen name="app_interval_5">5dip</dimen>
+    <dimen name="app_interval_10">10dip</dimen>
+    <dimen name="app_interval_20">20dip</dimen>
+    <dimen name="line">0.5dp</dimen>
+
+    <!-- typical spacing between two views -->
+    <dimen name="spacing_40">40dp</dimen>
+    <dimen name="spacing_34">34dp</dimen>
+    <dimen name="spacing_30">30dp</dimen>
+    <dimen name="spacing_24">24dp</dimen>
+    <dimen name="spacing_20">20dp</dimen>
+    <dimen name="spacing_18">18dp</dimen>
+    <dimen name="spacing_16">16dp</dimen>
+    <dimen name="spacing_14">14dp</dimen>
+    <dimen name="spacing_12">12dp</dimen>
+    <dimen name="spacing_10">10dp</dimen>
+    <dimen name="spacing_8">8dp</dimen>
+    <dimen name="spacing_6">6dp</dimen>
+    <dimen name="spacing_4">4dp</dimen>
+    <dimen name="spacing_2">2dp</dimen>
+</resources>

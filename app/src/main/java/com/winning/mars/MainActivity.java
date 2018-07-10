@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                     }
         });
 
-        UpdateUtil.checkUpdate(this);
+        UpdateUtil.checkUpdate(this,"ddddd");
         tvLeak.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, LeakActivity.class);
             startActivity(intent);

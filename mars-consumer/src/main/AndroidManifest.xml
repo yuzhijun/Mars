@@ -14,8 +14,5 @@
             android:enabled="true"
             android:permission="android.permission.BIND_JOB_SERVICE"/>
         <service android:name=".monitor.uploader.WorkService"/>
-        <provider android:name=".monitor.storage.PreferenceProvider"
-                  android:enabled="true"
-                  android:authorities="com.winning.marsConsumer.PreferenceProvider" />
     </application>
 </manifest>

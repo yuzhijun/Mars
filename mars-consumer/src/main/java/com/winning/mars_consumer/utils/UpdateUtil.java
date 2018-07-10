@@ -11,12 +11,13 @@ import com.vector.update_app.UpdateCallback;
 import com.winning.mars_consumer.monitor.bean.UpdateInfo;
 
 public class UpdateUtil{
-    public static void checkUpdate(Activity activity){
+    public static void checkUpdate(Activity activity,String appKey){
         new UpdateAppManager
                 .Builder()
                 .setActivity(activity)
                 .setHttpManager(new UpdateAppHttpUtil())
                 .setUpdateUrl(Constants.UPDATE_URL)
+                .setAppKey(appKey)
                 .build()
                 .checkNewApp(new UpdateCallback() {
                     @Override
