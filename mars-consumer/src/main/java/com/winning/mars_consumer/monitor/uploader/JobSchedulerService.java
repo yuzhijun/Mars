@@ -179,39 +179,22 @@ public class JobSchedulerService extends JobService {
     private Emitter.Listener onDeviceHandler = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Message msg = new Message();
-            msg.obj = args[0];
-            new MsgHandler(JobSchedulerService.this).sendMessage(msg);
-            if (args[args.length - 1] instanceof Ack){
-                Ack ack = (Ack) args[args.length - 1];
-                ack.call(args[0]);
-            }
+            backToUI(args);
         }
     };
 
     private Emitter.Listener onAppHandler = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Message msg = new Message();
-            msg.obj = args[0];
-            new MsgHandler(JobSchedulerService.this).sendMessage(msg);
-            if (args[args.length - 1] instanceof Ack){
-                Ack ack = (Ack) args[args.length - 1];
-                ack.call(args[0]);
-            }
+            backToUI(args);
         }
     };
+
 
     private Emitter.Listener onAccountHandler = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Message msg = new Message();
-            msg.obj = args[0];
-            new MsgHandler(JobSchedulerService.this).sendMessage(msg);
-            if (args[args.length - 1] instanceof Ack){
-                Ack ack = (Ack) args[args.length - 1];
-                ack.call(args[0]);
-            }
+            backToUI(args);
         }
     };
 
@@ -422,6 +405,16 @@ public class JobSchedulerService extends JobService {
             }
         }
         return false;
+    }
+
+    private void backToUI(Object[] args) {
+        Message msg = new Message();
+        msg.obj = args[0];
+        new MsgHandler(JobSchedulerService.this).sendMessage(msg);
+        if (args[args.length - 1] instanceof Ack){
+            Ack ack = (Ack) args[args.length - 1];
+            ack.call(args[0]);
+        }
     }
 
     static class  MsgHandler extends Handler{
