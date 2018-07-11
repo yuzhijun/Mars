@@ -89,15 +89,17 @@ public class JobSchedulerService extends JobService {
 
     @Override
     public void onDestroy() {
-        mSocket.disconnect();
+        if (null != mSocket){
+            mSocket.disconnect();
 
-        mSocket.off(Socket.EVENT_CONNECT, onConnect);
-        mSocket.off(Socket.EVENT_DISCONNECT, onDisconnect);
-        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
-        mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-        mSocket.off(DEVICE_HANDLER,onDeviceHandler);
-        mSocket.off(APP_HANDLER,onAppHandler);
-        mSocket.off(ACCOUNT_HANDLER,onAccountHandler);
+            mSocket.off(Socket.EVENT_CONNECT, onConnect);
+            mSocket.off(Socket.EVENT_DISCONNECT, onDisconnect);
+            mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
+            mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+            mSocket.off(DEVICE_HANDLER,onDeviceHandler);
+            mSocket.off(APP_HANDLER,onAppHandler);
+            mSocket.off(ACCOUNT_HANDLER,onAccountHandler);
+        }
         cancelAllJobs();
         super.onDestroy();
     }

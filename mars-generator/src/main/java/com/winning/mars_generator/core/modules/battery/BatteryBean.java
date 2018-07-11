@@ -3,11 +3,12 @@ package com.winning.mars_generator.core.modules.battery;
 import android.os.BatteryManager;
 
 import com.winning.mars_generator.core.BaseBean;
+import com.winning.mars_generator.core.modules.device.DeviceBean;
 
 /**
  * Created by yuzhijun on 2018/3/28.
  */
-public class BatteryBean extends BaseBean{
+public class BatteryBean extends BaseBean implements Cloneable{
     public static final String SPILT = "\r\n";
     //charging or full or no charge or unknown
     public int status;
@@ -88,5 +89,17 @@ public class BatteryBean extends BaseBean{
             default:
                 return "unknown";
         }
+    }
+
+    @Override
+    public BatteryBean clone() {
+        BatteryBean sc = null;
+        try
+        {
+            sc = (BatteryBean) super.clone();
+        } catch (CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+        return sc;
     }
 }

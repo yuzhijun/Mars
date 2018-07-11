@@ -43,7 +43,11 @@ public class Repository {
     private BatteryBean mBatteryBean;
     private final Object mLockForBattery = new Object();
     public BatteryBean getBatteryBean() {
-        return mBatteryBean;
+        synchronized (mLockForBattery){
+            final BatteryBean batteryBean = null == mBatteryBean ? null : mBatteryBean.clone();
+            mBatteryBean = null;
+            return batteryBean;
+        }
     }
     public void setBatteryBean(BatteryBean batteryBean) {
         synchronized (mLockForBattery){
@@ -97,7 +101,11 @@ public class Repository {
     private DeviceBean mDeviceBean;
     private final Object mLockForDevice = new Object();
     public DeviceBean getDeviceBean() {
-        return mDeviceBean;
+        synchronized (mLockForDevice){
+            final DeviceBean deviceBean = null == mDeviceBean ? null : mDeviceBean.clone();
+            mDeviceBean = null;
+            return deviceBean;
+        }
     }
     public void setDeviceBean(DeviceBean deviceBean) {
         synchronized (mLockForDevice){
@@ -262,7 +270,11 @@ public class Repository {
     private StartupBean mStartupBean;
     private final Object mLockForStartup = new Object();
     public StartupBean getStartupBean() {
-        return mStartupBean;
+        synchronized (mLockForStartup){
+            final StartupBean startupBean = null == mStartupBean ? null : mStartupBean.clone();
+            mStartupBean = null;
+            return startupBean;
+        }
     }
     public void setStartupBean(StartupBean startupBean) {
         synchronized (mLockForStartup){

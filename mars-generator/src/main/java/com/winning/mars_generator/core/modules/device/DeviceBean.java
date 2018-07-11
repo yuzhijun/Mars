@@ -6,7 +6,7 @@ import com.winning.mars_generator.core.BaseBean;
  * Created by yuzhijun on 2018/3/28.
  */
 
-public class DeviceBean extends BaseBean{
+public class DeviceBean extends BaseBean implements Cloneable{
     private String deviceBrand;
     private String deviceModel;
     private String deviceID;
@@ -87,5 +87,17 @@ public class DeviceBean extends BaseBean{
 
     public void setSimOperatorName(String simOperatorName) {
         this.simOperatorName = simOperatorName;
+    }
+
+    @Override
+    public DeviceBean clone() {
+        DeviceBean sc = null;
+        try
+        {
+            sc = (DeviceBean) super.clone();
+        } catch (CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+        return sc;
     }
 }
