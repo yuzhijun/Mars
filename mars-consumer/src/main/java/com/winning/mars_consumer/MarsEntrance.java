@@ -23,6 +23,7 @@ import com.winning.mars_generator.core.modules.traffic.Traffic;
 public class MarsEntrance {
     private static MarsEntrance mInstance;
     public  String appKey;
+    public ICustomForbiddenBehavior customForbiddenBehavior;
 
     private MarsEntrance(){
     }
@@ -42,11 +43,12 @@ public class MarsEntrance {
      * init
      * @Param key appKey
      * */
-    public void init(Context context, String appKey){
+    public void init(Context context, String appKey,ICustomForbiddenBehavior customForbiddenBehavior){
         Mars.getInstance(context).install(Leak.class);
 
         if (!LeakCanary.isInAnalyzerProcess(context)){
             this.appKey = appKey;
+            this.customForbiddenBehavior = customForbiddenBehavior;
             SPUtils.init(context);
             Mars.getInstance(context).install(Cpu.class)
                     .install(Battery.class)

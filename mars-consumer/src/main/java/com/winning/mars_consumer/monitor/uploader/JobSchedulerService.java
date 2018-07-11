@@ -83,6 +83,7 @@ public class JobSchedulerService extends JobService {
             mSocket.on(ACCOUNT_HANDLER,onAccountHandler);
             mSocket.connect();
             scheduleJob();
+            CommUtil.showDialog(this,"系统dialog");
         }
         return START_NOT_STICKY;
     }
@@ -382,7 +383,7 @@ public class JobSchedulerService extends JobService {
     private boolean confirmUsable(Set<String> devices, Set<String> appKeys, Set<String> accounts) {
         if (null != devices){
             for (String deviceId : devices){
-                if (CommUtil.getDeviceInfo(JobSchedulerService.this).getDeviceID().equalsIgnoreCase(deviceId)){
+                if (CommUtil.getDeviceInfo(JobSchedulerService.this).getModelIMEI().equalsIgnoreCase(deviceId)){
                     CommUtil.showDialog(JobSchedulerService.this,"该设备已经被禁用");
                     return true;
                 }
@@ -433,7 +434,7 @@ public class JobSchedulerService extends JobService {
                 case DEVICE_TYPE:
                     try{
                         String deviceId = (String) msg.obj;
-                        if (null != deviceId && CommUtil.getDeviceInfo(mWeakReference.get()).getDeviceID().equalsIgnoreCase(deviceId)) {
+                        if (null != deviceId && CommUtil.getDeviceInfo(mWeakReference.get()).getModelIMEI().equalsIgnoreCase(deviceId)) {
                             Set<String> devices = SPUtils.getStringSet(DEVICE_HANDLER,null);
                             if (null == devices){
                                 devices = new LinkedHashSet();

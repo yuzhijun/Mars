@@ -10,7 +10,6 @@ import com.winning.mars.model.GirlsData;
 import com.winning.mars.network.AppApiService;
 import com.winning.mars_consumer.monitor.uploader.network.ApiServiceModule;
 import com.winning.mars_consumer.utils.StartupTracer;
-import com.winning.mars_consumer.utils.UpdateUtil;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                     }
         });
 
-        UpdateUtil.checkUpdate(this,"ddddd");
+//        UpdateUtil.checkUpdate(this,"ddddd");
         tvLeak.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, LeakActivity.class);
             startActivity(intent);

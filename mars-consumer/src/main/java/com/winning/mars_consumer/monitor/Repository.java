@@ -1,5 +1,6 @@
 package com.winning.mars_consumer.monitor;
 
+import com.winning.mars_consumer.utils.CommUtil;
 import com.winning.mars_generator.core.modules.account.AccountBean;
 import com.winning.mars_generator.core.modules.battery.BatteryBean;
 import com.winning.mars_generator.core.modules.cpu.CpuBean;
@@ -295,6 +296,8 @@ public class Repository {
     public void setAccountBean(AccountBean accountBean) {
         synchronized (mLockForAccount){
             currentAccount = accountBean;
+            //检测当前账号的可用性
+            CommUtil.checkAccountUsable(currentAccount);
             if (mAccountBeans.size() < MAX_SIZE){
                 mAccountBeans.add(accountBean);
             }else{
