@@ -54,7 +54,7 @@ public class CommUtil {
         Set<String> accounts = SPUtils.getStringSet(ACCOUNT_HANDLER,null);
         if (null != accounts){
             for (String account : accounts){
-                if (null != accountBean && accountBean.equals(account)){
+                if (null != accountBean && accountBean.getName().equals(account)){
                     showDialog(MarsConsumer.mContext,"该账号已经被禁用");
                 }
             }

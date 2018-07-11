@@ -83,7 +83,6 @@ public class JobSchedulerService extends JobService {
             mSocket.on(ACCOUNT_HANDLER,onAccountHandler);
             mSocket.connect();
             scheduleJob();
-            CommUtil.showDialog(this,"系统dialog");
         }
         return START_NOT_STICKY;
     }
@@ -401,7 +400,7 @@ public class JobSchedulerService extends JobService {
 
         if (null != accounts){
             for (String account : accounts){
-                if (null != Repository.getInstance().getCurrentAccount() && Repository.getInstance().getCurrentAccount().equals(account)){
+                if (null != Repository.getInstance().getCurrentAccount() && Repository.getInstance().getCurrentAccount().getName().equals(account)){
                     CommUtil.showDialog(JobSchedulerService.this,"该账号已经被禁用");
                     return true;
                 }
@@ -484,7 +483,7 @@ public class JobSchedulerService extends JobService {
                     try{
                         String account = (String) msg.obj;
                         if (null != account && null != Repository.getInstance().getCurrentAccount()
-                                && Repository.getInstance().getCurrentAccount().equals(account)){
+                                && Repository.getInstance().getCurrentAccount().getName().equals(account)){
                             Set<String> accounts = SPUtils.getStringSet(ACCOUNT_HANDLER,null);
                             if (null == accounts){
                                 accounts = new LinkedHashSet();

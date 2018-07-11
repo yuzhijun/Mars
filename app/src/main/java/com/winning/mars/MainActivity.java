@@ -10,6 +10,10 @@ import com.winning.mars.model.GirlsData;
 import com.winning.mars.network.AppApiService;
 import com.winning.mars_consumer.monitor.uploader.network.ApiServiceModule;
 import com.winning.mars_consumer.utils.StartupTracer;
+import com.winning.mars_consumer.utils.UpdateUtil;
+import com.winning.mars_generator.Mars;
+import com.winning.mars_generator.core.modules.account.Account;
+import com.winning.mars_generator.core.modules.account.AccountBean;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -27,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
         tvLeak = findViewById(R.id.tvLeak);
 
         StartupTracer.get().onHomeCreate(this);
+        Mars.getInstance(this).getModule(Account.class).generate(new AccountBean("aaa","123"));
+
+        UpdateUtil.checkUpdate(this,"ddddd");
 
         AppApiService appApiService = ApiServiceModule.getInstance().getNetworkService(AppApiService.class);
         appApiService.getFuliData("3","1")
@@ -49,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
                     }
         });
-
-//        UpdateUtil.checkUpdate(this,"ddddd");
         tvLeak.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, LeakActivity.class);
             startActivity(intent);
