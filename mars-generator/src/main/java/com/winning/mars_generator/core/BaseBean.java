@@ -2,14 +2,14 @@ package com.winning.mars_generator.core;
 
 public class BaseBean {
     public String appKey;
-    public String deviceId;
+    public String modelIMEI;
 
-    public String getDeviceId() {
-        return deviceId;
+    public String getModelIMEI() {
+        return modelIMEI;
     }
 
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
+    public void setModelIMEI(String modelIMEI) {
+        this.modelIMEI = modelIMEI;
     }
 
     public String getAppKey() {

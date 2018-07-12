@@ -61,7 +61,7 @@ public class Monitor {
             @Override
             public void accept(BatteryBean batteryBean) throws Exception {
                 batteryBean.setAppKey(MarsEntrance.getInstance().appKey);
-                batteryBean.setDeviceId(CommUtil.getDeviceInfo(context).getModelIMEI());
+                batteryBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
                 mRepos.setBatteryBean(batteryBean);
             }
         }));
@@ -70,7 +70,7 @@ public class Monitor {
             @Override
             public void accept(CpuBean cpuBean) throws Exception {
                 cpuBean.setAppKey(MarsEntrance.getInstance().appKey);
-                cpuBean.setDeviceId(CommUtil.getDeviceInfo(context).getModelIMEI());
+                cpuBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
                 mRepos.setCpuBean(cpuBean);
             }
         }));
@@ -99,7 +99,7 @@ public class Monitor {
             @Override
             public void accept(CrashBean crashBean) throws Exception {
                 crashBean.setAppKey(MarsEntrance.getInstance().appKey);
-                crashBean.setDeviceId(CommUtil.getDeviceInfo(context).getModelIMEI());
+                crashBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
                 mRepos.setCrashBean(crashBean);
             }
         }));
@@ -108,7 +108,7 @@ public class Monitor {
             @Override
             public void accept(DeviceBean deviceBean) throws Exception {
                 deviceBean.setAppKey(MarsEntrance.getInstance().appKey);
-                deviceBean.setDeviceId(CommUtil.getDeviceInfo(context).getModelIMEI());
+                deviceBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
                 mRepos.setDeviceBean(deviceBean);
             }
         }));
@@ -117,7 +117,7 @@ public class Monitor {
             @Override
             public void accept(FpsBean fpsBean) throws Exception {
                 fpsBean.setAppKey(MarsEntrance.getInstance().appKey);
-                fpsBean.setDeviceId(CommUtil.getDeviceInfo(context).getModelIMEI());
+                fpsBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
                 mRepos.setFpsBean(fpsBean);
             }
         }));
@@ -126,7 +126,7 @@ public class Monitor {
             @Override
             public void accept(InflateBean inflateBean) throws Exception {
                 inflateBean.setAppKey(MarsEntrance.getInstance().appKey);
-                inflateBean.setDeviceId(CommUtil.getDeviceInfo(context).getModelIMEI());
+                inflateBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
                 mRepos.setInflateBean(inflateBean);
             }
         }));
@@ -135,7 +135,7 @@ public class Monitor {
             @Override
             public void accept(LeakBean.LeakMemoryBean leakMemoryBean) throws Exception {
                 leakMemoryBean.setAppKey(MarsEntrance.getInstance().appKey);
-                leakMemoryBean.setDeviceId(CommUtil.getDeviceInfo(context).getModelIMEI());
+                leakMemoryBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
                 mRepos.setLeakMemoryBean(leakMemoryBean);
             }
         }));
@@ -144,7 +144,7 @@ public class Monitor {
             @Override
             public void accept(SmBean smBean) throws Exception {
                 smBean.setAppKey(MarsEntrance.getInstance().appKey);
-                smBean.setDeviceId(CommUtil.getDeviceInfo(context).getModelIMEI());
+                smBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
                 mRepos.setSmBean(smBean);
             }
         }));
@@ -160,7 +160,7 @@ public class Monitor {
             @Override
             public void accept(TrafficBean trafficBean) throws Exception {
                 trafficBean.setAppKey(MarsEntrance.getInstance().appKey);
-                trafficBean.setDeviceId(CommUtil.getDeviceInfo(context).getModelIMEI());
+                trafficBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
                 mRepos.setTrafficBean(trafficBean);
             }
         }));
@@ -169,7 +169,7 @@ public class Monitor {
             @Override
             public void accept(NetworkBean networkBean) throws Exception {
                 networkBean.setAppKey(MarsEntrance.getInstance().appKey);
-                networkBean.setDeviceId(CommUtil.getDeviceInfo(context).getModelIMEI());
+                networkBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
                 mRepos.setNetworkBean(networkBean);
             }
         }));
@@ -178,7 +178,7 @@ public class Monitor {
             @Override
             public void accept(StartupBean startupBean) throws Exception {
                 startupBean.setAppKey(MarsEntrance.getInstance().appKey);
-                startupBean.setDeviceId(CommUtil.getDeviceInfo(context).getModelIMEI());
+                startupBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
                 mRepos.setStartupBean(startupBean);
             }
         }));
@@ -187,7 +187,7 @@ public class Monitor {
             @Override
             public void accept(AccountBean accountBean) throws Exception {
                 accountBean.setAppKey(MarsEntrance.getInstance().appKey);
-                accountBean.setDeviceId(CommUtil.getDeviceInfo(context).getModelIMEI());
+                accountBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
                 mRepos.setAccountBean(accountBean);
             }
         }));

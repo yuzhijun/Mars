@@ -10,6 +10,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
 
 import com.winning.mars_generator.core.Engine;
 import com.winning.mars_generator.core.Generator;
@@ -73,6 +74,16 @@ public class DeviceEngine implements Engine {
         mDeviceBean.setModelIP(getIpAddress());
         mDeviceBean.setNetworkOperator(phone.getNetworkOperator());
         mDeviceBean.setSimOperatorName(phone.getSimOperatorName());
+
+        try{
+            DisplayMetrics dm = mContext.getResources().getDisplayMetrics();
+            int screenWidth = dm.widthPixels;
+            int screenHeight = dm.heightPixels;
+            mDeviceBean.setScreenWidth(screenWidth+"");
+            mDeviceBean.setScreenHeight(screenHeight+"");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             mDeviceBean.setModelIMEI(null);

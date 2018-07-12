@@ -161,7 +161,7 @@ public class JobSchedulerService extends JobService {
             //upload base_info
             BaseBean baseInfo = new BaseBean();
             baseInfo.setAppKey(MarsEntrance.getInstance().appKey);
-            baseInfo.setDeviceId(CommUtil.getDeviceInfo(this).getModelIMEI());
+            baseInfo.setModelIMEI(CommUtil.getDeviceInfo(this).getModelIMEI());
             JSONObject jsonObject = JsonWrapperUtil.objectToJsonObject(baseInfo);
             if (null != jsonObject){
                 mSocket.emit(Constants.Mapper.BASE_INFO, jsonObject);
@@ -353,8 +353,8 @@ public class JobSchedulerService extends JobService {
                         @Override
                         public void onNext(UsableInfo usableInfo) {
                             if (null != usableInfo){
-                                if (null != usableInfo.getDevice_id()){
-                                    innerDevices.add(usableInfo.getDevice_id());
+                                if (null != usableInfo.getModelIMEI()){
+                                    innerDevices.add(usableInfo.getModelIMEI());
                                     SPUtils.putStringSet(DEVICE_HANDLER,innerDevices);
                                 }
 
@@ -437,8 +437,8 @@ public class JobSchedulerService extends JobService {
             switch (msg.what){
                 case DEVICE_TYPE:
                     try{
-                        String deviceId = (String) msg.obj;
-                        if (null != deviceId && CommUtil.getDeviceInfo(mWeakReference.get()).getModelIMEI().equalsIgnoreCase(deviceId)) {
+                        String modelIMEI = (String) msg.obj;
+                        if (null != modelIMEI && CommUtil.getDeviceInfo(mWeakReference.get()).getModelIMEI().equalsIgnoreCase(modelIMEI)) {
                             Set<String> devices = SPUtils.getStringSet(DEVICE_HANDLER,null);
                             if (null == devices){
                                 devices = new LinkedHashSet();
@@ -446,16 +446,16 @@ public class JobSchedulerService extends JobService {
 
                             String message;
                             boolean status;
-                            if(devices.contains(deviceId)){
-                                devices.remove(deviceId);
+                            if(devices.contains(modelIMEI)){
+                                devices.remove(modelIMEI);
                                 message = "该设备已经被启用";
                                 status = true;
                             }else{
-                                devices.add(deviceId);
+                                devices.add(modelIMEI);
                                 message = "该设备已经被禁用";
                                 status = false;
                             }
-                            SPUtils.putString(DEVICE_HANDLER,deviceId);
+                            SPUtils.putStringSet(DEVICE_HANDLER,devices);
 
                             CommUtil.showDialog(mWeakReference.get(),message,status);
                         }
@@ -482,7 +482,7 @@ public class JobSchedulerService extends JobService {
                                 message = "该应用已经被禁用";
                                 status = false;
                             }
-                            SPUtils.putString(APP_HANDLER,appKey);
+                            SPUtils.putStringSet(APP_HANDLER,apps);
 
                             CommUtil.showDialog(mWeakReference.get(),message,status);
                         }
@@ -510,7 +510,7 @@ public class JobSchedulerService extends JobService {
                                 message = "该账号已经被禁用";
                                 status = false;
                             }
-                            SPUtils.putString(ACCOUNT_HANDLER,account);
+                            SPUtils.putStringSet(ACCOUNT_HANDLER,accounts);
 
                             CommUtil.showDialog(mWeakReference.get(),message,status);
                         }

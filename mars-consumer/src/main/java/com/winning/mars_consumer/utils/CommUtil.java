@@ -67,7 +67,7 @@ public class CommUtil {
     public static void showDialog(Context context,String msg,boolean status){
         if (status){
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                showSystemDialog(context, msg,status);
+                showSystemDialog(context, msg, status);
             }
             return;
         }
@@ -83,10 +83,10 @@ public class CommUtil {
                 System.exit(0);//正常退出App
                 return;
             } else {
-                showSystemDialog(context, msg,status);
+                showSystemDialog(context, msg, status);
             }
         } else {
-            showSystemDialog(context, msg,status);
+            showSystemDialog(context, msg, status);
         }
     }
 

@@ -16,6 +16,8 @@ public class DeviceBean extends BaseBean implements Cloneable{
     private String modelIP;
     private String networkOperator;
     private String simOperatorName;
+    private String screenWidth;
+    private String screenHeight;
 
     public String getDeviceBrand() {
         return deviceBrand;
@@ -87,6 +89,22 @@ public class DeviceBean extends BaseBean implements Cloneable{
 
     public void setSimOperatorName(String simOperatorName) {
         this.simOperatorName = simOperatorName;
+    }
+
+    public String getScreenWidth() {
+        return screenWidth;
+    }
+
+    public void setScreenWidth(String screenWidth) {
+        this.screenWidth = screenWidth;
+    }
+
+    public String getScreenHeight() {
+        return screenHeight;
+    }
+
+    public void setScreenHeight(String screenHeight) {
+        this.screenHeight = screenHeight;
     }
 
     @Override
