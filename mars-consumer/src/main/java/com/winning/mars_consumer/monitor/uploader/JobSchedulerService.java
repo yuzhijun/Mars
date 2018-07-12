@@ -66,6 +66,8 @@ public class JobSchedulerService extends JobService {
     private static final int DEVICE_TYPE = 0;
     private static final int APP_TYPE = 1;
     private static final int ACCOUNT_TYPE = 2;
+    private static final int MAX_RETRY = 3;
+    private int retry = 0;
     private int mJobId = 0;
     private boolean isConnected = false;
     private Socket mSocket;
@@ -82,7 +84,9 @@ public class JobSchedulerService extends JobService {
             mSocket.on(APP_HANDLER,onAppHandler);
             mSocket.on(ACCOUNT_HANDLER,onAccountHandler);
             mSocket.connect();
-            scheduleJob();
+            while (scheduleJob() < 0 && retry <= MAX_RETRY){//增加计划任务服务启动失败重试机制
+                retry ++;
+            }
         }
         return START_NOT_STICKY;
     }
@@ -100,6 +104,7 @@ public class JobSchedulerService extends JobService {
             mSocket.off(APP_HANDLER,onAppHandler);
             mSocket.off(ACCOUNT_HANDLER,onAccountHandler);
         }
+        retry = 0;
         cancelAllJobs();
         super.onDestroy();
     }
@@ -156,7 +161,7 @@ public class JobSchedulerService extends JobService {
             //upload base_info
             BaseBean baseInfo = new BaseBean();
             baseInfo.setAppKey(MarsEntrance.getInstance().appKey);
-            baseInfo.setDeviceId(CommUtil.getDeviceInfo(this).getDeviceID());
+            baseInfo.setDeviceId(CommUtil.getDeviceInfo(this).getModelIMEI());
             JSONObject jsonObject = JsonWrapperUtil.objectToJsonObject(baseInfo);
             if (null != jsonObject){
                 mSocket.emit(Constants.Mapper.BASE_INFO, jsonObject);

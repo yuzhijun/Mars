@@ -34,6 +34,7 @@ import io.socket.emitter.Emitter;
 /**
  * Created by yuzhijun on 2018/4/2.
  */
+//TODO 兼容5.0以下机子
 public class WorkService extends IntentService {
     private boolean isConnected = false;
     private Socket mSocket;
