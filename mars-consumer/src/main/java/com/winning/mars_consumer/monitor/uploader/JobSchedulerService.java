@@ -388,7 +388,7 @@ public class JobSchedulerService extends JobService {
         if (null != devices){
             for (String deviceId : devices){
                 if (CommUtil.getDeviceInfo(JobSchedulerService.this).getModelIMEI().equalsIgnoreCase(deviceId)){
-                    CommUtil.showDialog(JobSchedulerService.this,"该设备已经被禁用");
+                    CommUtil.showDialog(JobSchedulerService.this,"该设备已经被禁用",false);
                     return true;
                 }
             }
@@ -397,7 +397,7 @@ public class JobSchedulerService extends JobService {
         if (null != appKeys){
             for (String appkey : appKeys){
                 if (MarsEntrance.getInstance().appKey.equalsIgnoreCase(appkey)){
-                    CommUtil.showDialog(JobSchedulerService.this,"该应用已经被禁用");
+                    CommUtil.showDialog(JobSchedulerService.this,"该应用已经被禁用",false);
                     return true;
                 }
             }
@@ -406,7 +406,7 @@ public class JobSchedulerService extends JobService {
         if (null != accounts){
             for (String account : accounts){
                 if (null != Repository.getInstance().getCurrentAccount() && Repository.getInstance().getCurrentAccount().getName().equals(account)){
-                    CommUtil.showDialog(JobSchedulerService.this,"该账号已经被禁用");
+                    CommUtil.showDialog(JobSchedulerService.this,"该账号已经被禁用",false);
                     return true;
                 }
             }
@@ -445,16 +445,19 @@ public class JobSchedulerService extends JobService {
                             }
 
                             String message;
+                            boolean status;
                             if(devices.contains(deviceId)){
                                 devices.remove(deviceId);
                                 message = "该设备已经被启用";
+                                status = true;
                             }else{
                                 devices.add(deviceId);
                                 message = "该设备已经被禁用";
+                                status = false;
                             }
                             SPUtils.putString(DEVICE_HANDLER,deviceId);
 
-                            CommUtil.showDialog(mWeakReference.get(),message);
+                            CommUtil.showDialog(mWeakReference.get(),message,status);
                         }
                     }catch (Exception e){
                         e.printStackTrace();
@@ -469,16 +472,19 @@ public class JobSchedulerService extends JobService {
                                 apps = new LinkedHashSet();
                             }
                             String message;
+                            boolean status;
                             if(apps.contains(appKey)){
                                 apps.remove(appKey);
                                 message = "该应用已经被启用";
+                                status = true;
                             }else{
                                 apps.add(appKey);
                                 message = "该应用已经被禁用";
+                                status = false;
                             }
                             SPUtils.putString(APP_HANDLER,appKey);
 
-                            CommUtil.showDialog(mWeakReference.get(),message);
+                            CommUtil.showDialog(mWeakReference.get(),message,status);
                         }
                     }catch (Exception e){
                         e.printStackTrace();
@@ -494,16 +500,19 @@ public class JobSchedulerService extends JobService {
                                 accounts = new LinkedHashSet();
                             }
                             String message;
+                            boolean status;
                             if(accounts.contains(account)){
                                 accounts.remove(account);
                                 message = "该账号已经被启用";
+                                status = true;
                             }else{
                                 accounts.add(account);
                                 message = "该账号已经被禁用";
+                                status = false;
                             }
                             SPUtils.putString(ACCOUNT_HANDLER,account);
 
-                            CommUtil.showDialog(mWeakReference.get(),message);
+                            CommUtil.showDialog(mWeakReference.get(),message,status);
                         }
                     }catch (Exception e){
                         e.printStackTrace();

@@ -55,13 +55,22 @@ public class CommUtil {
         if (null != accounts){
             for (String account : accounts){
                 if (null != accountBean && accountBean.getName().equals(account)){
-                    showDialog(MarsConsumer.mContext,"该账号已经被禁用");
+                    showDialog(MarsConsumer.mContext,"该账号已经被禁用",false);
                 }
             }
         }
     }
 
-    public static void showDialog(Context context,String msg){
+    /**
+     * @param status true 为启用,false为禁用
+     * */
+    public static void showDialog(Context context,String msg,boolean status){
+        if (status){
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                showSystemDialog(context, msg,status);
+            }
+            return;
+        }
         if (null != MarsEntrance.getInstance().customForbiddenBehavior){
             MarsEntrance.getInstance().customForbiddenBehavior.onForbiddenBehavior();
             return;
@@ -74,20 +83,20 @@ public class CommUtil {
                 System.exit(0);//正常退出App
                 return;
             } else {
-                showSystemDialog(context, msg);
+                showSystemDialog(context, msg,status);
             }
         } else {
-            showSystemDialog(context, msg);
+            showSystemDialog(context, msg,status);
         }
     }
 
-    private static  void showSystemDialog(Context context, String msg) {
+    private static  void showSystemDialog(Context context, String msg,boolean status) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context.getApplicationContext());
         builder.setTitle("提示");
         builder.setMessage(msg);
         final Dialog dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(status);
+        dialog.setCancelable(status);
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.show();
     }
