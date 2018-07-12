@@ -77,7 +77,7 @@ public class CpuEngine implements Engine {
             if (!isValidRatios(totalRatio, appRatio, userRatio, systemRatio, ioWaitRatio)) {
                 throw new MarsInvalidDataException("Invalid ratio");
             }
-            return new CpuBean(totalRatio, appRatio, userRatio, systemRatio, ioWaitRatio);
+            return new CpuBean(totalRatio, appRatio, userRatio, systemRatio, ioWaitRatio,System.currentTimeMillis()+"");
         }).retryWhen(throwableObservable -> throwableObservable.flatMap(new Function<Throwable, ObservableSource<?>>() {
             @Override
             public ObservableSource<?> apply(Throwable throwable) throws Exception {

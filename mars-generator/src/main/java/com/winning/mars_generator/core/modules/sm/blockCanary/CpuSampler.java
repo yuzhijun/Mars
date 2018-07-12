@@ -16,7 +16,6 @@ import java.util.Map;
  * Created by yuzhijun on 2018/3/29.
  */
 public class CpuSampler extends AbstractSampler {
-
     private static final String TAG = "CpuSampler";
     private static final int BUFFER_SIZE = 1000;
 
@@ -158,7 +157,7 @@ public class CpuSampler extends AbstractSampler {
             CpuBean cpuInfo = new CpuBean((totalTime - idleTime) * 100L / totalTime, (appCpuTime - mAppCpuTimeLast) *
                     100L / totalTime,
                     (user - mUserLast) * 100L / totalTime, (system - mSystemLast) * 100L / totalTime, (ioWait -
-                    mIoWaitLast) * 100L / totalTime);
+                    mIoWaitLast) * 100L / totalTime,System.currentTimeMillis()+"");
 
             synchronized (mCpuInfoEntries) {
                 mCpuInfoEntries.put(System.currentTimeMillis(), cpuInfo);

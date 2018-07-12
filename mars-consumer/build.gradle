@@ -33,6 +33,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
     testImplementation 'junit:junit:4.12'
     implementation project(':mars-generator')
+    //TODO 将来可以将这个库去掉
     implementation 'com.qianwen:update-app:3.5.2'
     implementation 'com.qianwen:okhttp-utils:3.8.0'
     implementation ('io.socket:socket.io-client:0.8.3') {

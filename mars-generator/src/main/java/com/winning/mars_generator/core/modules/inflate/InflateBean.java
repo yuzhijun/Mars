@@ -7,7 +7,7 @@ import com.winning.mars_generator.core.BaseBean;
  */
 
 public class InflateBean extends BaseBean{
-    private String mActivity;
+    private String activity;
     private long inflateDepth;
     private long inflateTime;
     private long stayTime;
@@ -21,11 +21,11 @@ public class InflateBean extends BaseBean{
     }
 
     public String getActivity() {
-        return mActivity;
+        return activity;
     }
 
     public void setActivity(String activity) {
-        mActivity = activity;
+        this.activity = activity;
     }
 
     public long getInflateDepth() {

@@ -20,13 +20,16 @@ public class CpuBean extends BaseBean{
     // io waiting ratio
     public double ioWaitRatio;
 
+    public String sampleTime;
+
     public CpuBean(double totalUseRatio, double appCpuRatio, double userCpuRatio, double sysCpuRatio, double
-            ioWaitRatio) {
+            ioWaitRatio, String sampleTime) {
         this.totalUseRatio = totalUseRatio;
         this.appCpuRatio = appCpuRatio;
         this.userCpuRatio = userCpuRatio;
         this.sysCpuRatio = sysCpuRatio;
         this.ioWaitRatio = ioWaitRatio;
+        this.sampleTime = sampleTime;
     }
 
     public CpuBean() {
@@ -43,6 +46,8 @@ public class CpuBean extends BaseBean{
                 "% , system:" +
                 String.format(Locale.US, "%.1f", sysCpuRatio * 100f) +
                 "% , iowait:" +
-                String.format(Locale.US, "%.1f", ioWaitRatio * 100f) + "%";
+                String.format(Locale.US, "%.1f", ioWaitRatio * 100f) +
+                "% , sampleTime:" +
+                sampleTime;
     }
 }
