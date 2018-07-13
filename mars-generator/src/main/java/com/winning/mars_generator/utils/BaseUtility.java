@@ -92,12 +92,12 @@ public class BaseUtility {
         return stackList;
     }
 
-    public static List<String> getStack(StackTraceElement... stackTraceElements) {
-        List<String> stackList = new ArrayList<>();
+    public static String getStack(StackTraceElement... stackTraceElements) {
+        StringBuilder sbStackElements = new StringBuilder();
         for (StackTraceElement traceElement : stackTraceElements) {
-            stackList.add(String.valueOf(traceElement));
+            sbStackElements.append(String.valueOf(traceElement)+"\n");
         }
-        return stackList;
+        return sbStackElements.toString();
     }
 
     public static String getString(Context context,int id) {

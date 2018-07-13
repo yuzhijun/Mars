@@ -187,14 +187,14 @@ public class JobSchedulerService extends JobService {
     private Emitter.Listener onDeviceHandler = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            backToUI(args);
+            backToUI(args, DEVICE_TYPE);
         }
     };
 
     private Emitter.Listener onAppHandler = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            backToUI(args);
+            backToUI(args, APP_TYPE);
         }
     };
 
@@ -202,7 +202,7 @@ public class JobSchedulerService extends JobService {
     private Emitter.Listener onAccountHandler = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            backToUI(args);
+            backToUI(args, ACCOUNT_TYPE);
         }
     };
 
@@ -415,8 +415,9 @@ public class JobSchedulerService extends JobService {
         return false;
     }
 
-    private void backToUI(Object[] args) {
+    private void backToUI(Object[] args, int Type) {
         Message msg = new Message();
+        msg.what = Type;
         msg.obj = args[0];
         new MsgHandler(JobSchedulerService.this).sendMessage(msg);
         if (args[args.length - 1] instanceof Ack){

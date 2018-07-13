@@ -22,8 +22,8 @@ import java.util.UUID;
 import static android.content.Context.SENSOR_SERVICE;
 
 /**
- * Created by admin on 2017/8/10.
- * 获取设备id
+ * Created by yuzhijun on 2017/8/10.
+ * get device identified id
  */
 public class DeviceUtil {
     private static final String TAG = "DeviceUtils";
@@ -179,7 +179,6 @@ public class DeviceUtil {
 
     /**
      * 判断cpu是否为电脑来判断 模拟器
-     *
      * @return true 为模拟器
      */
     public static boolean checkIsNotRealPhoneAccordingCpu() {

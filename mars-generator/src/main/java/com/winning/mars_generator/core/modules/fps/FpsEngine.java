@@ -72,7 +72,10 @@ public class FpsEngine implements Engine {
                             @Override
                             public void doFrame(long frameTimeNanos) {
                                 long frameInterval = frameTimeNanos - startTimeNanos;
-                                long fps = 1000000000 / frameInterval;
+                                long fps = 60;
+                                if (frameInterval != 0){
+                                    fps = 1000000000 / frameInterval;
+                                 }
                                 if (fps > getRefreshRate(mContext)){
                                     final long skippedFrames =(long)(fps / getRefreshRate(mContext));
                                     mFpsBean.setSkipFrame(skippedFrames);

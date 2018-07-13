@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 
@@ -79,6 +80,11 @@ public class DeviceEngine implements Engine {
             int screenHeight = dm.heightPixels;
             mDeviceBean.setScreenWidth(screenWidth+"");
             mDeviceBean.setScreenHeight(screenHeight+"");
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                long bootTime = System.currentTimeMillis() - SystemClock.elapsedRealtimeNanos() / 1000000;
+                mDeviceBean.setStart_time(bootTime);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

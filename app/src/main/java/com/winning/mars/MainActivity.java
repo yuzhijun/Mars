@@ -88,9 +88,9 @@ public class MainActivity extends AppCompatActivity {
 
         tvLogin.setOnClickListener(v -> {
             String name = "yuzhijun";
-            String pwd = "123";
-            Mars.getInstance(this).getModule(Account.class).generate(new AccountBean(name,"123"));
-            Toast.makeText(this,"name="+name+";password="+pwd+"已经登录，如果禁用名单上面有这个禁用账户，将会禁用",Toast.LENGTH_SHORT).show();
+            String empno = "123";
+            Mars.getInstance(this).getModule(Account.class).generate(new AccountBean(name,empno));
+            Toast.makeText(this,"name="+name+";emp_no="+empno+"已经登录，如果禁用名单上面有这个禁用账户，将会禁用",Toast.LENGTH_SHORT).show();
         });
 
         tvInflate.setOnClickListener(v -> {

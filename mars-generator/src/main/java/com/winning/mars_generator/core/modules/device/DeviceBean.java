@@ -12,12 +12,12 @@ public class DeviceBean extends BaseBean implements Cloneable{
     private String deviceID;
     private String deviceSDK;
     private String productName;
-    private String modelIMEI;
     private String modelIP;
     private String networkOperator;
     private String simOperatorName;
     private String screenWidth;
     private String screenHeight;
+    private long start_time;
 
     public String getDeviceBrand() {
         return deviceBrand;
@@ -49,14 +49,6 @@ public class DeviceBean extends BaseBean implements Cloneable{
 
     public void setProductName(String productName) {
         this.productName = productName;
-    }
-
-    public String getModelIMEI() {
-        return modelIMEI;
-    }
-
-    public void setModelIMEI(String modelIMEI) {
-        this.modelIMEI = modelIMEI;
     }
 
     public String getModelIP() {
@@ -105,6 +97,14 @@ public class DeviceBean extends BaseBean implements Cloneable{
 
     public void setScreenHeight(String screenHeight) {
         this.screenHeight = screenHeight;
+    }
+
+    public long getStart_time() {
+        return start_time;
+    }
+
+    public void setStart_time(long start_time) {
+        this.start_time = start_time;
     }
 
     @Override
