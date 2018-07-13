@@ -76,19 +76,19 @@ public class JobSchedulerService extends JobService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mSocket = MarsConsumer.mSocket;
-        if (checkUsable()){
-            mSocket.on(Socket.EVENT_CONNECT,onConnect);
-            mSocket.on(Socket.EVENT_DISCONNECT,onDisconnect);
-            mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
-            mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-            mSocket.on(DEVICE_HANDLER,onDeviceHandler);
-            mSocket.on(APP_HANDLER,onAppHandler);
-            mSocket.on(ACCOUNT_HANDLER,onAccountHandler);
-            mSocket.connect();
-            while (scheduleJob() < 0 && retry <= MAX_RETRY){//增加计划任务服务启动失败重试机制
-                retry ++;
-            }
+        mSocket.on(Socket.EVENT_CONNECT,onConnect);
+        mSocket.on(Socket.EVENT_DISCONNECT,onDisconnect);
+        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+        mSocket.on(DEVICE_HANDLER,onDeviceHandler);
+        mSocket.on(APP_HANDLER,onAppHandler);
+        mSocket.on(ACCOUNT_HANDLER,onAccountHandler);
+        mSocket.connect();
+        while (scheduleJob() < 0 && retry <= MAX_RETRY){//增加计划任务服务启动失败重试机制
+            retry ++;
         }
+
+        checkUsable();
         return START_NOT_STICKY;
     }
 
