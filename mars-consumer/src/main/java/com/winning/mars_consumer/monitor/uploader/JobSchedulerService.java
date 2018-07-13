@@ -37,6 +37,7 @@ import com.winning.mars_generator.core.modules.network.NetworkBean;
 import com.winning.mars_generator.core.modules.sm.SmBean;
 import com.winning.mars_generator.core.modules.startup.StartupBean;
 import com.winning.mars_generator.core.modules.traffic.TrafficBean;
+import com.winning.mars_generator.utils.DeviceUtil;
 import com.winning.mars_generator.utils.LogUtil;
 
 import org.json.JSONArray;
@@ -161,7 +162,7 @@ public class JobSchedulerService extends JobService {
             //upload base_info
             BaseBean baseInfo = new BaseBean();
             baseInfo.setAppKey(MarsEntrance.getInstance().appKey);
-            baseInfo.setModelIMEI(CommUtil.getDeviceInfo(this).getModelIMEI());
+            baseInfo.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
             JSONObject jsonObject = JsonWrapperUtil.objectToJsonObject(baseInfo);
             if (null != jsonObject){
                 mSocket.emit(Constants.Mapper.BASE_INFO, jsonObject);
@@ -387,7 +388,7 @@ public class JobSchedulerService extends JobService {
     private boolean confirmUsable(Set<String> devices, Set<String> appKeys, Set<String> accounts) {
         if (null != devices){
             for (String deviceId : devices){
-                if (CommUtil.getDeviceInfo(JobSchedulerService.this).getModelIMEI().equalsIgnoreCase(deviceId)){
+                if (DeviceUtil.getUniquePsuedoDeviceID().equalsIgnoreCase(deviceId)){
                     CommUtil.showDialog(JobSchedulerService.this,"该设备已经被禁用",false);
                     return true;
                 }
@@ -438,7 +439,7 @@ public class JobSchedulerService extends JobService {
                 case DEVICE_TYPE:
                     try{
                         String modelIMEI = (String) msg.obj;
-                        if (null != modelIMEI && CommUtil.getDeviceInfo(mWeakReference.get()).getModelIMEI().equalsIgnoreCase(modelIMEI)) {
+                        if (null != modelIMEI && DeviceUtil.getUniquePsuedoDeviceID().equalsIgnoreCase(modelIMEI)) {
                             Set<String> devices = SPUtils.getStringSet(DEVICE_HANDLER,null);
                             if (null == devices){
                                 devices = new LinkedHashSet();

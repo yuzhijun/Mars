@@ -1,19 +1,17 @@
 package com.winning.mars_generator.core.modules.device;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
-import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 
 import com.winning.mars_generator.core.Engine;
 import com.winning.mars_generator.core.Generator;
+import com.winning.mars_generator.utils.DeviceUtil;
 import com.winning.mars_generator.utils.LogUtil;
 
 import java.net.Inet4Address;
@@ -85,15 +83,18 @@ public class DeviceEngine implements Engine {
             e.printStackTrace();
         }
 
-        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            mDeviceBean.setModelIMEI(null);
-        }else{
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                mDeviceBean.setModelIMEI(phone.getImei());
-            }else{
-                mDeviceBean.setModelIMEI(phone.getDeviceId());
-            }
-        }
+
+        mDeviceBean.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
+        //因为版本的缘故获取IMEI不稳定，所以选择自己构造一个设备唯一标识
+//        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+//            mDeviceBean.setModelIMEI(null);
+//        }else{
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                mDeviceBean.setModelIMEI(phone.getImei());
+//            }else{
+//                mDeviceBean.setModelIMEI(phone.getDeviceId());
+//            }
+//        }
 
         return mDeviceBean;
     }

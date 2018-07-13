@@ -3,7 +3,6 @@ package com.winning.mars_consumer.monitor;
 import android.content.Context;
 
 import com.winning.mars_consumer.MarsEntrance;
-import com.winning.mars_consumer.utils.CommUtil;
 import com.winning.mars_generator.Mars;
 import com.winning.mars_generator.core.modules.account.Account;
 import com.winning.mars_generator.core.modules.account.AccountBean;
@@ -30,6 +29,7 @@ import com.winning.mars_generator.core.modules.startup.StartupBean;
 import com.winning.mars_generator.core.modules.thread.deadlock.DeadLock;
 import com.winning.mars_generator.core.modules.traffic.Traffic;
 import com.winning.mars_generator.core.modules.traffic.TrafficBean;
+import com.winning.mars_generator.utils.DeviceUtil;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -61,7 +61,7 @@ public class Monitor {
             @Override
             public void accept(BatteryBean batteryBean) throws Exception {
                 batteryBean.setAppKey(MarsEntrance.getInstance().appKey);
-                batteryBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
+                batteryBean.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
                 mRepos.setBatteryBean(batteryBean);
             }
         }));
@@ -70,7 +70,7 @@ public class Monitor {
             @Override
             public void accept(CpuBean cpuBean) throws Exception {
                 cpuBean.setAppKey(MarsEntrance.getInstance().appKey);
-                cpuBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
+                cpuBean.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
                 mRepos.setCpuBean(cpuBean);
             }
         }));
@@ -99,7 +99,7 @@ public class Monitor {
             @Override
             public void accept(CrashBean crashBean) throws Exception {
                 crashBean.setAppKey(MarsEntrance.getInstance().appKey);
-                crashBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
+                crashBean.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
                 mRepos.setCrashBean(crashBean);
             }
         }));
@@ -108,7 +108,7 @@ public class Monitor {
             @Override
             public void accept(DeviceBean deviceBean) throws Exception {
                 deviceBean.setAppKey(MarsEntrance.getInstance().appKey);
-                deviceBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
+                deviceBean.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
                 mRepos.setDeviceBean(deviceBean);
             }
         }));
@@ -117,7 +117,7 @@ public class Monitor {
             @Override
             public void accept(FpsBean fpsBean) throws Exception {
                 fpsBean.setAppKey(MarsEntrance.getInstance().appKey);
-                fpsBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
+                fpsBean.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
                 mRepos.setFpsBean(fpsBean);
             }
         }));
@@ -126,7 +126,7 @@ public class Monitor {
             @Override
             public void accept(InflateBean inflateBean) throws Exception {
                 inflateBean.setAppKey(MarsEntrance.getInstance().appKey);
-                inflateBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
+                inflateBean.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
                 mRepos.setInflateBean(inflateBean);
             }
         }));
@@ -135,7 +135,7 @@ public class Monitor {
             @Override
             public void accept(LeakBean.LeakMemoryBean leakMemoryBean) throws Exception {
                 leakMemoryBean.setAppKey(MarsEntrance.getInstance().appKey);
-                leakMemoryBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
+                leakMemoryBean.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
                 mRepos.setLeakMemoryBean(leakMemoryBean);
             }
         }));
@@ -144,7 +144,7 @@ public class Monitor {
             @Override
             public void accept(SmBean smBean) throws Exception {
                 smBean.setAppKey(MarsEntrance.getInstance().appKey);
-                smBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
+                smBean.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
                 mRepos.setSmBean(smBean);
             }
         }));
@@ -160,7 +160,7 @@ public class Monitor {
             @Override
             public void accept(TrafficBean trafficBean) throws Exception {
                 trafficBean.setAppKey(MarsEntrance.getInstance().appKey);
-                trafficBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
+                trafficBean.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
                 mRepos.setTrafficBean(trafficBean);
             }
         }));
@@ -169,7 +169,7 @@ public class Monitor {
             @Override
             public void accept(NetworkBean networkBean) throws Exception {
                 networkBean.setAppKey(MarsEntrance.getInstance().appKey);
-                networkBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
+                networkBean.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
                 mRepos.setNetworkBean(networkBean);
             }
         }));
@@ -178,7 +178,7 @@ public class Monitor {
             @Override
             public void accept(StartupBean startupBean) throws Exception {
                 startupBean.setAppKey(MarsEntrance.getInstance().appKey);
-                startupBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
+                startupBean.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
                 mRepos.setStartupBean(startupBean);
             }
         }));
@@ -187,7 +187,7 @@ public class Monitor {
             @Override
             public void accept(AccountBean accountBean) throws Exception {
                 accountBean.setAppKey(MarsEntrance.getInstance().appKey);
-                accountBean.setModelIMEI(CommUtil.getDeviceInfo(context).getModelIMEI());
+                accountBean.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
                 mRepos.setAccountBean(accountBean);
             }
         }));

@@ -8,14 +8,14 @@ import com.winning.mars_generator.core.BaseBean;
 
 public class AccountBean extends BaseBean{
     private String name;
-    private String pwd;
+    private String empno;
 
     public AccountBean(){
 
     }
-    public AccountBean(String name, String pwd) {
+    public AccountBean(String name, String empno) {
         this.name = name;
-        this.pwd = pwd;
+        this.empno = empno;
     }
 
     public String getName() {
@@ -26,19 +26,19 @@ public class AccountBean extends BaseBean{
         this.name = name;
     }
 
-    public String getPwd() {
-        return pwd;
+    public String getEmpno() {
+        return empno;
     }
 
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
+    public void setEmpno(String empno) {
+        this.empno = empno;
     }
 
     @Override
     public String toString() {
         return  "AccountInfo{"+
                 "name" + name + "\'" +
-                ",password" + pwd + "\'" +
+                ",emp_no" + empno + "\'" +
                 "}";
     }
 }
