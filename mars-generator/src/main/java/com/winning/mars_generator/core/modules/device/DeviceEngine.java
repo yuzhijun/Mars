@@ -12,6 +12,7 @@ import android.util.DisplayMetrics;
 
 import com.winning.mars_generator.core.Engine;
 import com.winning.mars_generator.core.Generator;
+import com.winning.mars_generator.core.modules.memory.MemoryUtil;
 import com.winning.mars_generator.utils.DeviceUtil;
 import com.winning.mars_generator.utils.LogUtil;
 
@@ -63,14 +64,18 @@ public class DeviceEngine implements Engine {
     }
 
     private DeviceBean getDeviceInfo() {
-         DeviceBean  mDeviceBean = new DeviceBean();
+        String OS = System.getProperty("os.name");
+        DeviceBean  mDeviceBean = new DeviceBean();
         TelephonyManager phone = (TelephonyManager) mContext.getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
         mDeviceBean.setDeviceBrand(Build.BRAND);
         mDeviceBean.setDeviceID(Build.ID);
         mDeviceBean.setDeviceModel(Build.MODEL);
         mDeviceBean.setDeviceSDK(Build.VERSION.SDK_INT + "");
-        mDeviceBean.setProductName(Build.PRODUCT);
+        mDeviceBean.setProductName(Build.MANUFACTURER);
         mDeviceBean.setModelIP(getIpAddress());
+        mDeviceBean.setCzxt(OS != null ? OS.toLowerCase() : "");
+        mDeviceBean.setCckj(MemoryUtil.getRamInfo(mContext).totalMemKb + "");
+        mDeviceBean.setYxnc(MemoryUtil.getAppHeapInfo().allocatedKb+ "");
         mDeviceBean.setNetworkOperator(phone.getNetworkOperator());
         mDeviceBean.setSimOperatorName(phone.getSimOperatorName());
 

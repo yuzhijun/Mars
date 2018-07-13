@@ -18,6 +18,33 @@ public class DeviceBean extends BaseBean implements Cloneable{
     private String screenWidth;
     private String screenHeight;
     private long start_time;
+    private String yxnc;
+    private String cckj;
+    private String czxt;
+
+    public String getCzxt() {
+        return czxt;
+    }
+
+    public void setCzxt(String czxt) {
+        this.czxt = czxt;
+    }
+
+    public String getYxnc() {
+        return yxnc;
+    }
+
+    public void setYxnc(String yxnc) {
+        this.yxnc = yxnc;
+    }
+
+    public String getCckj() {
+        return cckj;
+    }
+
+    public void setCckj(String cckj) {
+        this.cckj = cckj;
+    }
 
     public String getDeviceBrand() {
         return deviceBrand;
