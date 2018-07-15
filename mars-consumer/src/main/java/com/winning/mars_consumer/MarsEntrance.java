@@ -1,8 +1,14 @@
 package com.winning.mars_consumer;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.winning.mars_consumer.utils.SPUtils;
+import com.winning.mars_consumer.utils.UsableCheckUtil;
 import com.winning.mars_generator.Mars;
 import com.winning.mars_generator.core.modules.battery.Battery;
 import com.winning.mars_generator.core.modules.cpu.Cpu;
@@ -23,6 +29,8 @@ import com.winning.mars_generator.core.modules.traffic.Traffic;
 public class MarsEntrance {
     private static MarsEntrance mInstance;
     public  String appKey;
+    private int mFinalCount;
+    private static boolean checkUsableFlag = true;
     public ICustomForbiddenBehavior customForbiddenBehavior;
 
     private MarsEntrance(){
@@ -50,6 +58,7 @@ public class MarsEntrance {
             this.appKey = appKey;
             this.customForbiddenBehavior = customForbiddenBehavior;
             SPUtils.init(context);
+            checkUsable(context);
             Mars.getInstance(context).install(Cpu.class)
                     .install(Battery.class)
                     .install(Crash.class)
@@ -75,5 +84,75 @@ public class MarsEntrance {
         Mars.getInstance(MarsConsumer.mContext).getModule(Traffic.class).uninstall();
 
         MarsConsumer.stop();
+    }
+
+    public void checkUsable(Context context){
+        ((Application)context).registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                mFinalCount++;
+                if (mFinalCount == 2){
+                    Handler mHandler = new Handler(Looper.getMainLooper());
+                    activity.getWindow().getDecorView().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    InnerCheckUsable(context);
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+                mFinalCount--;
+                if (mFinalCount == 0){
+
+                }
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+
+            }
+        });
+    }
+
+    private void InnerCheckUsable(Context context) {
+        if (isCheckUsableFlag()){
+            UsableCheckUtil.checkUsable(context);
+        }
+    }
+
+    public static void setCheckUsableFlag(boolean checkUsableFlag) {
+        MarsEntrance.checkUsableFlag = checkUsableFlag;
+    }
+
+    public static boolean isCheckUsableFlag() {
+        return checkUsableFlag;
     }
 }

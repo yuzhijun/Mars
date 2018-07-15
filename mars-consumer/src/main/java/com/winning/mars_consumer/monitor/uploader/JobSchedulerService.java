@@ -1,6 +1,5 @@
 package com.winning.mars_consumer.monitor.uploader;
 
-import android.annotation.SuppressLint;
 import android.app.job.JobInfo;
 import android.app.job.JobParameters;
 import android.app.job.JobScheduler;
@@ -17,8 +16,6 @@ import android.support.annotation.RequiresApi;
 import com.winning.mars_consumer.MarsConsumer;
 import com.winning.mars_consumer.MarsEntrance;
 import com.winning.mars_consumer.monitor.Repository;
-import com.winning.mars_consumer.monitor.bean.UsableInfo;
-import com.winning.mars_consumer.monitor.uploader.network.ApiServiceModule;
 import com.winning.mars_consumer.utils.CommUtil;
 import com.winning.mars_consumer.utils.Constants;
 import com.winning.mars_consumer.utils.DefaultPoolExecutor;
@@ -48,9 +45,6 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subscribers.DisposableSubscriber;
 import io.socket.client.Ack;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -87,8 +81,6 @@ public class JobSchedulerService extends JobService {
         while (scheduleJob() < 0 && retry <= MAX_RETRY){//增加计划任务服务启动失败重试机制
             retry ++;
         }
-
-        checkUsable();
         return START_NOT_STICKY;
     }
 
@@ -334,88 +326,8 @@ public class JobSchedulerService extends JobService {
         }
     }
 
-    /**
-     * 检查是否被禁用
-     * */
-    @SuppressLint("CheckResult")
-    private boolean checkUsable(){
-        Set<String> devices = SPUtils.getStringSet(DEVICE_HANDLER, null);
-        Set<String> appKeys = SPUtils.getStringSet(APP_HANDLER,null);
-        Set<String> accounts = SPUtils.getStringSet(ACCOUNT_HANDLER,null);
-        if (null == devices && null == appKeys && null == accounts){
-            Set<String> innerDevices = new LinkedHashSet<>();
-            Set<String> innerAppKeys = new LinkedHashSet<>();
-            Set<String> innerAccounts = new LinkedHashSet<>();
-            ApiServiceModule.getInstance().getNetworkService()
-                    .getUsableInfo()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(new DisposableSubscriber<UsableInfo>() {
-                        @Override
-                        public void onNext(UsableInfo usableInfo) {
-                            if (null != usableInfo){
-                                if (null != usableInfo.getModelIMEI()){
-                                    innerDevices.add(usableInfo.getModelIMEI());
-                                    SPUtils.putStringSet(DEVICE_HANDLER,innerDevices);
-                                }
-
-                                if (null != usableInfo.getApp_key()){
-                                    innerAppKeys.add(usableInfo.getApp_key());
-                                    SPUtils.putStringSet(APP_HANDLER,innerAppKeys);
-                                }
-
-                                if (null != usableInfo.getAccounts()){
-                                    innerAccounts.addAll(usableInfo.getAccounts());
-                                    SPUtils.putStringSet(ACCOUNT_HANDLER,innerAccounts);
-                                }
-
-                                confirmUsable(innerDevices, innerAppKeys, innerAccounts);
-                            }
-                        }
-                        @Override
-                        public void onError(Throwable t) {
-                        }
-                        @Override
-                        public void onComplete() {
-                        }
-                    });
-        }else{
-            if (confirmUsable(devices, appKeys, accounts)) return false;
-        }
-        return true;
-    }
-
-    private boolean confirmUsable(Set<String> devices, Set<String> appKeys, Set<String> accounts) {
-        if (null != devices){
-            for (String deviceId : devices){
-                if (DeviceUtil.getUniquePsuedoDeviceID().equalsIgnoreCase(deviceId)){
-                    CommUtil.showDialog(JobSchedulerService.this,"该设备已经被禁用",false);
-                    return true;
-                }
-            }
-        }
-
-        if (null != appKeys){
-            for (String appkey : appKeys){
-                if (MarsEntrance.getInstance().appKey.equalsIgnoreCase(appkey)){
-                    CommUtil.showDialog(JobSchedulerService.this,"该应用已经被禁用",false);
-                    return true;
-                }
-            }
-        }
-
-        if (null != accounts){
-            for (String account : accounts){
-                if (null != Repository.getInstance().getCurrentAccount() && Repository.getInstance().getCurrentAccount().getName().equals(account)){
-                    CommUtil.showDialog(JobSchedulerService.this,"该账号已经被禁用",false);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     private void backToUI(Object[] args, int Type) {
+        MarsEntrance.setCheckUsableFlag(false);
         Message msg = new Message();
         msg.what = Type;
         msg.obj = args[0];
@@ -457,7 +369,7 @@ public class JobSchedulerService extends JobService {
                                 message = "该设备已经被禁用";
                                 status = false;
                             }
-                            SPUtils.putStringSet(DEVICE_HANDLER,devices);
+                            SPUtils.putStringSet(DEVICE_HANDLER,devices.size() <=0 ? null : devices);
 
                             CommUtil.showDialog(mWeakReference.get(),message,status);
                         }
@@ -484,7 +396,7 @@ public class JobSchedulerService extends JobService {
                                 message = "该应用已经被禁用";
                                 status = false;
                             }
-                            SPUtils.putStringSet(APP_HANDLER,apps);
+                            SPUtils.putStringSet(APP_HANDLER,apps.size() <=0 ? null : apps);
 
                             CommUtil.showDialog(mWeakReference.get(),message,status);
                         }
@@ -496,7 +408,7 @@ public class JobSchedulerService extends JobService {
                     try{
                         String account = (String) msg.obj;
                         if (null != account && null != Repository.getInstance().getCurrentAccount()
-                                && Repository.getInstance().getCurrentAccount().getName().equals(account)){
+                                && Repository.getInstance().getCurrentAccount().getEmpno().equals(account)){
                             Set<String> accounts = SPUtils.getStringSet(ACCOUNT_HANDLER,null);
                             if (null == accounts){
                                 accounts = new LinkedHashSet();
@@ -512,7 +424,7 @@ public class JobSchedulerService extends JobService {
                                 message = "该账号已经被禁用";
                                 status = false;
                             }
-                            SPUtils.putStringSet(ACCOUNT_HANDLER,accounts);
+                            SPUtils.putStringSet(ACCOUNT_HANDLER,accounts.size() <=0 ? null : accounts);
 
                             CommUtil.showDialog(mWeakReference.get(),message,status);
                         }
