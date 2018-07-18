@@ -1,12 +1,15 @@
 package com.winning.mars_generator.utils;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Build;
+import android.os.Environment;
+import android.os.StatFs;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -15,6 +18,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.UUID;
@@ -189,4 +193,72 @@ public class DeviceUtil {
         return false;
     }
 
+    /**
+     * 获取手机内部空间总大小
+     * @return 大小，KB为单位
+     */
+     public static long getTotalInternalMemorySize() {
+        //获取内部存储根目录
+        File path = Environment.getDataDirectory();
+        //系统的空间描述类
+        StatFs stat = new StatFs(path.getPath());
+        //每个区块占字节数
+        long blockSize = stat.getBlockSize();
+        //区块总数
+        long totalBlocks = stat.getBlockCount();
+        return totalBlocks * blockSize / 1024;
+    }
+
+    /**
+     * 获取手机内部可用空间大小
+     * @return 大小，KB为单位
+     */
+     public static long getAvailableInternalMemorySize() {
+        File path = Environment.getDataDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        //获取可用区块数量
+        long availableBlocks = stat.getAvailableBlocks();
+        return availableBlocks * blockSize / 1024;
+    }
+
+    /**
+     * 判断SD卡是否可用
+     * @return true : 可用<br>false : 不可用
+     */
+    public static boolean isSDCardEnable() {
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+    }
+
+    /**
+     * 获取手机外部总空间大小
+     * @return 总大小，kb为单位
+     */
+     public static long getTotalExternalMemorySize() {
+        if (isSDCardEnable()) {
+            //获取SDCard根目录
+            File path = Environment.getExternalStorageDirectory();
+            StatFs stat = new StatFs(path.getPath());
+            long blockSize = stat.getBlockSize();
+            long totalBlocks = stat.getBlockCount();
+            return totalBlocks * blockSize / 1024;
+        } else {
+            return -1;
+        }
+    }
+
+    /**
+     * 获取SD卡剩余空间
+     * @return SD卡剩余空间 kb
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    public static String getFreeSpace() {
+        if (!isSDCardEnable()) return "sdcard unable!";
+        StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+        long blockSize, availableBlocks;
+        availableBlocks = stat.getAvailableBlocksLong();
+        blockSize = stat.getBlockSizeLong();
+        long size = availableBlocks * blockSize / 1024L;
+        return String.valueOf(size);
+    }
 }

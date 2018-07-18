@@ -39,7 +39,10 @@ public class MarsConsumer {
         }
         try {
             IO.Options options = new IO.Options();
-            options.reconnectionAttempts = 10;
+            //由于医院的网络环境不稳定，有可能设置了这两个参数
+            //到时就算到网络环境好的情况下也不会再重连了，因为尝试次数到达指定次数
+//            options.reconnectionAttempts = 20;
+//            options.reconnectionDelay = 20000;
             options.timeout = 20000;
             mSocket = IO.socket(Constants.SOCKET_URL,options);
         } catch (URISyntaxException e) {

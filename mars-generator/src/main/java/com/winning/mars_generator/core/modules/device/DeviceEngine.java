@@ -74,12 +74,16 @@ public class DeviceEngine implements Engine {
         mDeviceBean.setProductName(Build.MANUFACTURER);
         mDeviceBean.setModelIP(getIpAddress());
         mDeviceBean.setCzxt(OS != null ? OS.toLowerCase() : "");
-        mDeviceBean.setCckj(MemoryUtil.getRamInfo(mContext).totalMemKb + "");
-        mDeviceBean.setYxnc(MemoryUtil.getAppHeapInfo().allocatedKb+ "");
+        mDeviceBean.setYxnc(MemoryUtil.getRamInfo(mContext).totalMemKb+ "");
         mDeviceBean.setNetworkOperator(phone.getNetworkOperator());
         mDeviceBean.setSimOperatorName(phone.getSimOperatorName());
 
         try{
+            if (DeviceUtil.isSDCardEnable()){
+                mDeviceBean.setCckj(DeviceUtil.getTotalInternalMemorySize() + DeviceUtil.getTotalExternalMemorySize() + "");
+            }else{
+                mDeviceBean.setCckj(DeviceUtil.getTotalInternalMemorySize() + "");
+            }
             DisplayMetrics dm = mContext.getResources().getDisplayMetrics();
             int screenWidth = dm.widthPixels;
             int screenHeight = dm.heightPixels;
