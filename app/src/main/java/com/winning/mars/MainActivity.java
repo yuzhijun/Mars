@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         tvNetWork.setOnClickListener(v -> {
-            AppApiService appApiService = ApiServiceModule.getInstance().getNetworkService(AppApiService.class);
+            String BASE_URL =  "http://gank.io";//used for consumer module
+            AppApiService appApiService = ApiServiceModule.getInstance().getNetworkService(AppApiService.class,BASE_URL);
             appApiService.getFuliData("3","1")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

@@ -128,8 +128,8 @@ public class JobSchedulerService extends JobService {
             // run per 2000 millis
             builder.setPeriodic(CommUtil.isApkInDebug(MarsConsumer.mContext) ? Constants.DEBUG_UPLOAD_RATE : Constants.RELEASE_UPLOAD_RATE);
         }
-        // wifi only
-        builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED);
+        //no limited
+        builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE);
         // no need charging
         builder.setRequiresCharging(false);
         // no need device idle
@@ -327,14 +327,19 @@ public class JobSchedulerService extends JobService {
     }
 
     private void backToUI(Object[] args, int Type) {
-        MarsEntrance.setCheckUsableFlag(false);
-        Message msg = new Message();
-        msg.what = Type;
-        msg.obj = args[0];
-        new MsgHandler(JobSchedulerService.this).sendMessage(msg);
-        if (args[args.length - 1] instanceof Ack){
-            Ack ack = (Ack) args[args.length - 1];
-            ack.call(args[0]);
+        try{
+            MarsEntrance.setCheckUsableFlag(false);
+            Message msg = new Message();
+            msg.what = Type;
+            msg.obj = args[0];
+            msg.arg1 = (int)args[1];
+            new MsgHandler(JobSchedulerService.this).sendMessage(msg);
+            if (args[args.length - 1] instanceof Ack){
+                Ack ack = (Ack) args[args.length - 1];
+                ack.call(args[0]);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -352,26 +357,22 @@ public class JobSchedulerService extends JobService {
                 case DEVICE_TYPE:
                     try{
                         String modelIMEI = (String) msg.obj;
+                        int status = msg.arg1;
                         if (null != modelIMEI && DeviceUtil.getUniquePsuedoDeviceID().equalsIgnoreCase(modelIMEI)) {
                             Set<String> devices = SPUtils.getStringSet(DEVICE_HANDLER,null);
                             if (null == devices){
                                 devices = new LinkedHashSet();
                             }
 
-                            String message;
-                            boolean status;
-                            if(devices.contains(modelIMEI)){
+                            if(status != 0 && devices.contains(modelIMEI)){//0代表禁用
                                 devices.remove(modelIMEI);
-                                message = "该设备已经被启用";
-                                status = true;
                             }else{
                                 devices.add(modelIMEI);
-                                message = "该设备已经被禁用";
-                                status = false;
                             }
+
                             SPUtils.putStringSet(DEVICE_HANDLER,devices.size() <=0 ? null : devices);
 
-                            CommUtil.showDialog(mWeakReference.get(),message,status);
+                            CommUtil.showDialog(mWeakReference.get(),status == 0 ? "该设备被禁用" : "该设备被启用",status != 0);
                         }
                     }catch (Exception e){
                         e.printStackTrace();
@@ -380,25 +381,22 @@ public class JobSchedulerService extends JobService {
                 case APP_TYPE:
                     try{
                         String appKey = (String) msg.obj;
+                        int status = msg.arg1;
                         if (null != appKey && MarsEntrance.getInstance().appKey.equalsIgnoreCase(appKey)) {
                             Set<String> apps = SPUtils.getStringSet(APP_HANDLER,null);
                             if (null == apps){
                                 apps = new LinkedHashSet();
                             }
-                            String message;
-                            boolean status;
-                            if(apps.contains(appKey)){
+
+                            if(status != 0 && apps.contains(appKey)){//0代表禁用
                                 apps.remove(appKey);
-                                message = "该应用已经被启用";
-                                status = true;
                             }else{
                                 apps.add(appKey);
-                                message = "该应用已经被禁用";
-                                status = false;
                             }
+
                             SPUtils.putStringSet(APP_HANDLER,apps.size() <=0 ? null : apps);
 
-                            CommUtil.showDialog(mWeakReference.get(),message,status);
+                            CommUtil.showDialog(mWeakReference.get(),status == 0 ? "该应用被禁用" : "该应用被启用",status != 0);
                         }
                     }catch (Exception e){
                         e.printStackTrace();
@@ -407,26 +405,22 @@ public class JobSchedulerService extends JobService {
                 case ACCOUNT_TYPE:
                     try{
                         String account = (String) msg.obj;
+                        int status = msg.arg1;
                         if (null != account && null != Repository.getInstance().getCurrentAccount()
                                 && Repository.getInstance().getCurrentAccount().getEmpno().equals(account)){
                             Set<String> accounts = SPUtils.getStringSet(ACCOUNT_HANDLER,null);
                             if (null == accounts){
                                 accounts = new LinkedHashSet();
                             }
-                            String message;
-                            boolean status;
-                            if(accounts.contains(account)){
+                            if(status != 0 && accounts.contains(account)){//0代表禁用
                                 accounts.remove(account);
-                                message = "该账号已经被启用";
-                                status = true;
                             }else{
                                 accounts.add(account);
-                                message = "该账号已经被禁用";
-                                status = false;
                             }
+
                             SPUtils.putStringSet(ACCOUNT_HANDLER,accounts.size() <=0 ? null : accounts);
 
-                            CommUtil.showDialog(mWeakReference.get(),message,status);
+                            CommUtil.showDialog(mWeakReference.get(),status == 0 ? "该账号被禁用" : "该账号被启用",status != 0);
                         }
                     }catch (Exception e){
                         e.printStackTrace();

@@ -34,28 +34,28 @@ public class UsableCheckUtil {
             Set<String> innerAppKeys = new LinkedHashSet<>();
             Set<String> innerAccounts = new LinkedHashSet<>();
             ApiServiceModule.getInstance().getNetworkService()
-                    .getUsableInfo()
+                    .getUsableInfo(DeviceUtil.getUniquePsuedoDeviceID(),MarsEntrance.getInstance().appKey)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeWith(new DisposableSubscriber<UsableInfo>() {
                         @Override
                         public void onNext(UsableInfo usableInfo) {
                             if (null != usableInfo){
-                                if (null != usableInfo.getModelIMEI()){
+                                if (null != usableInfo.getModelIMEI() && !"".equalsIgnoreCase(usableInfo.getModelIMEI())){
                                     innerDevices.add(usableInfo.getModelIMEI());
-                                    SPUtils.putStringSet(DEVICE_HANDLER,innerDevices);
                                 }
 
-                                if (null != usableInfo.getApp_key()){
+                                if (null != usableInfo.getApp_key() && !"".equalsIgnoreCase(usableInfo.getApp_key())){
                                     innerAppKeys.add(usableInfo.getApp_key());
-                                    SPUtils.putStringSet(APP_HANDLER,innerAppKeys);
                                 }
 
-                                if (null != usableInfo.getAccounts()){
+                                if (null != usableInfo.getAccounts() && usableInfo.getAccounts().size() > 0){
                                     innerAccounts.addAll(usableInfo.getAccounts());
-                                    SPUtils.putStringSet(ACCOUNT_HANDLER,innerAccounts);
                                 }
 
+                                SPUtils.putStringSet(DEVICE_HANDLER,innerDevices);
+                                SPUtils.putStringSet(APP_HANDLER,innerAppKeys);
+                                SPUtils.putStringSet(ACCOUNT_HANDLER,innerAccounts);
                                 confirmUsable(context, innerDevices, innerAppKeys, innerAccounts);
                             }
                         }
