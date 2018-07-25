@@ -7,6 +7,7 @@ import com.winning.mars_consumer.MarsEntrance;
 import com.winning.mars_consumer.monitor.Repository;
 import com.winning.mars_consumer.monitor.bean.UsableInfo;
 import com.winning.mars_consumer.monitor.uploader.network.ApiServiceModule;
+import com.winning.mars_consumer.monitor.uploader.network.HttpResultFunc;
 import com.winning.mars_generator.utils.DeviceUtil;
 
 import java.util.LinkedHashSet;
@@ -37,6 +38,7 @@ public class UsableCheckUtil {
                     .getUsableInfo(DeviceUtil.getUniquePsuedoDeviceID(),MarsEntrance.getInstance().appKey)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
+                    .map(new HttpResultFunc<>())
                     .subscribeWith(new DisposableSubscriber<UsableInfo>() {
                         @Override
                         public void onNext(UsableInfo usableInfo) {
