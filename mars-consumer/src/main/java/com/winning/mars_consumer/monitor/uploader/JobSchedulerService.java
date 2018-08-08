@@ -106,6 +106,12 @@ public class JobSchedulerService extends JobService {
     public boolean onStartJob(final JobParameters jobParameters) {
         if (isConnected){
             DefaultPoolExecutor.getInstance().execute(() -> uploadLocalData(jobParameters));
+        }else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                jobFinished(jobParameters, true);
+            } else {
+                jobFinished(jobParameters, false);
+            }
         }
         return true;
     }

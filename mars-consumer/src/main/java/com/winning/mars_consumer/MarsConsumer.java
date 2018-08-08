@@ -41,7 +41,7 @@ public class MarsConsumer {
             IO.Options options = new IO.Options();
             //由于医院的网络环境不稳定，有可能设置了这两个参数
             //到时就算到网络环境好的情况下也不会再重连了，因为尝试次数到达指定次数
-//            options.reconnectionAttempts = 20;
+            options.reconnectionAttempts = Integer.MAX_VALUE;
 //            options.reconnectionDelay = 20000;
             options.timeout = 10000;
             mSocket = IO.socket(Constants.SOCKET_URL,options);

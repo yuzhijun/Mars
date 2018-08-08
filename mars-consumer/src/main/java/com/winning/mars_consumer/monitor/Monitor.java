@@ -98,7 +98,7 @@ public class Monitor {
         }).subscribe(new Consumer<CrashBean>() {
             @Override
             public void accept(CrashBean crashBean) throws Exception {
-               if (null != crashBean && !"".equalsIgnoreCase(crashBean.throwableMessage)){
+               if (null != crashBean && null != crashBean.throwableMessage &&  !"".equalsIgnoreCase(crashBean.throwableMessage)){
                    crashBean.setAppKey(MarsEntrance.getInstance().appKey);
                    crashBean.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
                    mRepos.setCrashBean(crashBean);
