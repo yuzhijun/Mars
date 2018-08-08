@@ -20,10 +20,10 @@ public class CpuBean extends BaseBean{
     // io waiting ratio
     public double ioWaitRatio;
 
-    public String sampleTime;
+    public long sampleTime;
 
     public CpuBean(double totalUseRatio, double appCpuRatio, double userCpuRatio, double sysCpuRatio, double
-            ioWaitRatio, String sampleTime) {
+            ioWaitRatio, long sampleTime) {
         this.totalUseRatio = totalUseRatio;
         this.appCpuRatio = appCpuRatio;
         this.userCpuRatio = userCpuRatio;

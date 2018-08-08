@@ -157,7 +157,7 @@ public class CpuSampler extends AbstractSampler {
             CpuBean cpuInfo = new CpuBean((totalTime - idleTime) * 100L / totalTime, (appCpuTime - mAppCpuTimeLast) *
                     100L / totalTime,
                     (user - mUserLast) * 100L / totalTime, (system - mSystemLast) * 100L / totalTime, (ioWait -
-                    mIoWaitLast) * 100L / totalTime,System.currentTimeMillis()+"");
+                    mIoWaitLast) * 100L / totalTime,System.currentTimeMillis());
 
             synchronized (mCpuInfoEntries) {
                 mCpuInfoEntries.put(System.currentTimeMillis(), cpuInfo);

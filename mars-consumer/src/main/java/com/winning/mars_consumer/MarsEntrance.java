@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.winning.mars_consumer.utils.CommUtil;
 import com.winning.mars_consumer.utils.SPUtils;
 import com.winning.mars_consumer.utils.UsableCheckUtil;
 import com.winning.mars_generator.Mars;
@@ -59,15 +60,18 @@ public class MarsEntrance {
             this.customForbiddenBehavior = customForbiddenBehavior;
             SPUtils.init(context);
             checkUsable(context);
-            Mars.getInstance(context).install(Cpu.class)
-                    .install(Battery.class)
+            Mars.getInstance(context).install(Battery.class)
                     .install(Crash.class)
-                    .install(Fps.class)
                     .install(Inflate.class)
                     .install(Device.class)
                     .install(Sm.class)
-                    .install(DeadLock.class)
-                    .install(Traffic.class);
+                    .install(DeadLock.class);
+
+            if (CommUtil.isApkInDebug(context)) {
+                Mars.getInstance(context).install(Cpu.class)
+                        .install(Traffic.class)
+                        .install(Fps.class);
+            }
 
             MarsConsumer.consume(context);
         }
@@ -126,7 +130,6 @@ public class MarsEntrance {
             public void onActivityStopped(Activity activity) {
                 mFinalCount--;
                 if (mFinalCount == 0){
-
                 }
             }
 
@@ -145,6 +148,8 @@ public class MarsEntrance {
     private void InnerCheckUsable(Context context) {
         if (isCheckUsableFlag()){
             UsableCheckUtil.checkUsable(context);
+        }else{
+            MarsEntrance.setCheckUsableFlag(true);
         }
     }
 

@@ -46,7 +46,10 @@ public class StartupTracer {
                     @Override
                     public void run() {
                         Startup startup = Mars.getInstance(activity).getModule(Startup.class);
-                        startup.generate(generateStartupInfo(System.currentTimeMillis()));
+                        StartupBean startupBean = generateStartupInfo(System.currentTimeMillis());
+                        if (null != startupBean){
+                            startup.generate(startupBean);
+                        }
                     }
                 });
             }

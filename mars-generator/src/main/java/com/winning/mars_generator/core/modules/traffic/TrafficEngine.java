@@ -58,6 +58,7 @@ public class TrafficEngine implements Engine {
                 trafficBean.txTotalRate = (endTrafficSnapshot.txTotalKB - start.txTotalKB) * 1000 / mSampleMillis;
                 trafficBean.rxUidRate = (endTrafficSnapshot.rxUidKB - start.rxUidKB) * 1000 / mSampleMillis;
                 trafficBean.txUidRate = (endTrafficSnapshot.txUidKB - start.txUidKB) * 1000 / mSampleMillis;
+                trafficBean.sampleTime = System.currentTimeMillis();
                 return trafficBean;
             }
         });

@@ -155,6 +155,7 @@ public class JobSchedulerService extends JobService {
             BaseBean baseInfo = new BaseBean();
             baseInfo.setAppKey(MarsEntrance.getInstance().appKey);
             baseInfo.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
+            baseInfo.setApp_type(CommUtil.isApkInDebug(MarsConsumer.mContext) ? 0 : 1);
             JSONObject jsonObject = JsonWrapperUtil.objectToJsonObject(baseInfo);
             if (null != jsonObject){
                 mSocket.emit(Constants.Mapper.BASE_INFO, jsonObject);

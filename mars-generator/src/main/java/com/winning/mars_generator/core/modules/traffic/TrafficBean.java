@@ -18,11 +18,14 @@ public class TrafficBean extends BaseBean{
     // app upload traffic rate
     public float txUidRate;
 
-    public TrafficBean(float rxTotalRate, float txTotalRate, float rxUidRate, float txUidRate) {
+    public long sampleTime;
+
+    public TrafficBean(float rxTotalRate, float txTotalRate, float rxUidRate, float txUidRate, long sampleTime) {
         this.rxTotalRate = rxTotalRate;
         this.txTotalRate = txTotalRate;
         this.rxUidRate = rxUidRate;
         this.txUidRate = txUidRate;
+        this.sampleTime = sampleTime;
     }
 
     public TrafficBean() {

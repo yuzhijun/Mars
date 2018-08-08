@@ -34,40 +34,44 @@ public class UsableCheckUtil {
             Set<String> innerDevices = new LinkedHashSet<>();
             Set<String> innerAppKeys = new LinkedHashSet<>();
             Set<String> innerAccounts = new LinkedHashSet<>();
-            ApiServiceModule.getInstance().getNetworkService()
-                    .getUsableInfo(DeviceUtil.getUniquePsuedoDeviceID(),MarsEntrance.getInstance().appKey)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .map(new HttpResultFunc<>())
-                    .subscribeWith(new DisposableSubscriber<UsableInfo>() {
-                        @Override
-                        public void onNext(UsableInfo usableInfo) {
-                            if (null != usableInfo){
-                                if (null != usableInfo.getModelIMEI() && !"".equalsIgnoreCase(usableInfo.getModelIMEI())){
-                                    innerDevices.add(usableInfo.getModelIMEI());
-                                }
+            try{
+                ApiServiceModule.getInstance().getNetworkService()
+                        .getUsableInfo(DeviceUtil.getUniquePsuedoDeviceID(),MarsEntrance.getInstance().appKey)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .map(new HttpResultFunc<>())
+                        .subscribeWith(new DisposableSubscriber<UsableInfo>() {
+                            @Override
+                            public void onNext(UsableInfo usableInfo) {
+                                if (null != usableInfo){
+                                    if (null != usableInfo.getModelIMEI() && !"".equalsIgnoreCase(usableInfo.getModelIMEI())){
+                                        innerDevices.add(usableInfo.getModelIMEI());
+                                    }
 
-                                if (null != usableInfo.getApp_key() && !"".equalsIgnoreCase(usableInfo.getApp_key())){
-                                    innerAppKeys.add(usableInfo.getApp_key());
-                                }
+                                    if (null != usableInfo.getApp_key() && !"".equalsIgnoreCase(usableInfo.getApp_key())){
+                                        innerAppKeys.add(usableInfo.getApp_key());
+                                    }
 
-                                if (null != usableInfo.getAccounts() && usableInfo.getAccounts().size() > 0){
-                                    innerAccounts.addAll(usableInfo.getAccounts());
-                                }
+                                    if (null != usableInfo.getAccounts() && usableInfo.getAccounts().size() > 0){
+                                        innerAccounts.addAll(usableInfo.getAccounts());
+                                    }
 
-                                SPUtils.putStringSet(DEVICE_HANDLER,innerDevices);
-                                SPUtils.putStringSet(APP_HANDLER,innerAppKeys);
-                                SPUtils.putStringSet(ACCOUNT_HANDLER,innerAccounts);
-                                confirmUsable(context, innerDevices, innerAppKeys, innerAccounts);
+                                    SPUtils.putStringSet(DEVICE_HANDLER,innerDevices);
+                                    SPUtils.putStringSet(APP_HANDLER,innerAppKeys);
+                                    SPUtils.putStringSet(ACCOUNT_HANDLER,innerAccounts);
+                                    confirmUsable(context, innerDevices, innerAppKeys, innerAccounts);
+                                }
                             }
-                        }
-                        @Override
-                        public void onError(Throwable t) {
-                        }
-                        @Override
-                        public void onComplete() {
-                        }
-                    });
+                            @Override
+                            public void onError(Throwable t) {
+                            }
+                            @Override
+                            public void onComplete() {
+                            }
+                        });
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }else{
             if (confirmUsable(context, devices, appKeys, accounts)) return false;
         }
