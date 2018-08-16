@@ -199,7 +199,7 @@ public final class HeapAnalyzer {
         LeakTrace leakTrace = buildLeakTrace(result.leakingNode);
         String className = leakingRef.getClassObj().getClassName();
         // Side effect: computes retained size.
-        //TODO KYSON IMPL 因为这里暂停所有线程太久，太耗时导致分析失败
+        //TODO KYSON IMPL pause all threads is taking a long time ，caused analyzer failed
 //    snapshot.computeDominators();
 //    Log.d(TAG,"checkForLeak step14");
 //    Instance leakingInstance = result.leakingNode.instance;

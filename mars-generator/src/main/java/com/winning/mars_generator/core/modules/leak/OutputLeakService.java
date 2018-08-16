@@ -141,7 +141,7 @@ public class OutputLeakService extends AbstractAnalysisResultService {
             CanaryLog.d("Could not rename heap dump file %s to %s", heapDump.heapDumpFile.getPath(),
                     newFile.getPath());
         } else {
-            CanaryLog.d("rename，%s -> %s", heapDump.heapDumpFile.getAbsolutePath(), newFile.getAbsolutePath());
+            CanaryLog.d("rename,%s -> %s", heapDump.heapDumpFile.getAbsolutePath(), newFile.getAbsolutePath());
         }
         return new HeapDump(newFile, heapDump.referenceKey, heapDump.referenceName,
                 heapDump.excludedRefs, heapDump.watchDurationMs, heapDump.gcDurationMs,

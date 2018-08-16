@@ -46,7 +46,7 @@ public final class AndroidHeapDumper implements HeapDumper {
             OutputLeakService.sendOutputBroadcastRetry(context, referenceKey);
             return RETRY_LATER;
         }
-        LogUtil.d("create new dump file：" + heapDumpFile.getAbsolutePath());
+        LogUtil.d("create new dump file:" + heapDumpFile.getAbsolutePath());
 
         try {
             CanaryLog.d("write dump info");

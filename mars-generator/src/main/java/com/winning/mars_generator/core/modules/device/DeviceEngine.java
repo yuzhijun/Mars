@@ -100,7 +100,6 @@ public class DeviceEngine implements Engine {
 
 
         mDeviceBean.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
-        //因为版本的缘故获取IMEI不稳定，所以选择自己构造一个设备唯一标识
 //        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
 //            mDeviceBean.setModelIMEI(null);
 //        }else{

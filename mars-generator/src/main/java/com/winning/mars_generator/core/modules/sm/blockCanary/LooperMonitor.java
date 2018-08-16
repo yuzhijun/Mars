@@ -11,7 +11,7 @@ public class LooperMonitor implements Printer {
     private long mShortBlockThresholdMillis;
     // this event start time
     private long mThisEventStartTime = 0;
-    // this event start time（in thread）
+    // this event start time(in thread)
     private long mThisEventStartThreadTime = 0;
     private BlockListener mBlockListener = null;
     //event start flag
@@ -26,7 +26,7 @@ public class LooperMonitor implements Printer {
          * block event
          * @param eventStartTimeMilliis     event start time
          * @param eventEndTimeMillis        event end time
-         * @param blockTimeMillis           block time（event solve time）
+         * @param blockTimeMillis           block time(event solve time)
          * @param threadBlockTimeMillis     actual thread block time
          * @param longBlockThresholdMillis  long block threshold
          * @param shortBlockThresholdMillis short block threshold

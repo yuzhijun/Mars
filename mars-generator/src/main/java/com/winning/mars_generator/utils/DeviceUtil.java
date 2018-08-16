@@ -98,15 +98,9 @@ public class DeviceUtil {
     }
 
 
-    /**
-     * 判断是否存在光传感器来判断是否为模拟器
-     * 部分真机也不存在温度和压力传感器。其余传感器模拟器也存在。
-     *
-     * @return true 为模拟器
-     */
     public static Boolean notHasLightSensorManager(Context context) {
         SensorManager sensorManager = (SensorManager) context.getSystemService(SENSOR_SERVICE);
-        Sensor sensor8 = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT); //光
+        Sensor sensor8 = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         if (null == sensor8) {
             return true;
         } else {
@@ -114,11 +108,6 @@ public class DeviceUtil {
         }
     }
 
-    /**
-     * 判断蓝牙是否有效来判断是否为模拟器
-     *
-     * @return true 为模拟器
-     */
     public static boolean notHasBlueTooth(AppCompatActivity context) {
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
@@ -131,7 +120,7 @@ public class DeviceUtil {
             if (ba == null) {
                 return true;
             } else {
-                // 如果有蓝牙不一定是有效的。获取蓝牙名称，若为null 则默认为模拟器
+                // Bluetooth is available get name, else is simulator
                 String name = ba.getName();
                 if (TextUtils.isEmpty(name)) {
                     return true;
@@ -144,11 +133,6 @@ public class DeviceUtil {
         return false;
     }
 
-    /**
-     * 根据部分特征参数设备信息来判断是否为模拟器
-     *
-     * @return true 为模拟器
-     */
     public static boolean isFeatures() {
         return Build.FINGERPRINT.startsWith("generic")
                 || Build.FINGERPRINT.toLowerCase().contains("vbox")
@@ -181,10 +165,6 @@ public class DeviceUtil {
         return result;
     }
 
-    /**
-     * 判断cpu是否为电脑来判断 模拟器
-     * @return true 为模拟器
-     */
     public static boolean checkIsNotRealPhoneAccordingCpu() {
         String cpuInfo = readCpuInfo();
         if ((cpuInfo.contains("intel") || cpuInfo.contains("amd"))) {
@@ -193,50 +173,33 @@ public class DeviceUtil {
         return false;
     }
 
-    /**
-     * 获取手机内部空间总大小
-     * @return 大小，KB为单位
-     */
      public static long getTotalInternalMemorySize() {
-        //获取内部存储根目录
+        //get internal memory dir
         File path = Environment.getDataDirectory();
-        //系统的空间描述类
+        //system memory des class
         StatFs stat = new StatFs(path.getPath());
-        //每个区块占字节数
         long blockSize = stat.getBlockSize();
-        //区块总数
+        //total block
         long totalBlocks = stat.getBlockCount();
         return totalBlocks * blockSize / 1024;
     }
 
-    /**
-     * 获取手机内部可用空间大小
-     * @return 大小，KB为单位
-     */
      public static long getAvailableInternalMemorySize() {
         File path = Environment.getDataDirectory();
         StatFs stat = new StatFs(path.getPath());
         long blockSize = stat.getBlockSize();
-        //获取可用区块数量
+        //get available blocks
         long availableBlocks = stat.getAvailableBlocks();
         return availableBlocks * blockSize / 1024;
     }
 
-    /**
-     * 判断SD卡是否可用
-     * @return true : 可用<br>false : 不可用
-     */
     public static boolean isSDCardEnable() {
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
     }
 
-    /**
-     * 获取手机外部总空间大小
-     * @return 总大小，kb为单位
-     */
      public static long getTotalExternalMemorySize() {
         if (isSDCardEnable()) {
-            //获取SDCard根目录
+            //get sdcard root dir
             File path = Environment.getExternalStorageDirectory();
             StatFs stat = new StatFs(path.getPath());
             long blockSize = stat.getBlockSize();
@@ -247,10 +210,6 @@ public class DeviceUtil {
         }
     }
 
-    /**
-     * 获取SD卡剩余空间
-     * @return SD卡剩余空间 kb
-     */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     public static String getFreeSpace() {
         if (!isSDCardEnable()) return "sdcard unable!";

@@ -1,4 +1,24 @@
 apply plugin: 'com.android.library'
+ext {
+    bintrayRepo = 'Maven'//bintray的库名称
+    bintrayName = 'mars-consumer'//bintray中填写的名字
+    publishedGroupId = 'com.winning.mars_consumer'//一般为包名
+    libraryName = 'mars-consumer'//本地库名称
+    artifact = "mars-consumer"//同上
+
+    libraryDescription = 'APM'
+    siteUrl = 'https://github.com/yuzhijun/Mars'
+    gitUrl = 'https://github.com/yuzhijun/Mars.git'
+    libraryVersion = '1.0'
+
+    developerId = 'yuzhijun'
+    developerName = 'yuzhijun'
+    developerEmail = '664281688@qq.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
 
 android {
     compileSdkVersion 27
@@ -32,7 +52,8 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
     testImplementation 'junit:junit:4.12'
-    implementation project(':mars-generator')
+//    implementation project(':mars-generator')
+    implementation 'com.winning.mars_generator:mars-generator:1.0'
     //TODO 将来可以将这个库去掉
     implementation 'com.qianwen:update-app:3.5.2'
     implementation 'com.qianwen:okhttp-utils:3.8.0'
@@ -44,3 +65,6 @@ dependencies {
     api 'com.squareup.retrofit2:converter-gson:2.4.0'
     api 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
 }
+
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'

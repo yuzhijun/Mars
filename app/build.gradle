@@ -30,11 +30,19 @@ android {
     }
 }
 
+repositories {
+   maven{
+       url 'https://dl.bintray.com/yuzhijun/Maven'
+   }
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
-    implementation project(':mars-generator')
-    implementation project(':mars-consumer')
+//    implementation project(':mars-generator')
+    implementation 'com.winning.mars_generator:mars-generator:1.0'
+//    implementation project(':mars-consumer')
+    implementation 'com.winning.mars_consumer:mars-consumer:1.0'
 }

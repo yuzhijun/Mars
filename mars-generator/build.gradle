@@ -1,4 +1,24 @@
 apply plugin: 'com.android.library'
+ext {
+    bintrayRepo = 'Maven'//bintray的库名称
+    bintrayName = 'mars'//bintray中填写的名字
+    publishedGroupId = 'com.winning.mars_generator'//一般为包名
+    libraryName = 'mars-generator'//本地库名称
+    artifact = "mars-generator"//同上
+
+    libraryDescription = 'APM'
+    siteUrl = 'https://github.com/yuzhijun/Mars'
+    gitUrl = 'https://github.com/yuzhijun/Mars.git'
+    libraryVersion = '1.0'
+
+    developerId = 'yuzhijun'
+    developerName = 'yuzhijun'
+    developerEmail = '664281688@qq.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
 
 android {
     compileSdkVersion 27
@@ -39,3 +59,6 @@ dependencies {
     // TODO 将来可以将这个库去掉
     implementation 'com.yanzhenjie:permission:2.0.0-rc11'
 }
+
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
