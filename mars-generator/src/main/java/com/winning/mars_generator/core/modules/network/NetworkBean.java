@@ -11,13 +11,15 @@ public class NetworkBean extends BaseBean{
     public long respBodySizeByte;
     public String url;
     public  Object[] args;
+    public String error;
 
-    public NetworkBean(long startTimeMillis, long endTimeMillis, long respBodySizeByte, String url, Object[] args) {
+    public NetworkBean(long startTimeMillis, long endTimeMillis, long respBodySizeByte, String url, Object[] args, String error) {
         this.startTimeMillis = startTimeMillis;
         this.endTimeMillis = endTimeMillis;
         this.respBodySizeByte = respBodySizeByte;
         this.url = url;
         this.args = args;
+        this.error = error;
     }
 
     @Override

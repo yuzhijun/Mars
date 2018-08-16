@@ -31,6 +31,7 @@ public class ResponseErrorProxy implements InvocationHandler {
     private Gson mGson = new Gson();
     private Object mProxyObject;
     private String url;
+    private long startTime;
 
     public ResponseErrorProxy(Object proxyObject, String url) {
         mProxyObject = proxyObject;
@@ -41,16 +42,11 @@ public class ResponseErrorProxy implements InvocationHandler {
     public Object invoke(Object proxy, final Method method, final Object[] args) {
            return Flowable.just("")
                    .flatMap((Function<String, Flowable<?>>) s -> {
-                       final long startTime = System.currentTimeMillis();
+                       startTime = System.currentTimeMillis();
                        Flowable<?> flowable =  (Flowable<?>) method.invoke(mProxyObject, args);
                        return flowable.map((Function<Object, Object>) o -> {
                                 try {
-                                    GET getAnnotation = method.getAnnotation(GET.class);
-                                    POST postAnnotation = method.getAnnotation(POST.class);
-                                    String subUrl = null != getAnnotation ? getAnnotation.value() : null != postAnnotation ? postAnnotation.value() : "";
-                                    int respBodySizeByte = mGson.toJson(o).length();
-                                    long endTime = System.currentTimeMillis();
-                                    Mars.getInstance(MarsConsumer.mContext).getModule(Network.class).generate(new NetworkBean(startTime,endTime,respBodySizeByte,url+subUrl,args));
+                                    generateNetworkData(method, args, startTime, o, "");
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -59,6 +55,7 @@ public class ResponseErrorProxy implements InvocationHandler {
                    })
                     .retryWhen(throwableFlowable -> throwableFlowable.flatMap((Function<Throwable, Flowable<?>>) throwable -> {
                         ResponseError error = null;
+                        generateNetworkData(method, args, startTime,null, throwable.getMessage());
                         if (throwable instanceof ConnectTimeoutException
                                 || throwable instanceof SocketTimeoutException
                                 || throwable instanceof UnknownHostException
@@ -87,6 +84,15 @@ public class ResponseErrorProxy implements InvocationHandler {
                             return Flowable.error(error);
                         }
                     }));
+    }
+
+    private void generateNetworkData(Method method, Object[] args, long startTime, Object o, String error) {
+        GET getAnnotation = method.getAnnotation(GET.class);
+        POST postAnnotation = method.getAnnotation(POST.class);
+        String subUrl = null != getAnnotation ? getAnnotation.value() : null != postAnnotation ? postAnnotation.value() : "";
+        int respBodySizeByte = null != o ?  mGson.toJson(o).length() : 0;
+        long endTime = System.currentTimeMillis();
+        Mars.getInstance(MarsConsumer.mContext).getModule(Network.class).generate(new NetworkBean(startTime,endTime,respBodySizeByte,url+subUrl,args , error));
     }
 
     private Flowable<?> refreshTokenWhenTokenInvalid() {

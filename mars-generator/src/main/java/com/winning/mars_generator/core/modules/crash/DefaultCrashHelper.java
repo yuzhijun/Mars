@@ -59,6 +59,7 @@ public class DefaultCrashHelper implements ICrashHelper {
             try {
                 reader = new FileReader(crashFile);
                 crashInfos.add(mSerializer.deserialize(reader, CrashBean.class));
+                crashFile.delete();
             } catch (IOException e) {
             } finally {
                 IoUtil.closeSilently(reader);
