@@ -9,7 +9,7 @@ ext {
     libraryDescription = 'APM'
     siteUrl = 'https://github.com/yuzhijun/Mars'
     gitUrl = 'https://github.com/yuzhijun/Mars.git'
-    libraryVersion = '1.0'
+    libraryVersion = '1.0.3'
 
     developerId = 'yuzhijun'
     developerName = 'yuzhijun'
@@ -53,7 +53,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
     testImplementation 'junit:junit:4.12'
     implementation project(':mars-generator')
-//    implementation 'com.winning.mars_generator:mars-generator:1.0'
+//    implementation 'com.winning.mars_generator:mars-generator:1.0.2'
     //TODO 将来可以将这个库去掉
     implementation 'com.qianwen:update-app:3.5.2'
     implementation 'com.qianwen:okhttp-utils:3.8.0'

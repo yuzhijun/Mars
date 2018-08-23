@@ -127,7 +127,8 @@ public class InflateEngine implements Engine {
                             }
                         }else {
                             if (null != TreeHelper.getTree() && TreeHelper.getTree().size() > 0){
-                                mNodeGenerator.generate(new UserBehaviorBean(TreeHelper.getTree()));
+                                mHandlePathStack.clear();
+                                mNodeGenerator.generate(new UserBehaviorBean(TreeHelper.getFinalTree()));
                             }
                         }
                     }

@@ -3,6 +3,7 @@ package com.winning.mars_generator.utils.tree;
 import android.app.Activity;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class TreeHelper {
@@ -46,5 +47,21 @@ public class TreeHelper {
 
     public static List<Node> getTree() {
         return tree;
+    }
+
+    public static List<Node> getFinalTree() {
+        List<Node> nodes = tree!= null && tree.size() > 0 ? cloneList(tree) : tree;
+        tree.clear();
+        return nodes;
+    }
+
+    private static <T> List<T> cloneList(Collection<T> originList) {
+        List<T> dest = new ArrayList<>();
+        if (originList == null || originList.isEmpty()) {
+            return dest;
+        }
+
+        dest.addAll(originList);
+        return dest;
     }
 }
