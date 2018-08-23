@@ -8,6 +8,7 @@ import com.winning.mars_generator.core.modules.crash.CrashBean;
 import com.winning.mars_generator.core.modules.device.DeviceBean;
 import com.winning.mars_generator.core.modules.fps.FpsBean;
 import com.winning.mars_generator.core.modules.inflate.InflateBean;
+import com.winning.mars_generator.core.modules.inflate.UserBehaviorBean;
 import com.winning.mars_generator.core.modules.leak.LeakBean;
 import com.winning.mars_generator.core.modules.network.NetworkBean;
 import com.winning.mars_generator.core.modules.sm.SmBean;
@@ -280,6 +281,23 @@ public class Repository {
     public void setStartupBean(StartupBean startupBean) {
         synchronized (mLockForStartup){
             mStartupBean = startupBean;
+        }
+    }
+
+    //user behavior information
+    private UserBehaviorBean mUserBehavior;
+    private final  Object mLockUserBehavior = new Object();
+    public UserBehaviorBean getUserBehavior (){
+        synchronized (mLockUserBehavior) {
+            final UserBehaviorBean userBehaviorBean = null == mUserBehavior ? null : new UserBehaviorBean(mUserBehavior.appKey,mUserBehavior.modelIMEI,cloneList(mUserBehavior.getTree()));
+            mUserBehavior = null;
+            return userBehaviorBean;
+        }
+    }
+
+    public void setUserBehavior(UserBehaviorBean userBehavior) {
+        synchronized (mLockUserBehavior){
+            mUserBehavior = userBehavior;
         }
     }
 

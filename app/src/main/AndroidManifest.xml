@@ -21,6 +21,8 @@
         <activity android:name=".LeakActivity"/>
         <activity android:name=".InflateActivity">
         </activity>
+        <activity android:name=".UserBehaviorActivity">
+        </activity>
     </application>
 
 </manifest>

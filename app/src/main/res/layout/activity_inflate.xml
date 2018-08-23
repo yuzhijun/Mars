@@ -9,9 +9,10 @@
     android:background="@android:color/white"
     >
     <TextView
+        android:id="@+id/tvHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="头部"
+        android:text="头部(可点击跳转)"
         android:textColor="@android:color/black"
         android:layout_gravity="center"
         android:gravity="center"/>

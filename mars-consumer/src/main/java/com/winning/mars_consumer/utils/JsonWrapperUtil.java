@@ -36,6 +36,8 @@ public class JsonWrapperUtil {
                 return jsonObject;
             } catch (JSONException e) {
                 e.printStackTrace();
+            } catch (Exception e){
+                e.printStackTrace();
             }
         }
         return null;

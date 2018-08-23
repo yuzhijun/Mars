@@ -18,6 +18,8 @@ import com.winning.mars_generator.core.modules.fps.Fps;
 import com.winning.mars_generator.core.modules.fps.FpsBean;
 import com.winning.mars_generator.core.modules.inflate.Inflate;
 import com.winning.mars_generator.core.modules.inflate.InflateBean;
+import com.winning.mars_generator.core.modules.inflate.UserBehavior;
+import com.winning.mars_generator.core.modules.inflate.UserBehaviorBean;
 import com.winning.mars_generator.core.modules.leak.Leak;
 import com.winning.mars_generator.core.modules.leak.LeakBean;
 import com.winning.mars_generator.core.modules.network.Network;
@@ -191,6 +193,15 @@ public class Monitor {
                 accountBean.setAppKey(MarsEntrance.getInstance().appKey);
                 accountBean.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
                 mRepos.setAccountBean(accountBean);
+            }
+        }));
+
+        mCompositeDisposable.add(mars.getModule(UserBehavior.class).subject().subscribe(new Consumer<UserBehaviorBean>() {
+            @Override
+            public void accept(UserBehaviorBean userBehaviorBean) throws Exception {
+                userBehaviorBean.setAppKey(MarsEntrance.getInstance().appKey);
+                userBehaviorBean.setModelIMEI(DeviceUtil.getUniquePsuedoDeviceID());
+                mRepos.setUserBehavior(userBehaviorBean);
             }
         }));
     }

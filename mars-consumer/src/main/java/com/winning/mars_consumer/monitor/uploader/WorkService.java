@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import com.winning.mars_consumer.MarsConsumer;
 import com.winning.mars_consumer.monitor.Repository;
 import com.winning.mars_consumer.utils.Constants;
-import com.winning.mars_consumer.utils.DefaultPoolExecutor;
 import com.winning.mars_consumer.utils.JsonWrapperUtil;
 import com.winning.mars_generator.core.modules.account.AccountBean;
 import com.winning.mars_generator.core.modules.battery.BatteryBean;
@@ -62,7 +61,8 @@ public class WorkService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable final Intent intent) {
         if (isConnected){
-            DefaultPoolExecutor.getInstance().execute(() -> uploadLocalData(intent));
+            //暂不做兼容，因为8.0以后google已经不提倡这些方式了
+//            DefaultPoolExecutor.getInstance().execute(() -> uploadLocalData(intent));
         }
     }
 

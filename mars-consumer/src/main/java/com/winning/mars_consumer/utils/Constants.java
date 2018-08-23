@@ -37,5 +37,6 @@ public class Constants {
         public static final String APP_HANDLER = "APP_HANDLER";
         public static final String ACCOUNT_HANDLER = "ACCOUNT_HANDLER";
         public static final String BASE_INFO = "BASE_INFO";
+        public static final String USER_BEHAVIOR = "UserBehavior";
     }
 }

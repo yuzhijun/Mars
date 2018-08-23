@@ -29,6 +29,7 @@ import com.winning.mars_generator.core.modules.crash.CrashBean;
 import com.winning.mars_generator.core.modules.device.DeviceBean;
 import com.winning.mars_generator.core.modules.fps.FpsBean;
 import com.winning.mars_generator.core.modules.inflate.InflateBean;
+import com.winning.mars_generator.core.modules.inflate.UserBehaviorBean;
 import com.winning.mars_generator.core.modules.leak.LeakBean;
 import com.winning.mars_generator.core.modules.network.NetworkBean;
 import com.winning.mars_generator.core.modules.sm.SmBean;
@@ -245,6 +246,14 @@ public class JobSchedulerService extends JobService {
             }
         }
 
+        UserBehaviorBean userBehavior = Repository.getInstance().getUserBehavior();
+        if (null != userBehavior){
+            JSONObject jsonObject = JsonWrapperUtil.objectToJsonObject(userBehavior);
+            if (null != jsonObject){
+                mSocket.emit(Constants.Mapper.USER_BEHAVIOR, jsonObject);
+            }
+        }
+
         //upload fps data
         Collection<FpsBean> fps = Repository.getInstance().getFpsBeans();
         if (null != fps && fps.size() > 0){
@@ -325,6 +334,7 @@ public class JobSchedulerService extends JobService {
                 mSocket.emit(Constants.Mapper.ACCOUNT, jsonArray);
             }
         }
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             jobFinished(jobParameters, true);

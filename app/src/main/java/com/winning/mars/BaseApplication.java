@@ -20,7 +20,7 @@ public class BaseApplication extends Application {
 //                Toast.makeText(getApplicationContext(), "我是自定义的禁用行为", Toast.LENGTH_SHORT).show();
 //            }
 //        });
-        MarsEntrance.getInstance().init(this, "e17d8260-f742-4ac3-9b00-7f5a0dfba785", null);
+        MarsEntrance.getInstance().init(this, "ae94846d-5237-4e6e-b27e-08bf901c201e", null);
         StartupTracer.get().onApplicationCreate();
     }
 }

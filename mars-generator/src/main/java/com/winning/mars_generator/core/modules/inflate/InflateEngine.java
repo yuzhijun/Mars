@@ -16,9 +16,11 @@ import android.widget.FrameLayout;
 
 import com.winning.mars_generator.core.Engine;
 import com.winning.mars_generator.core.Generator;
+import com.winning.mars_generator.utils.tree.TreeHelper;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Stack;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -28,19 +30,23 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class InflateEngine implements Engine {
     private Generator<InflateBean> mGenerator;
+    private Generator<UserBehaviorBean> mNodeGenerator;
     private Context mContext;
     private Application.ActivityLifecycleCallbacks mActivityLifecycleCallbacks;
     private WeakHashMap<Activity, InflaterDelegateFactory> mInflaterDelegateMap;
     private ConcurrentHashMap<AppCompatActivity,List<View>> mViewHashMap;
+    private Stack<Activity> mHandlePathStack;
     private InflateBean mInflateBean;
     private final Handler mHandler;
     private long time;
 
-    public InflateEngine(Generator<InflateBean> generator, Context context) {
+    public InflateEngine(Generator<InflateBean> generator, Generator<UserBehaviorBean> nodeGenerator, Context context) {
         this.mGenerator = generator;
+        this.mNodeGenerator = nodeGenerator;
         this.mContext = context;
         mViewHashMap = new ConcurrentHashMap<>();
         mHandler = new Handler(Looper.getMainLooper());
+        mHandlePathStack = new Stack<>();
     }
 
     @Override
@@ -52,6 +58,12 @@ public class InflateEngine implements Engine {
             mActivityLifecycleCallbacks = new Application.ActivityLifecycleCallbacks() {
                 @Override
                 public void onActivityCreated(Activity activity, Bundle bundle) {
+                    //mock user handler
+                   if (null != mHandlePathStack){
+                       Activity topActivity = mHandlePathStack.size() > 0 ? mHandlePathStack.peek() : null;
+                       mHandlePathStack.push(activity);
+                       TreeHelper.addNode(topActivity, activity);
+                   }
                     /**
                      *  in order to get all views of current activity
                      *  so that we can calculate the depth of inflater
@@ -106,6 +118,20 @@ public class InflateEngine implements Engine {
 
                 @Override
                 public void onActivityDestroyed(Activity activity) {
+                    //mock user handler
+                    if (null != mHandlePathStack){
+                        if (mHandlePathStack.size() > 1){
+                            int index = mHandlePathStack.lastIndexOf(activity);
+                            if (index != -1){
+                                mHandlePathStack.remove(index);
+                            }
+                        }else {
+                            if (null != TreeHelper.getTree() && TreeHelper.getTree().size() > 0){
+                                mNodeGenerator.generate(new UserBehaviorBean(TreeHelper.getTree()));
+                            }
+                        }
+                    }
+                    //record inflate info
                     final long destroyTime = System.currentTimeMillis();
                     mInflateBean.setStayTime(destroyTime - time);
                     //calculate the depth of inflater

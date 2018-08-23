@@ -42,7 +42,8 @@ public class JobStarter {
         if (Build.VERSION.SDK_INT >= LOLLIPOP){
             startJobService(context);
         }else{
-            registerAlarm(context,1);
+            //暂不做兼容，因为google已经不提倡这种方式
+//            registerAlarm(context,1);
         }
     }
 
