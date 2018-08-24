@@ -66,6 +66,11 @@ public class CommUtil {
 //                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
 //                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                context.startActivity(intent);
+                try {
+                    Thread.sleep(1000);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 System.exit(0);//正常退出App
                 return;
             } else {

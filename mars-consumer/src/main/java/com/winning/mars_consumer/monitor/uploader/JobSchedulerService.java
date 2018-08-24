@@ -43,7 +43,6 @@ import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 import io.socket.client.Ack;
@@ -376,18 +375,11 @@ public class JobSchedulerService extends JobService {
                         String modelIMEI = (String) msg.obj;
                         int status = msg.arg1;
                         if (null != modelIMEI && DeviceUtil.getUniquePsuedoDeviceID().equalsIgnoreCase(modelIMEI)) {
-                            Set<String> devices = SPUtils.getStringSet(DEVICE_HANDLER,null);
-                            if (null == devices){
-                                devices = new LinkedHashSet();
-                            }
-
-                            if(status != 0 && devices.contains(modelIMEI)){//0代表禁用
-                                devices.remove(modelIMEI);
+                            if(status != 0){//0代表禁用
+                                SPUtils.putString(DEVICE_HANDLER, "");
                             }else{
-                                devices.add(modelIMEI);
+                               SPUtils.putString(DEVICE_HANDLER, modelIMEI);
                             }
-
-                            SPUtils.putStringSet(DEVICE_HANDLER,devices.size() <=0 ? null : devices);
 
                             CommUtil.showDialog(mWeakReference.get(),status == 0 ? "该设备被禁用" : "该设备被启用",status != 0);
                         }
@@ -400,18 +392,11 @@ public class JobSchedulerService extends JobService {
                         String appKey = (String) msg.obj;
                         int status = msg.arg1;
                         if (null != appKey && MarsEntrance.getInstance().appKey.equalsIgnoreCase(appKey)) {
-                            Set<String> apps = SPUtils.getStringSet(APP_HANDLER,null);
-                            if (null == apps){
-                                apps = new LinkedHashSet();
-                            }
-
-                            if(status != 0 && apps.contains(appKey)){//0代表禁用
-                                apps.remove(appKey);
+                            if(status != 0){//0代表禁用
+                                SPUtils.putString(APP_HANDLER, "");
                             }else{
-                                apps.add(appKey);
+                                SPUtils.putString(APP_HANDLER, appKey);
                             }
-
-                            SPUtils.putStringSet(APP_HANDLER,apps.size() <=0 ? null : apps);
 
                             CommUtil.showDialog(mWeakReference.get(),status == 0 ? "该应用被禁用" : "该应用被启用",status != 0);
                         }
@@ -426,9 +411,7 @@ public class JobSchedulerService extends JobService {
                         if (null != account && null != Repository.getInstance().getCurrentAccount()
                                 && Repository.getInstance().getCurrentAccount().getEmpno().equals(account)){
                             Set<String> accounts = SPUtils.getStringSet(ACCOUNT_HANDLER,null);
-                            if (null == accounts){
-                                accounts = new LinkedHashSet();
-                            }
+
                             if(status != 0 && accounts.contains(account)){//0代表禁用
                                 accounts.remove(account);
                             }else{

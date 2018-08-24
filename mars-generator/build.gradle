@@ -9,7 +9,7 @@ ext {
     libraryDescription = 'APM'
     siteUrl = 'https://github.com/yuzhijun/Mars'
     gitUrl = 'https://github.com/yuzhijun/Mars.git'
-    libraryVersion = '1.0.2'
+    libraryVersion = '1.0.3'
 
     developerId = 'yuzhijun'
     developerName = 'yuzhijun'

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.NonNull;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -259,7 +260,7 @@ public class SPUtils {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static Set<String> getStringSet(final String key, final Set<String> defValue) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            return sharedPreferences.getStringSet(key, defValue);
+            return new HashSet<>(sharedPreferences.getStringSet(key, new HashSet<>()));
         } else {
             // Workaround for pre-HC's missing getStringSet
             return getOrderedStringSet(key, defValue);
