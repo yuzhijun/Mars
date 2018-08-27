@@ -50,9 +50,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         tvCrash.setOnClickListener(v -> {
-            int A = 100;
-            int B = 0;
-            double i = A / B;
+//            int A = 100;
+//            int B = 0;
+//            double i = A / B;
+            GirlsData girlsData = null;
+
+            System.out.print(girlsData.getResults());
             Log.e(this.getClass().getSimpleName(),"generate crash info");
         });
 

@@ -36,9 +36,8 @@ public class InflateEngine implements Engine {
     private WeakHashMap<Activity, InflaterDelegateFactory> mInflaterDelegateMap;
     private ConcurrentHashMap<AppCompatActivity,List<View>> mViewHashMap;
     private Stack<Activity> mHandlePathStack;
-    private InflateBean mInflateBean;
+    private Stack<InflateBean> mInflateBeanStack;
     private final Handler mHandler;
-    private long time;
 
     public InflateEngine(Generator<InflateBean> generator, Generator<UserBehaviorBean> nodeGenerator, Context context) {
         this.mGenerator = generator;
@@ -47,49 +46,25 @@ public class InflateEngine implements Engine {
         mViewHashMap = new ConcurrentHashMap<>();
         mHandler = new Handler(Looper.getMainLooper());
         mHandlePathStack = new Stack<>();
+        mInflateBeanStack = new Stack<>();
     }
 
     @Override
     public void launch() {
-        if (null == mInflateBean){
-            mInflateBean = new InflateBean();
-        }
         if (null == mActivityLifecycleCallbacks){
             mActivityLifecycleCallbacks = new Application.ActivityLifecycleCallbacks() {
                 @Override
                 public void onActivityCreated(Activity activity, Bundle bundle) {
-                    //mock user handler
-                   if (null != mHandlePathStack){
-                       Activity topActivity = mHandlePathStack.size() > 0 ? mHandlePathStack.peek() : null;
-                       mHandlePathStack.push(activity);
-                       TreeHelper.addNode(topActivity, activity);
-                   }
+                    addToTree(activity);
                     /**
                      *  in order to get all views of current activity
                      *  so that we can calculate the depth of inflater
                      * */
-                    if (activity instanceof AppCompatActivity){
-                        LayoutInflater layoutInflater = activity.getLayoutInflater();
-                        try {
-                            Field field = LayoutInflater.class.getDeclaredField("mFactorySet");
-                            field.setAccessible(true);
-                            field.setBoolean(layoutInflater, false);
-                            LayoutInflaterCompat.setFactory(activity.getLayoutInflater(), getInflaterDelegate(InflateEngine.this,(AppCompatActivity) activity));
-                        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    hookInflater(activity);
                     /**
                      * in order to get pageLoad time
                      * */
-                   time = System.currentTimeMillis();
-                    calculateInflaterTime(activity, new OnViewInflated() {
-                        @Override
-                        public void didInflated() {
-                            long inflateTime = System.currentTimeMillis() - time;
-                            mInflateBean.setInflateTime(inflateTime);
-                        }
-                    });
+                    doInflaterTime(activity);
                 }
                 @Override
                 public void onActivityStarted(Activity activity) {
@@ -119,34 +94,91 @@ public class InflateEngine implements Engine {
                 @Override
                 public void onActivityDestroyed(Activity activity) {
                     //mock user handler
-                    if (null != mHandlePathStack){
-                        if (mHandlePathStack.size() > 1){
-                            int index = mHandlePathStack.lastIndexOf(activity);
-                            if (index != -1){
-                                mHandlePathStack.remove(index);
-                            }
-                        }else {
-                            if (null != TreeHelper.getTree() && TreeHelper.getTree().size() > 0){
-                                mHandlePathStack.clear();
-                                mNodeGenerator.generate(new UserBehaviorBean(TreeHelper.getFinalTree()));
-                            }
-                        }
-                    }
+                    popStackAndGenData(activity);
                     //record inflate info
-                    final long destroyTime = System.currentTimeMillis();
-                    mInflateBean.setStayTime(destroyTime - time);
-                    //calculate the depth of inflater
-                    if (null != mViewHashMap && null != mViewHashMap.get(activity)
-                            && mViewHashMap.get(activity).size() > 0){
-                        long depth = calculateDepthInflater(mViewHashMap.get(activity));
-                        mInflateBean.setInflateDepth(depth);
-                        mInflateBean.setActivity(activity.getClass().getSimpleName());
-                    }
-                    mGenerator.generate(mInflateBean);
+                    calculateInflateDepthAndGenData(activity);
                 }
             };
         }
         ((Application)mContext).registerActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
+    }
+
+    private void calculateInflateDepthAndGenData(Activity activity) {
+        if (null != mInflateBeanStack && mInflateBeanStack.size() > 0){
+            int index = -1;
+            for (int i = mInflateBeanStack.size() -1;i >= 0;i --){
+                InflateBean inflateBean = mInflateBeanStack.get(i);
+                if (activity.getClass().getSimpleName().equalsIgnoreCase(inflateBean.getActivity())){
+                    index = i;
+                }
+            }
+            if (-1 != index){
+                final long destroyTime = System.currentTimeMillis();
+                InflateBean inflateBean = mInflateBeanStack.get(index);
+                inflateBean.setStayTime(destroyTime - inflateBean.getStartTime());
+
+                //calculate the depth of inflater
+                if (null != mViewHashMap && null != mViewHashMap.get(activity)
+                        && mViewHashMap.get(activity).size() > 0){
+                    long depth = calculateDepthInflater(mViewHashMap.get(activity));
+                    inflateBean.setInflateDepth(depth);
+                }
+                mGenerator.generate(inflateBean.clone());
+                mInflateBeanStack.remove(index);
+            }
+        }
+    }
+
+    private void popStackAndGenData(Activity activity) {
+        if (null != mHandlePathStack){
+            if (mHandlePathStack.size() > 1){
+                int index = mHandlePathStack.lastIndexOf(activity);
+                if (index != -1){
+                    mHandlePathStack.remove(index);
+                }
+            }else {
+                if (null != TreeHelper.getTree() && TreeHelper.getTree().size() > 0){
+                    mHandlePathStack.clear();
+                    mNodeGenerator.generate(new UserBehaviorBean(TreeHelper.getFinalTree()));
+                }
+            }
+        }
+    }
+
+    private void doInflaterTime(Activity activity) {
+        InflateBean inflateBean = new InflateBean();
+        long time = System.currentTimeMillis();
+        inflateBean.setActivity(activity.getClass().getSimpleName());
+        inflateBean.setStartTime(time);
+        mInflateBeanStack.push(inflateBean);
+
+        calculateInflaterTime(activity, () -> {
+            long inflateTime = System.currentTimeMillis() - time;
+            mInflateBeanStack.peek().setInflateTime(inflateTime);
+        });
+    }
+
+    private void hookInflater(Activity activity) {
+        if (activity instanceof AppCompatActivity){
+            LayoutInflater layoutInflater = activity.getLayoutInflater();
+            try {
+                Field field = LayoutInflater.class.getDeclaredField("mFactorySet");
+                field.setAccessible(true);
+                field.setBoolean(layoutInflater, false);
+                LayoutInflaterCompat.setFactory(activity.getLayoutInflater(), getInflaterDelegate(InflateEngine.this,(AppCompatActivity) activity));
+            } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void addToTree(Activity activity) {
+        //mock user handler
+        if (null != mHandlePathStack){
+            Activity topActivity = mHandlePathStack.size() > 0 ? mHandlePathStack.peek() : null;
+            mHandlePathStack.push(activity);
+            TreeHelper.addNode(topActivity, activity);
+        }
     }
 
     @Override
