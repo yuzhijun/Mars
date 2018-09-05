@@ -9,7 +9,7 @@ ext {
     libraryDescription = 'APM'
     siteUrl = 'https://github.com/yuzhijun/Mars'
     gitUrl = 'https://github.com/yuzhijun/Mars.git'
-    libraryVersion = '1.0.3'
+    libraryVersion = '1.0.5'
 
     developerId = 'yuzhijun'
     developerName = 'yuzhijun'
@@ -60,5 +60,5 @@ dependencies {
     implementation 'com.yanzhenjie:permission:2.0.0-rc11'
 }
 
-//apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-//apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
